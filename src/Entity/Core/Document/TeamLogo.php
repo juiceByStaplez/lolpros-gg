@@ -14,14 +14,9 @@ class TeamLogo extends Document
 {
     /**
      * @var Team
-     *
      * @ORM\OneToOne(targetEntity="App\Entity\Team\Team", inversedBy="logo")
-     *
      * @Serializer\Type("App\Entity\Team\Team")
-     * @Serializer\Groups({
-     *     "get_document"
-     * })
-     * @Assert\NotNull()
+     * @Assert\NotNull
      */
     protected $team;
 

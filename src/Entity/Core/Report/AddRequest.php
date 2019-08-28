@@ -21,7 +21,6 @@ class AddRequest
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -30,15 +29,8 @@ class AddRequest
 
     /**
      * @var UuidInterface
-     *
      * @ORM\Column(type="uuid", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_add_request",
-     *     "get_add_requests",
-     * })
-     *
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -46,127 +38,69 @@ class AddRequest
 
     /**
      * @var DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
-     * @Serializer\Groups({
-     *     "get_add_request",
-     *     "get_add_requests",
-     * })
      */
     protected $createdAt;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_add_request",
-     *     "get_add_requests",
-     * })
      * @Assert\NotNull(groups={"post_add_request"})
      */
     protected $name;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_add_request",
-     *     "get_add_requests",
-     * })
-     *
      * @Assert\NotNull(groups={"post_add_request"})
      */
     protected $country;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_add_request",
-     *     "get_add_requests",
-     * })
-     *
      * @Assert\NotNull(groups={"post_add_request"})
-     * @Assert\Choice(callback="getAvailablePositions", groups={
-     *     "post_add_request",
-     *     "put_add_request",
-     * }, strict=true)
+     * @Assert\Choice(callback="getAvailablePositions", strict=true)
      */
     protected $position;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=true)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_add_request",
-     *     "get_add_requests",
-     * })
      */
     protected $twitter;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=true)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_add_request",
-     *     "get_add_requests",
-     * })
      */
     protected $twitch;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="text", nullable=true)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_add_request",
-     *     "get_add_requests",
-     * })
      */
     protected $comment;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=true)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_add_request",
-     *     "get_add_requests",
-     * })
      * @Assert\NotNull(groups={"post_add_request"})
      */
     protected $summonerName;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=true)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_add_request",
-     *     "get_add_requests",
-     * })
      * @Assert\NotNull(groups={"post_add_request"})
      */
     protected $summonerId;
@@ -184,13 +118,6 @@ class AddRequest
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
-    }
-
-    public function setCreatedAt(DateTime $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
     }
 
     public function getName(): ?string

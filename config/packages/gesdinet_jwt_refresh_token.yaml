@@ -1,0 +1,5 @@
+gesdinet_jwt_refresh_token:
+    ttl: 2592000  #1 mois
+    ttl_update: true
+    firewall: refresh
+    user_provider: knpu.oauth2.user_provider

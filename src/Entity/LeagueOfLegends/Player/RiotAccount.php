@@ -22,7 +22,6 @@ class RiotAccount
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -31,21 +30,8 @@ class RiotAccount
 
     /**
      * @var UuidInterface
-     *
      * @ORM\Column(type="uuid", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "league.get_players",
-     *     "league.get_player_riot_accounts",
-     *
-     *    "league.get_riot_accounts",
-     *	  "league.get_riot_account",
-     *	  "league.put_riot_account",
-     *    "league.get_search",
-     *    "get_team_members",
-     * })
-     *
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -53,20 +39,8 @@ class RiotAccount
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "league.get_player_riot_accounts",
-     *
-     *    "league.get_riot_accounts",
-     *    "league.get_riot_account",
-     *    "league.post_riot_account_initialize",
-     *    "league.post_player_riot_account",
-     *    "league.post_riot_account",
-     * })
-     *
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -74,19 +48,8 @@ class RiotAccount
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "league.get_player_riot_accounts",
-     *
-     *    "league.get_riot_accounts",
-     *    "league.get_riot_account",
-     *    "league.post_riot_account_initialize",
-     *    "league.post_player_riot_account",
-     * })
-     *
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -94,21 +57,9 @@ class RiotAccount
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
      * @Serializer\SerializedName("ecrypted_puuid")
-     * @Serializer\Groups({
-     *     "league.get_player_riot_accounts",
-     *
-     *    "league.get_riot_accounts",
-     *    "league.get_riot_account",
-     *    "league.post_riot_account_initialize",
-     *    "league.post_player_riot_account",
-     *    "league.post_riot_account",
-     * })
-     *
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -116,20 +67,8 @@ class RiotAccount
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "league.get_player_riot_accounts",
-     *
-     *    "league.get_riot_accounts",
-     *    "league.get_riot_account",
-     *    "league.post_riot_account_initialize",
-     *    "league.post_player_riot_account",
-     *    "league.post_riot_account",
-     * })
-     *
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -137,20 +76,8 @@ class RiotAccount
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "league.get_player_riot_accounts",
-     *
-     *    "league.get_riot_accounts",
-     *    "league.get_riot_account",
-     *    "league.post_riot_account_initialize",
-     *    "league.post_player_riot_account",
-     *    "league.post_riot_account",
-     * })
-     *
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -158,57 +85,27 @@ class RiotAccount
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=true)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "league.get_player_riot_accounts",
-     *
-     *    "league.get_riot_accounts",
-     *    "league.get_riot_account",
-     *    "league.post_riot_account_initialize",
-     *    "league.post_player_riot_account",
-     *    "league.get_search",
-     * })
      */
     protected $profileIconId;
 
     /**
      * @var Player
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\LeagueOfLegends\Player\Player", inversedBy="accounts")
-     *
      * @Serializer\Type("App\Entity\LeagueOfLegends\Player\Player")
-     * @Serializer\Groups({
-     *	  "league.get_riot_account",
-     *    "league.post_riot_account",
-     *    "league.get_search",
-     * })
      */
     protected $player;
 
     /**
      * @var bool
-     *
      * @ORM\Column(type="boolean", nullable=false)
-     *
      * @Serializer\Type("boolean")
-     * @Serializer\Groups({
-     *    "league.get_player_riot_accounts",
-     *
-     *    "league.get_riot_accounts",
-     *    "league.get_riot_account",
-     *    "league.post_riot_account_initialize",
-     *    "league.post_riot_account",
-     *    "league.put_riot_account",
-     * })
      */
     protected $smurf;
 
     /**
      * @var Collection|SummonerName[]
-     *
      * @ORM\OneToMany(targetEntity="App\Entity\LeagueOfLegends\Player\SummonerName", mappedBy="owner")
      * @ORM\OrderBy({"createdAt"="DESC"})
      */
@@ -216,7 +113,6 @@ class RiotAccount
 
     /**
      * @var Collection|Ranking[]
-     *
      * @ORM\OneToMany(targetEntity="App\Entity\LeagueOfLegends\Player\Ranking", mappedBy="owner")
      * @ORM\OrderBy({"createdAt"="DESC"})
      */
@@ -224,50 +120,30 @@ class RiotAccount
 
     /**
      * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
-     *
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
 
     /**
      * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="update")
-     *
      * @ORM\Column(name="updated_at", type="datetime")
-     *
      * @Serializer\Type("DateTime")
-     * @Serializer\Groups({
-     *    "league.get_player_riot_accounts",
-     *
-     *    "league.get_riot_account",
-     * })
      */
     protected $updatedAt;
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer", options={"default"=0})
-     *
      * @Serializer\Type("integer")
-     * @Serializer\Groups({
-     *    "league.get_riot_account",
-     * })
      */
     private $score = 0;
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer", options={"default"=1})
-     *
      * @Serializer\Type("integer")
-     * @Serializer\Groups({
-     *    "league.get_riot_account",
-     * })
      */
     protected $summonerLevel;
 
@@ -463,13 +339,6 @@ class RiotAccount
 
     /**
      * @Serializer\VirtualProperty()
-     * @Serializer\Groups({
-     *    "league.get_player_riot_accounts",
-     *
-     *    "league.get_riot_accounts",
-     *    "league.get_riot_account",
-     *	  "league.get_search",
-     * })
      *
      * @return string
      */
@@ -487,12 +356,6 @@ class RiotAccount
 
     /**
      * @Serializer\VirtualProperty
-     * @Serializer\Groups({
-     *    "league.get_player_riot_accounts",
-     *
-     *		"get_team_members",
-     *		"league.get_search",
-     * })
      */
     public function getCurrentRanking(): Ranking
     {
@@ -501,12 +364,6 @@ class RiotAccount
 
     /**
      * @Serializer\VirtualProperty
-     * @Serializer\Groups({
-     *    "league.get_player_riot_accounts",
-     *
-     *		"get_team_members",
-     *		"league.get_search",
-     * })
      */
     public function getBestRanking(): Ranking
     {

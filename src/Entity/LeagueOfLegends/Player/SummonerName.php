@@ -20,7 +20,6 @@ class SummonerName
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -29,18 +28,8 @@ class SummonerName
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "league.post_riot_account_initialize",
-     *     "league.get_players_ranking",
-     *     "league.get_players_riot_accounts",
-     *     "league.get_riot_account_summoner_names",
-     *     "league.get_summoner_name",
-     * })
-     *
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -48,74 +37,45 @@ class SummonerName
 
     /**
      * @var RiotAccount
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\LeagueOfLegends\Player\RiotAccount", inversedBy="summonerNames")
-     *
      * @Serializer\Type("string")
      */
     protected $owner;
 
     /**
      * @var bool
-     *
      * @ORM\Column(type="boolean", nullable=false)
-     *
      * @Serializer\Type("boolean")
-     * @Serializer\Groups({
-     *     "league.post_riot_account_initialize",
-     *     "league.get_riot_account_summoner_names",
-     *     "league.get_summoner_name",
-     * })
      */
     protected $current;
 
     /**
      * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
-     *
      * @ORM\Column(name="created_at", type="datetime")
-     *
      * @Serializer\Type("DateTime")
-     * @Serializer\Groups({
-     *     "league.get_riot_account_summoner_names",
-     *     "league.get_summoner_name",
-     * })
      */
     protected $createdAt;
 
     /**
      * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="update")
-     *
      * @ORM\Column(name="changed_at", type="datetime")
-     *
      * @Serializer\Type("DateTime")
-     * @Serializer\Groups({
-     *     "league.get_riot_account_summoner_names",
-     * })
      */
     protected $changedAt;
 
     /**
      * @var SummonerName
-     *
      * @ORM\OneToOne(targetEntity="App\Entity\LeagueOfLegends\Player\SummonerName", inversedBy="next")
-     *
      * @Serializer\Type("App\Entity\LeagueOfLegends\Player\SummonerName")
      * @Serializer\Exclude(if="object.isChild(context)")
-     * @Serializer\Groups({
-     *     "league.get_summoner_name",
-     * })
      */
     protected $previous;
 
     /**
      * @var SummonerName
-     *
      * @ORM\OneToOne(targetEntity="App\Entity\LeagueOfLegends\Player\SummonerName", mappedBy="previous")
-     *
      * @Serializer\Type("App\Entity\LeagueOfLegends\Player\SummonerName")
      * @Serializer\Exclude(if="object.isChild(context)")
      */
@@ -188,11 +148,6 @@ class SummonerName
 
     /**
      * @Serializer\VirtualProperty()
-     * @Serializer\Groups({
-     *     "league.get_summoner_name",
-     * })
-     *
-     * @return Player
      */
     public function getPlayer(): Player
     {

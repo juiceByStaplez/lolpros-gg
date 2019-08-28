@@ -24,7 +24,6 @@ class Member
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -33,18 +32,8 @@ class Member
 
     /**
      * @var UuidInterface
-     *
      * @ORM\Column(type="uuid", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_team_members",
-     *     "get_player_members",
-     *     "get_member",
-     *     "get_teams",
-     *     "get_team",
-     * })
-     *
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -52,110 +41,51 @@ class Member
 
     /**
      * @var Player
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Player\Player", inversedBy="memberships")
-     *
      * @Serializer\Type("App\Entity\Player\Player")
-     * @Serializer\Groups({
-     *     "get_team_members",
-     *     "get_member",
-     *     "get_teams",
-     *     "get_team",
-     * })
      */
     protected $player;
 
     /**
      * @var Team
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Team\Team", inversedBy="members")
-     *
      * @Serializer\Type("App\Entity\Team\Team")
-     * @Serializer\Groups({
-     *     "get_team_members",
-     *     "get_member",
-     *     "get_player_memberships",
-     *     "get_player_members",
-     * })
      */
     protected $team;
 
     /**
      * @var DateTime
-     *
      * @ORM\Column(name="join_date", type="datetime", nullable=true)
-     *
      * @Serializer\Type("DateTime<'Y-m-d'>")
-     * @Serializer\Groups({
-     *     "get_team_members",
-     *     "post_team_member",
-     *     "get_member",
-     *     "get_teams",
-     *     "get_team",
-     *     "patch_member",
-     *     "get_player_memberships",
-     *     "get_player_members",
-     * })
      */
     protected $joinDate;
 
     /**
      * @var DateTime
-     *
      * @ORM\Column(name="leave_date", type="datetime", nullable=true)
-     *
      * @Serializer\Type("DateTime<'Y-m-d'>")
-     * @Serializer\Groups({
-     *     "get_team_members",
-     *     "post_team_member",
-     *     "get_member",
-     *     "get_teams",
-     *     "get_team",
-     *     "patch_member",
-     *     "get_player_memberships",
-     *     "get_player_members",
-     * })
      */
     protected $leaveDate;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="role", type="string")
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_team_members",
-     *     "post_team_member",
-     *     "get_member",
-     *     "get_teams",
-     *     "get_team",
-     *     "patch_member",
-     *     "get_player_memberships",
-     *     "get_player_members",
-     * })
-     *
      * @Assert\NotNull(groups={"post_team_member"})
-     * @Assert\Choice(callback="getAvailableRoles", groups={
-     *     "post_team_member",
-     * }, strict=true)
+     * @Assert\Choice(callback="getAvailableRoles", strict=true)
      */
     protected $role;
 
     /**
      * @var DateTime
-     *
      * @Gedmo\Timestampable(on="create")
-     *
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
 
     /**
      * @var DateTime
-     *
      * @Gedmo\Timestampable(on="update")
-     *
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;

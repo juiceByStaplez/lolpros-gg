@@ -2,7 +2,7 @@
 
 namespace App\Entity\LeagueOfLegends\Player;
 
-use App\Entity\LeagueOfLegends\Manager\Player\RankingsManager;
+use App\Manager\LeagueOfLegends\Player\RankingsManager;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as Serializer;
@@ -35,7 +35,6 @@ class Ranking
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -44,168 +43,85 @@ class Ranking
 
     /**
      * @var bool
-     *
      * @ORM\Column(type="boolean", nullable=false)
-     *
      * @Serializer\Type("boolean")
-     * @Serializer\Groups({
-     *     "league.get_players_ranking",
-     *     "league.get_riot_account_rankings",
-     * })
      */
     protected $best = false;
 
     /**
      * @var RiotAccount
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\LeagueOfLegends\Player\RiotAccount", inversedBy="rankings")
-     *
      * @Serializer\Type("string")
      */
     protected $owner;
 
     /**
      * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
-     *
      * @ORM\Column(name="created_at", type="datetime")
-     *
      * @Serializer\Type("DateTime")
-     * @Serializer\Groups({
-     *    "league.get_player_riot_accounts",
-     *
-     *     "league.get_riot_account_rankings",
-     * })
      */
     protected $createdAt;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string")
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "league.post_riot_account_initialize",
-     *     "league.get_players_ranking",
-     *     "league.get_riot_account_rankings",
-     * })
      */
     protected $queueType;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string")
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *    "league.get_player_riot_accounts",
-     *
-     *     "league.post_riot_account_initialize",
-     *     "league.get_players_ranking",
-     *     "league.get_riot_account_rankings",
-     *     "league.get_search",
-     * })
      */
     protected $tier;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="integer", options={"default"=0})
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *    "league.get_player_riot_accounts",
-     *
-     *     "league.post_riot_account_initialize",
-     *     "league.get_players_ranking",
-     *     "league.get_riot_account_rankings",
-     *     "league.get_search",
-     * })
      */
     protected $rank = 0;
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer", options={"default"=0})
-     *
      * @Serializer\Type("integer")
-     * @Serializer\Groups({
-     *    "league.get_player_riot_accounts",
-     *
-     *     "league.post_riot_account_initialize",
-     *     "league.get_players_ranking",
-     *     "league.get_riot_account_rankings",
-     *	   "get_team_members",
-     *     "league.get_search",
-     * })
      */
     protected $leaguePoints = 0;
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer", options={"default"=0})
-     *
      * @Serializer\Type("integer")
-     * @Serializer\Groups({
-     *     "league.post_riot_account_initialize",
-     *     "league.get_riot_account_rankings",
-     * })
      */
     protected $wins = 0;
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer", options={"default"=0})
-     *
      * @Serializer\Type("integer")
-     * @Serializer\Groups({
-     *     "league.post_riot_account_initialize",
-     *     "league.get_riot_account_rankings",
-     * })
      */
     protected $losses = 0;
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer", options={"default"=0})
-     *
      * @Serializer\Type("integer")
-     * @Serializer\Groups({
-     *     "league.get_riot_account_rankings",
-     * })
      */
     private $score = 0;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string")
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "league.get_riot_account_rankings",
-     * })
      */
     private $season;
 
     public function isBest(): bool
     {
         return $this->best;
-    }
-
-    public function setCreatedAt(\DateTime $createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
     }
 
     public function setBest(bool $best): self

@@ -20,7 +20,6 @@ class AdminLog
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -29,98 +28,58 @@ class AdminLog
 
     /**
      * @var UuidInterface
-     *
      * @ORM\Column(type="uuid", nullable=false)
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_admin_log",
-     *     "get_admin_logs",
-     * })
      */
     protected $uuid;
 
     /**
      * @var DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
      * @Serializer\Type("DateTime")
-     * @Serializer\Groups({
-     *     "get_admin_log",
-     *     "get_admin_logs",
-     * })
      */
     protected $createdAt;
 
     /**
      * @var UserInterface
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="edits")
      * @Serializer\Type("App\Entity\User\User")
-     * @Serializer\Groups({
-     *     "get_admin_log",
-     *     "get_admin_logs",
-     * })
      */
     protected $user;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_admin_log",
-     *     "get_admin_logs",
-     * })
      */
     protected $type;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_admin_log",
-     *     "get_admin_logs",
-     * })
      */
     protected $entityUuid;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_admin_log",
-     *     "get_admin_logs",
-     * })
      */
     protected $entityName;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_admin_log",
-     *     "get_admin_logs",
-     * })
      */
     protected $linkedUuid;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_admin_log",
-     *     "get_admin_logs",
-     * })
      */
     protected $linkedName;
 

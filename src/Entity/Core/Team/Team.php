@@ -28,7 +28,6 @@ class Team
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -37,20 +36,8 @@ class Team
 
     /**
      * @var UuidInterface
-     *
      * @ORM\Column(type="uuid", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_teams",
-     *     "get_team",
-     *     "get_team_members",
-     *     "get_member",
-     *     "league.get_player",
-     *     "get_document",
-     *     "get_player_members",
-     * })
-     *
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -58,20 +45,8 @@ class Team
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_teams",
-     *     "get_team",
-     *     "post_team",
-     *     "put_team",
-     *     "get_team_members",
-     *     "get_member",
-     *     "get_player_members",
-     * })
-     *
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -79,19 +54,9 @@ class Team
 
     /**
      * @var string
-     *
      * @Gedmo\Slug(fields={"name"})
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_teams",
-     *     "get_team",
-     *     "post_team",
-     *     "put_team",
-     *     "get_player_members",
-     * })
-     *
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -99,33 +64,15 @@ class Team
 
     /**
      * @var TeamLogo
-     *
      * @ORM\OneToOne(targetEntity="\App\Entity\Document\TeamLogo", mappedBy="team", cascade={"remove"})
-     *
      * @Serializer\Type("App\Entity\Document\TeamLogo")
-     * @Serializer\Groups({
-     *     "get_teams",
-     *     "get_team",
-     *     "get_member",
-     *     "get_player_members",
-     * })
      */
     protected $logo;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_teams",
-     *     "get_team",
-     *     "post_team",
-     *     "put_team",
-     *     "get_player_members",
-     * })
-     *
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -133,57 +80,29 @@ class Team
 
     /**
      * @var DateTime
-     *
      * @ORM\Column(name="creation_date", type="datetime", nullable=true)
-     *
      * @Serializer\Type("DateTime<'Y-m-d'>")
-     * @Serializer\Groups({
-     *     "get_teams",
-     *     "get_team",
-     *     "post_team",
-     *     "put_team",
-     * })
      */
     protected $creationDate;
 
     /**
      * @var DateTime
-     *
      * @ORM\Column(name="disband_date", type="datetime", nullable=true)
-     *
      * @Serializer\Type("DateTime<'Y-m-d'>")
-     * @Serializer\Groups({
-     *     "get_teams",
-     *     "get_team",
-     *     "post_team",
-     *     "put_team",
-     * })
      */
     protected $disbandDate;
 
     /**
      * @var SocialMedia
-     *
      * @ORM\OneToOne(targetEntity="App\Entity\Team\SocialMedia", mappedBy="owner", cascade={"persist", "remove"})
-     *
      * @Serializer\Type("App\Entity\Team\SocialMedia")
      */
     protected $socialMedia;
 
     /**
      * @var Region
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\LeagueOfLegends\Region\Region", inversedBy="teams")
-     *
      * @Serializer\Type("App\Entity\LeagueOfLegends\Region\Region")
-     * @Serializer\Groups({
-     *     "get_teams",
-     *     "get_team",
-     *     "post_team",
-     *     "put_team",
-     *     "get_player_members",
-     * })
-     *
      * @Assert\NotNull(groups={"post_team"})
      * @Assert\NotBlank(groups={"post_team"})
      */
@@ -191,32 +110,22 @@ class Team
 
     /**
      * @var ArrayCollection|Member[]
-     *
      * @ORM\OneToMany(targetEntity="App\Entity\Team\Member", mappedBy="team")
-     *
      * @Serializer\Type("array<App\Entity\Team\Member>")
      * @ORM\OrderBy({"leaveDate"="ASC", "joinDate"="DESC"})
-     * @Serializer\Groups({
-     *     "get_team",
-     *     "get_teams",
-     * })
      */
     protected $members;
 
     /**
      * @var DateTime
-     *
      * @Gedmo\Timestampable(on="create")
-     *
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
 
     /**
      * @var DateTime
-     *
      * @Gedmo\Timestampable(on="update")
-     *
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
@@ -245,23 +154,9 @@ class Team
         return $this->name;
     }
 
-    public function setCreatedAt($createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
-    }
-
-    public function setUpdatedAt($updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
     }
 
     public function getUpdatedAt(): DateTime

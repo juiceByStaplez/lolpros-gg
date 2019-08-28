@@ -2,7 +2,7 @@
 
 namespace App\Entity\LeagueOfLegends\Player;
 
-use App\Entity\Core\Player as BasePlayer;
+use App\Entity\Core\Player\Player as BasePlayer;
 use App\Entity\LeagueOfLegends\Region\Region;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,70 +26,32 @@ class Player extends BasePlayer
 
     /**
      * @var Collection|RiotAccount[]
-     *
      * @ORM\OneToMany(targetEntity="App\Entity\LeagueOfLegends\Player\RiotAccount", mappedBy="player")
      * @ORM\OrderBy({"smurf" = "ASC", "score" = "DESC"})
-     *
      * @Serializer\Type("App\Entity\LeagueOfLegends\Player\RiotAccount")
-     * @Serializer\Groups({
-     *     "league.get_players",
-     *     "league.post_player",
-     *     "league.get_players_ranking",
-     * })
      */
     protected $accounts;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string")
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "league.get_players",
-     *     "league.get_player",
-     *     "league.post_player",
-     *     "league.put_player",
-     *     "league.get_players_ranking",
-     *     "league.get_search",
-     *     "get_team_members",
-     *     "get_team",
-     * })
-     *
      * @Assert\NotNull(groups={"league.post_player"})
-     * @Assert\Choice(callback="getAvailablePositions", groups={
-     *     "league.post_player",
-     *     "league.put_player",
-     * }, strict=true)
+     * @Assert\Choice(callback="getAvailablePositions", strict=true)
      */
     protected $position;
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer", options={"default"=0})
      * @Serializer\Type("integer")
-     * @Serializer\Groups({
-     *     "league.get_players",
-     *     "league.get_player",
-     * })
      */
     private $score = 0;
 
     /**
      * @var ArrayCollection|Region[]
-     *
      * @ORM\ManyToMany(targetEntity="App\Entity\LeagueOfLegends\Region\Region", inversedBy="players")
-     *
      * @Serializer\Type("App\Entity\LeagueOfLegends\Region\Region")
-     * @Serializer\Groups({
-     *     "league.get_players",
-     *
-     *     "league.get_player",
-     *     "league.put_player",
-     *     "league.post_player",
-     *     "league.get_search",
-     * })
      */
     private $regions;
 
@@ -150,13 +112,6 @@ class Player extends BasePlayer
         return $this;
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
     public function getRegions(): ?Collection
     {
         return $this->regions;
@@ -187,10 +142,6 @@ class Player extends BasePlayer
 
     /**
      * @Serializer\VirtualProperty
-     * @Serializer\Groups({
-     *     "get_team_members",
-     *     "league.get_search",
-     *	})
      */
     public function getBestAccount(): ?RiotAccount
     {

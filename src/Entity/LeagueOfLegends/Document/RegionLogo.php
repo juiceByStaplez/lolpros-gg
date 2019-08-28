@@ -13,7 +13,6 @@ class RegionLogo extends Document
 {
     /**
      * @var Region
-     *
      * @ORM\OneToOne(targetEntity="App\Entity\LeagueOfLegends\Region\Region", inversedBy="logo")
      */
     protected $region;

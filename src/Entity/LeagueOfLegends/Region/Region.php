@@ -28,7 +28,6 @@ class Region
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -37,178 +36,79 @@ class Region
 
     /**
      * @var UuidInterface
-     *
      * @ORM\Column(type="uuid", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "league.get_region",
-     *     "league.get_regions",
-     *     "league.get_player",
-     *     "league.get_players",
-     *     "league.get_search",
-     *     "get_document",
-     *     "get_teams",
-     *     "get_team",
-     *     "post_team",
-     *     "put_team",
-     *     "get_player_members",
-     * })
-     *
-     * @Assert\NotNull()
-     * @Assert\NotBlank()
+     * @Assert\NotNull
+     * @Assert\NotBlank
      */
     protected $uuid;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "league.get_region",
-     *     "league.get_regions",
-     *     "league.post_region",
-     *     "league.put_region",
-     *     "league.get_player",
-     *     "league.get_players",
-     *     "league.get_search",
-     *     "get_teams",
-     *     "get_team",
-     *     "get_player_members",
-     * })
-     *
-     * @Assert\NotNull(groups={
-     *     "league.post_region",
-     * })
+     * @Assert\NotNull(groups={"league.post_region"})
      */
     protected $name;
 
     /**
      * @var string
-     *
      * @Gedmo\Slug(fields={"name"})
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "league.get_region",
-     *     "league.get_regions",
-     *     "league.get_player",
-     *     "league.get_players",
-     *     "league.get_search",
-     *     "get_teams",
-     *     "get_team",
-     * })
      */
     protected $slug;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "league.get_region",
-     *     "league.get_regions",
-     *     "league.put_region",
-     *     "league.get_player",
-     *     "league.get_players",
-     *     "league.get_search",
-     *     "get_teams",
-     *     "get_team",
-     * })
-     *
-     * @Assert\NotNull(groups={
-     *     "league.post_region",
-     * })
+     * @Assert\NotNull(groups={"league.post_region"})
      */
     protected $shorthand;
 
     /**
      * @var array
-     *
      * @ORM\Column(type="array", nullable=true)
-     *
      * @Serializer\Type("array")
-     * @Serializer\Groups({
-     *     "league.get_region",
-     *     "league.get_regions",
-     *     "league.post_region",
-     *     "league.put_region",
-     * })
-     *
-     * @Assert\NotBlank(groups={
-     *     "league.post_region",
-     * })
+     * @Assert\NotBlank(groups={"league.post_region"})
      */
     protected $countries;
 
     /**
      * @var ArrayCollection|Player[]
-     *
      * @ORM\ManyToMany(targetEntity="App\Entity\LeagueOfLegends\Player\Player", mappedBy="regions")
-     *
      * @Serializer\Type("array<LeagueOfLegends\Entity\Player\Player>")
      */
     protected $players;
 
     /**
      * @var ArrayCollection|Team[]
-     *
      * @ORM\OneToMany(targetEntity="App\Entity\Team\Team", mappedBy="region")
-     *
      * @Serializer\Type("array<App\Entity\Team\Team>")
      */
     protected $teams;
 
     /**
      * @var RegionLogo
-     *
      * @ORM\OneToOne(targetEntity="\LeagueOfLegends\Entity\Document\RegionLogo", mappedBy="region", cascade={"remove"})
-     *
      * @Serializer\Type("App\Entity\LeagueOfLegends\Document\RegionLogo")
-     * @Serializer\Groups({
-     *     "league.get_region",
-     *     "league.get_regions",
-     *     "league.get_player",
-     *     "league.get_players",
-     *     "league.get_search",
-     *     "get_teams",
-     *     "get_team",
-     * })
      */
     protected $logo;
 
     /**
      * @var DateTime
-     *
      * @Gedmo\Timestampable(on="create")
-     *
      * @ORM\Column(name="created_at", type="datetime")
-     *
      * @Serializer\Type("DateTime")
-     * @Serializer\Groups({
-     *     "league.get_region",
-     *     "league.get_regions",
-     * })
      */
     protected $createdAt;
 
     /**
      * @var DateTime
-     *
      * @Gedmo\Timestampable(on="update")
-     *
      * @ORM\Column(name="updated_at", type="datetime")
-     *
      * @Serializer\Type("DateTime")
-     * @Serializer\Groups({
-     *     "league.get_region",
-     *     "league.get_regions",
-     * })
      */
     protected $updatedAt;
 

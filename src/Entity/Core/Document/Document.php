@@ -2,6 +2,7 @@
 
 namespace App\Entity\Core\Document;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as Serializer;
@@ -22,105 +23,45 @@ abstract class Document
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
-     * @Serializer\Exclude()
+     * @Serializer\Exclude
      */
     protected $id;
 
     /**
      * @var UuidInterface
-     *
      * @ORM\Column(name="uuid", type="uuid")
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_document",
-     *     "get_team",
-     *     "get_teams",
-     *     "league.get_region",
-     *     "league.get_regions",
-     *     "league.get_players",
-     *     "get_player_members",
-     * })
      */
     protected $uuid;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="public_id", type="string", length=255)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_document",
-     *     "get_team",
-     *     "get_teams",
-     *     "league.get_region",
-     *     "league.get_regions",
-     *     "league.get_players",
-     *     "league.get_search",
-     *     "get_player_members",
-     * })
      */
     protected $publicId;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="version", type="string", length=255)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_document",
-     *     "get_team",
-     *     "get_teams",
-     *     "league.get_region",
-     *     "league.get_regions",
-     *     "league.get_players",
-     *     "league.get_search",
-     *     "get_player_members",
-     * })
      */
     protected $version;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="url", type="string", length=255)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "get_document",
-     *     "get_team",
-     *     "get_teams",
-     *     "league.get_region",
-     *     "league.get_regions",
-     *     "league.get_players",
-     *     "league.get_search",
-     *     "get_player_members",
-     *     "get_member",
-     * })
      */
     protected $url;
 
     /**
-     * @var \DateTime
-     *
+     * @var DateTime
      * @Gedmo\Timestampable(on="create")
-     *
      * @ORM\Column(name="created_at", type="datetime")
-     *
-     * @Serializer\Type("DateTime")
-     * @Serializer\Groups({
-     *     "get_document",
-     *     "get_team",
-     *     "league.get_region",
-     *     "league.get_regions",
-     * })
      */
     protected $createdAt;
 
@@ -170,15 +111,8 @@ abstract class Document
         return $this;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTime $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
     }
 }
