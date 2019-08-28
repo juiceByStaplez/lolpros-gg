@@ -5,16 +5,14 @@ namespace App\Controller\Core\Player;
 use App\Controller\APIController;
 use App\Entity\Core\Player\Player;
 use App\Entity\Core\Team\Member;
-use App\Factory\Core\Team\TeamFactory;
+use App\Factory\Core\TeamFactory;
 use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\Prefix;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @NamePrefix("app.")
- * @Prefix("/players")
+ * @Route("/players")
  */
 class PlayersMembersController extends APIController
 {

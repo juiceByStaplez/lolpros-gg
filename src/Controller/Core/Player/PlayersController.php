@@ -5,15 +5,13 @@ namespace App\Controller\Core\Player;
 use App\Controller\APIController;
 use App\Entity\LeagueOfLegends\Player\Player;
 use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\Prefix;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @NamePrefix("app.")
- * @Prefix("/players")
+ * @Route("/players")
  */
 class PlayersController extends APIController
 {

@@ -17,8 +17,6 @@ use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Region.
- *
  * @ORM\Table(name="region__region")
  * @ORM\Entity
  */
@@ -78,20 +76,20 @@ class Region
     /**
      * @var ArrayCollection|Player[]
      * @ORM\ManyToMany(targetEntity="App\Entity\LeagueOfLegends\Player\Player", mappedBy="regions")
-     * @Serializer\Type("array<LeagueOfLegends\Entity\Player\Player>")
+     * @Serializer\Type("array<App\Entity\LeagueOfLegends\Player\Player>")
      */
     protected $players;
 
     /**
      * @var ArrayCollection|Team[]
-     * @ORM\OneToMany(targetEntity="App\Entity\Team\Team", mappedBy="region")
-     * @Serializer\Type("array<App\Entity\Team\Team>")
+     * @ORM\OneToMany(targetEntity="App\Entity\Core\Team\Team", mappedBy="region")
+     * @Serializer\Type("array<App\Entity\Core\Team\Team>")
      */
     protected $teams;
 
     /**
      * @var RegionLogo
-     * @ORM\OneToOne(targetEntity="\LeagueOfLegends\Entity\Document\RegionLogo", mappedBy="region", cascade={"remove"})
+     * @ORM\OneToOne(targetEntity="\App\Entity\LeagueOfLegends\Document\RegionLogo", mappedBy="region", cascade={"remove"})
      * @Serializer\Type("App\Entity\LeagueOfLegends\Document\RegionLogo")
      */
     protected $logo;

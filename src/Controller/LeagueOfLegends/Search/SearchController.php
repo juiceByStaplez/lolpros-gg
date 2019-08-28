@@ -4,16 +4,14 @@ namespace App\Controller\LeagueOfLegends\Search;
 
 use App\Controller\APIController;
 use App\Manager\LeagueOfLegends\Search\SearchManager;
-use App\Model\Player\Ladder\SearchResult;
+use App\Model\LeagueOfLegends\Ladder\SearchResult;
 use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\Prefix;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @NamePrefix("league.")
- * @Prefix("/search")
+ * @Route("/search")
  */
 class SearchController extends APIController
 {

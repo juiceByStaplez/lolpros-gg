@@ -17,8 +17,6 @@ use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Team.
- *
  * @ORM\Table(name="team__team")
  * @ORM\Entity(repositoryClass="App\Repository\Core\TeamRepository")
  */
@@ -64,8 +62,8 @@ class Team
 
     /**
      * @var TeamLogo
-     * @ORM\OneToOne(targetEntity="\App\Entity\Document\TeamLogo", mappedBy="team", cascade={"remove"})
-     * @Serializer\Type("App\Entity\Document\TeamLogo")
+     * @ORM\OneToOne(targetEntity="\App\Entity\Core\Document\TeamLogo", mappedBy="team", cascade={"remove"})
+     * @Serializer\Type("App\Entity\Core\Document\TeamLogo")
      */
     protected $logo;
 
@@ -94,8 +92,8 @@ class Team
 
     /**
      * @var SocialMedia
-     * @ORM\OneToOne(targetEntity="App\Entity\Team\SocialMedia", mappedBy="owner", cascade={"persist", "remove"})
-     * @Serializer\Type("App\Entity\Team\SocialMedia")
+     * @ORM\OneToOne(targetEntity="App\Entity\Core\Team\SocialMedia", mappedBy="owner", cascade={"persist", "remove"})
+     * @Serializer\Type("App\Entity\Core\Team\SocialMedia")
      */
     protected $socialMedia;
 
@@ -110,8 +108,8 @@ class Team
 
     /**
      * @var ArrayCollection|Member[]
-     * @ORM\OneToMany(targetEntity="App\Entity\Team\Member", mappedBy="team")
-     * @Serializer\Type("array<App\Entity\Team\Member>")
+     * @ORM\OneToMany(targetEntity="App\Entity\Core\Team\Member", mappedBy="team")
+     * @Serializer\Type("array<App\Entity\Core\Team\Member>")
      * @ORM\OrderBy({"leaveDate"="ASC", "joinDate"="DESC"})
      */
     protected $members;

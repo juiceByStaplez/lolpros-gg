@@ -7,16 +7,14 @@ use App\Entity\Core\Team\SocialMedia;
 use App\Entity\Core\Team\Team;
 use App\Manager\Core\Team\SocialMediaManager;
 use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\Prefix;
 use FOS\RestBundle\Controller\Annotations\Put;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @NamePrefix("app.")
- * @Prefix("/teams")
+ * @Route("/teams")
  */
 class TeamsSocialMediasController extends APIController
 {

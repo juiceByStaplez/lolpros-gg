@@ -43,8 +43,8 @@ class AdminLog
 
     /**
      * @var UserInterface
-     * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="edits")
-     * @Serializer\Type("App\Entity\User\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Core\User\User", inversedBy="edits")
+     * @Serializer\Type("App\Entity\Core\User\User")
      */
     protected $user;
 

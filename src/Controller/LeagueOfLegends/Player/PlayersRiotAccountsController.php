@@ -5,13 +5,11 @@ namespace App\Controller\LeagueOfLegends\Player;
 use App\Controller\APIController;
 use App\Entity\LeagueOfLegends\Player\Player;
 use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\Prefix;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @NamePrefix("league.")
- * @Prefix("/players")
+ * @Route("/players")
  */
 class PlayersRiotAccountsController extends APIController
 {

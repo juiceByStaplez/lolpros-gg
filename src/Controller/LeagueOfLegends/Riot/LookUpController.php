@@ -10,15 +10,13 @@ use App\Manager\LeagueOfLegends\Riot\RiotLeagueManager;
 use App\Manager\LeagueOfLegends\Riot\RiotSpectatorManager;
 use App\Manager\LeagueOfLegends\Riot\RiotSummonerManager;
 use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\Prefix;
 use RiotAPI\LeagueAPI\Exceptions\RequestException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @NamePrefix("league.")
- * @Prefix("/look-up")
+ * @Route("/look-up")
  */
 class LookUpController extends APIController
 {

@@ -8,17 +8,15 @@ use App\Form\Core\Report\AddRequestForm;
 use App\Manager\Core\Report\AddRequestsManager;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\Post;
-use FOS\RestBundle\Controller\Annotations\Prefix;
 use FOS\RestBundle\Controller\Annotations\Put;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @NamePrefix("app.")
- * @Prefix("/add-requests")
+ * @Route("/add-requests")
  */
 class AddRequestController extends APIController
 {

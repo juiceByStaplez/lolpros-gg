@@ -24,8 +24,8 @@ class SocialMedia
 
     /**
      * @var Player
-     * @ORM\OneToOne(targetEntity="App\Entity\Player\Player", inversedBy="socialMedia")
-     * @Serializer\Type("App\Entity\Player\Player")
+     * @ORM\OneToOne(targetEntity="App\Entity\Core\Player\Player", inversedBy="socialMedia")
+     * @Serializer\Type("App\Entity\Core\Player\Player")
      */
     protected $owner;
 

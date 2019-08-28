@@ -11,8 +11,6 @@ use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Player.
- *
  * @ORM\Entity(repositoryClass="App\Repository\LeagueOfLegends\PlayerRepository")
  * @ORM\Table(name="player__player")
  */

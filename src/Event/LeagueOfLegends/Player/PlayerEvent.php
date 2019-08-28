@@ -3,7 +3,7 @@
 namespace App\Event\LeagueOfLegends\Player;
 
 use App\Entity\LeagueOfLegends\Player\Player;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class PlayerEvent extends Event
 {

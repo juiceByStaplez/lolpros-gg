@@ -3,7 +3,7 @@
 namespace App\Event\Core\Team;
 
 use App\Entity\Core\Team\Member;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class MemberEvent extends Event
 {

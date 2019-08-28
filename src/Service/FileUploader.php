@@ -13,7 +13,7 @@ use App\Manager\DefaultManager;
 use Cloudinary\Uploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploader extends DefaultManager

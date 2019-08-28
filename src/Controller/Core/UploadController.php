@@ -6,15 +6,13 @@ use App\Controller\APIController;
 use App\Entity\Core\Team\Team;
 use App\Entity\LeagueOfLegends\Region\Region;
 use App\Service\FileUploader;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\Post;
-use FOS\RestBundle\Controller\Annotations\Prefix;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @NamePrefix("app.")
- * @Prefix("/upload")
+ * @Route("/upload")
  */
 class UploadController extends APIController
 {

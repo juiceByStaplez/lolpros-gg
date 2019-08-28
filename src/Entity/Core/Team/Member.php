@@ -41,15 +41,15 @@ class Member
 
     /**
      * @var Player
-     * @ORM\ManyToOne(targetEntity="App\Entity\Player\Player", inversedBy="memberships")
-     * @Serializer\Type("App\Entity\Player\Player")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Core\Player\Player", inversedBy="memberships")
+     * @Serializer\Type("App\Entity\Core\Player\Player")
      */
     protected $player;
 
     /**
      * @var Team
-     * @ORM\ManyToOne(targetEntity="App\Entity\Team\Team", inversedBy="members")
-     * @Serializer\Type("App\Entity\Team\Team")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Core\Team\Team", inversedBy="members")
+     * @Serializer\Type("App\Entity\Core\Team\Team")
      */
     protected $team;
 

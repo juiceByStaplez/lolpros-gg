@@ -8,8 +8,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
- * Class SocialMedia.
- *
  * @ORM\Table(name="team__social_media")
  * @ORM\Entity
  */
@@ -25,8 +23,8 @@ class SocialMedia
 
     /**
      * @var Team
-     * @ORM\OneToOne(targetEntity="App\Entity\Team\Team", inversedBy="socialMedia")
-     * @Serializer\Type("App\Entity\Team\Team")
+     * @ORM\OneToOne(targetEntity="App\Entity\Core\Team\Team", inversedBy="socialMedia")
+     * @Serializer\Type("App\Entity\Core\Team\Team")
      */
     protected $owner;
 

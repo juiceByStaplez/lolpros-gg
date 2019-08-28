@@ -3,7 +3,7 @@
 namespace App\Event\LeagueOfLegends\Region;
 
 use App\Entity\LeagueOfLegends\Region\Region;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class RegionEvent extends Event
 {

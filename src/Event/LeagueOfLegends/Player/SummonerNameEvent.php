@@ -3,7 +3,7 @@
 namespace App\Event\LeagueOfLegends\Player;
 
 use App\Entity\LeagueOfLegends\Player\SummonerName;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class SummonerNameEvent extends Event
 {

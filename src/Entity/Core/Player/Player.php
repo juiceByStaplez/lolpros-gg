@@ -70,16 +70,16 @@ abstract class Player
 
     /**
      * @var ArrayCollection|Member[]
-     * @ORM\OneToMany(targetEntity="App\Entity\Team\Member", mappedBy="player")
+     * @ORM\OneToMany(targetEntity="App\Entity\Core\Team\Member", mappedBy="player")
      * @ORM\OrderBy({"joinDate"="DESC"})
-     * @Serializer\Type("App\Entity\Team\Member")
+     * @Serializer\Type("App\Entity\Core\Team\Member")
      */
     protected $memberships;
 
     /**
      * @var SocialMedia
-     * @ORM\OneToOne(targetEntity="App\Entity\Player\SocialMedia", mappedBy="owner", cascade={"persist", "remove"})
-     * @Serializer\Type("App\Entity\Player\SocialMedia")
+     * @ORM\OneToOne(targetEntity="App\Entity\Core\Player\SocialMedia", mappedBy="owner", cascade={"persist", "remove"})
+     * @Serializer\Type("App\Entity\Core\Player\SocialMedia")
      */
     protected $socialMedia;
 

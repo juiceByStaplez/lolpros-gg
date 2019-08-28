@@ -6,10 +6,10 @@ use Doctrine\Common\Inflector\Inflector;
 use FOS\RestBundle\Context\Context;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use JMS\Serializer\DeserializationContext;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class APIController extends AbstractFOSRestController
 {
@@ -25,21 +25,22 @@ class APIController extends AbstractFOSRestController
 
     protected function serialize($data, $groups = null, $code = 200): Response
     {
-        $context = (new Context())->setSerializeNull(true);
+        $context = (new Context())->setGroups($groups ? (array) $groups : null)->setSerializeNull(true);
 
         return $this->handleView($this->view($data, $code)->setContext($context)->setFormat('json'));
     }
 
     protected function deserialize(string $class, string $group = null)
     {
-        $content = $this->get('request_stack')->getCurrentRequest()->getContent();
-
-        if (!$content) {
+        if (!($content = $this->get('request_stack')->getCurrentRequest()->getContent())) {
             return $content;
         }
 
         try {
-            return $this->get('jms_serializer')->deserialize($content, $class, 'json', DeserializationContext::create()->setGroups([$group]));
+            $context = DeserializationContext::create();
+            $context->setGroups([$group]);
+
+            return $this->serializer->deserialize($content, $class, 'json', $context);
         } catch (\Exception $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
@@ -71,9 +72,7 @@ class APIController extends AbstractFOSRestController
 
     protected function find(string $namespace, string $uuid)
     {
-        $entity = $this->getDoctrine()->getRepository($namespace)->findOneBy([
-            'uuid' => $uuid,
-        ]);
+        $entity = $this->getDoctrine()->getRepository($namespace)->findOneBy(['uuid' => $uuid]);
 
         if (!$entity) {
             throw new NotFoundHttpException();

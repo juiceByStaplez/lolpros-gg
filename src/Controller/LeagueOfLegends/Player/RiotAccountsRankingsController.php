@@ -6,15 +6,13 @@ use App\Controller\APIController;
 use App\Entity\LeagueOfLegends\Player\RiotAccount;
 use App\Manager\LeagueOfLegends\Player\RankingsManager;
 use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\Prefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @NamePrefix("league.")
- * @Prefix("/riot-accounts")
+ * @Route("/riot-accounts")
  */
 class RiotAccountsRankingsController extends APIController
 {
