@@ -74,7 +74,7 @@ class DiscordAuthenticator extends SocialAuthenticator
      */
     public function supports(Request $request)
     {
-        return 'connect_discord_check' === $request->attributes->get('_route');
+        return ' app_core_oauth_discord_connectdiscordcheck' === $request->attributes->get('_route');
     }
 
     /**

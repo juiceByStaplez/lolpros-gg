@@ -34,6 +34,10 @@ abstract class Document
      * @var UuidInterface
      * @ORM\Column(name="uuid", type="uuid")
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "league.get_regions",
+     *     "league.get_region",
+     * })
      */
     protected $uuid;
 
@@ -55,6 +59,10 @@ abstract class Document
      * @var string
      * @ORM\Column(name="url", type="string", length=255)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "league.get_regions",
+     *     "league.get_region",
+     * })
      */
     protected $url;
 

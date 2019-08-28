@@ -33,7 +33,7 @@ class RegionsController extends APIController
 
     /**
      * @Get(path="/{uuid}")
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
     public function getRegionAction($uuid)
     {

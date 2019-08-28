@@ -14,7 +14,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as Serializer;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="region__region")
@@ -36,16 +35,22 @@ class Region
      * @var UuidInterface
      * @ORM\Column(type="uuid", nullable=false)
      * @Serializer\Type("string")
-     * @Assert\NotNull
-     * @Assert\NotBlank
+     * @Serializer\Groups({
+     *     "league.get_regions",
+     *     "league.get_region",
+     * })
      */
     protected $uuid;
 
     /**
      * @var string
      * @ORM\Column(type="string", nullable=false)
+     *
      * @Serializer\Type("string")
-     * @Assert\NotNull(groups={"league.post_region"})
+     * @Serializer\Groups({
+     *     "league.get_regions",
+     *     "league.get_region",
+     * })
      */
     protected $name;
 
@@ -53,7 +58,12 @@ class Region
      * @var string
      * @Gedmo\Slug(fields={"name"})
      * @ORM\Column(type="string", nullable=false)
+     *
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "league.get_regions",
+     *     "league.get_region",
+     * })
      */
     protected $slug;
 
@@ -61,7 +71,10 @@ class Region
      * @var string
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
-     * @Assert\NotNull(groups={"league.post_region"})
+     * @Serializer\Groups({
+     *     "league.get_regions",
+     *     "league.get_region",
+     * })
      */
     protected $shorthand;
 
@@ -69,7 +82,10 @@ class Region
      * @var array
      * @ORM\Column(type="array", nullable=true)
      * @Serializer\Type("array")
-     * @Assert\NotBlank(groups={"league.post_region"})
+     * @Serializer\Groups({
+     *     "league.get_regions",
+     *     "league.get_region",
+     * })
      */
     protected $countries;
 
@@ -89,8 +105,12 @@ class Region
 
     /**
      * @var RegionLogo
-     * @ORM\OneToOne(targetEntity="\App\Entity\LeagueOfLegends\Document\RegionLogo", mappedBy="region", cascade={"remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\LeagueOfLegends\Document\RegionLogo", mappedBy="region", cascade={"remove"})
      * @Serializer\Type("App\Entity\LeagueOfLegends\Document\RegionLogo")
+     * @Serializer\Groups({
+     *     "league.get_regions",
+     *     "league.get_region",
+     * })
      */
     protected $logo;
 
