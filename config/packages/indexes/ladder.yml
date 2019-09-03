@@ -1,0 +1,84 @@
+fos_elastica:
+  indexes:
+    fol_ladder:
+      index_name: "%env(ELASTICA_PREFIX)%_ladder"
+      settings:
+        number_of_replicas: 0
+        number_of_shards: 1
+      types:
+        ladder:
+          dynamic: strict
+          properties:
+            uuid:
+            name:
+              type: keyword
+            slug:
+            country:
+            position:
+            regions:
+              type: nested
+              properties:
+                uuid:
+                  type: keyword
+                name:
+                slug:
+                shorthand:
+                  type: keyword
+                logo:
+                  type: object
+                  properties:
+                    public_id:
+                    version:
+                    url:
+            score:
+              type: integer
+            total_games:
+              type: integer
+            account:
+              type: nested
+              properties:
+                uuid:
+                profile_icon_id:
+                riot_id:
+                account_id:
+                summoner_name:
+                rank:
+                tier:
+                league_points:
+                games:
+                  type: integer
+                winrate:
+                  type: float
+            peak:
+              type: nested
+              properties:
+                rank:
+                tier:
+                league_points:
+                score:
+                  type: integer
+                date:
+                  type: date
+            team:
+              type: object
+              properties:
+                uuid:
+                name:
+                slug:
+                  type: keyword
+                tag:
+                logo:
+                  type: object
+                  properties:
+                    public_id:
+                    version:
+                    url:
+
+          persistence:
+            driver: orm
+            model: App\Entity\Core\Player\Player
+            model_to_elastica_transformer:
+              service: App\Transformer\LadderTransformer
+            listener:
+              defer: true
+              logger: true

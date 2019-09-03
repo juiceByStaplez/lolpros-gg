@@ -6,7 +6,7 @@ use App\Controller\APIController;
 use App\Entity\Core\Team\Team;
 use App\Entity\LeagueOfLegends\Region\Region;
 use App\Form\Core\Team\TeamForm;
-use App\Manager\Core\Team\TeamsManager;
+use App\Manager\Core\Team\TeamManager;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -74,7 +74,7 @@ class TeamsController extends APIController
             return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
         }
 
-        $team = $this->get(TeamsManager::class)->create($team);
+        $team = $this->get(TeamManager::class)->create($team);
 
         return $this->serialize($team, 'get_team', 201);
     }
@@ -96,7 +96,7 @@ class TeamsController extends APIController
             return new JsonResponse($this->get('service.generic.error_formatter')->reduce($violationList), 422);
         }
 
-        $team = $this->get(TeamsManager::class)->update($team, $teamData);
+        $team = $this->get(TeamManager::class)->update($team, $teamData);
 
         return $this->serialize($team, 'get_team');
     }
@@ -109,7 +109,7 @@ class TeamsController extends APIController
     {
         $team = $this->find(Team::class, $uuid);
 
-        $this->get(TeamsManager::class)->delete($team);
+        $this->get(TeamManager::class)->delete($team);
 
         return new JsonResponse(null, 204);
     }

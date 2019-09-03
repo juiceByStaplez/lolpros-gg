@@ -8,7 +8,7 @@ use App\Entity\LeagueOfLegends\Player\RiotAccount;
 use App\Exception\Core\EntityNotDeletedException;
 use App\Exception\LeagueOfLegends\AccountRecentlyUpdatedException;
 use App\Form\LeagueOfLegends\Player\RiotAccountForm;
-use App\Manager\LeagueOfLegends\Player\RiotAccountsManager;
+use App\Manager\LeagueOfLegends\Player\RiotAccountManager;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -55,7 +55,7 @@ class RiotAccountsController extends APIController
         $datas = $this->deserialize(RiotAccount::class, 'league.post_riot_account');
         $player = $this->find(Player::class, $content->player);
 
-        $riotAccount = $this->get(RiotAccountsManager::class)->createRiotAccount($datas, $player);
+        $riotAccount = $this->get(RiotAccountManager::class)->createRiotAccount($datas, $player);
 
         return $this->serialize($riotAccount, 'league.get_riot_account', 201);
     }
@@ -77,7 +77,7 @@ class RiotAccountsController extends APIController
             return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
         }
 
-        $riotAccount = $this->get(RiotAccountsManager::class)->update($riotAccount);
+        $riotAccount = $this->get(RiotAccountManager::class)->update($riotAccount);
 
         return $this->serialize($riotAccount, 'league.get_riot_account');
     }
@@ -90,7 +90,7 @@ class RiotAccountsController extends APIController
     {
         $riotAccount = $this->find(RiotAccount::class, $uuid);
         try {
-            $riotAccount = $this->get(RiotAccountsManager::class)->refreshRiotAccount($riotAccount);
+            $riotAccount = $this->get(RiotAccountManager::class)->refreshRiotAccount($riotAccount);
         } catch (AccountRecentlyUpdatedException $e) {
             return new JsonResponse($e->getMessage(), 409);
         }
@@ -105,7 +105,7 @@ class RiotAccountsController extends APIController
     {
         $riotAccount = $this->find(RiotAccount::class, $uuid);
         try {
-            $this->get(RiotAccountsManager::class)->delete($riotAccount);
+            $this->get(RiotAccountManager::class)->delete($riotAccount);
         } catch (EntityNotDeletedException $e) {
             return new JsonResponse($e->getMessage(), 409);
         }

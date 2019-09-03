@@ -1,0 +1,70 @@
+fos_elastica:
+  indexes:
+    fol_members:
+      index_name: "%env(ELASTICA_PREFIX)%_members"
+      settings:
+        number_of_replicas: 0
+        number_of_shards: 1
+      types:
+        member:
+          dynamic: strict
+          properties:
+            uuid:
+            type:
+            join_date:
+              type: date
+            join_timestamp:
+            leave_date:
+              type: date
+            leave_timestamp:
+            current:
+            event_type:
+            event_date:
+              type: date
+            timestamp:
+              type: date
+            player:
+              type: object
+              properties:
+                uuid:
+                name:
+                slug:
+                  type: keyword
+                country:
+                position:
+            team:
+              type: object
+              properties:
+                uuid:
+                name:
+                slug:
+                  type: keyword
+                tag:
+                logo:
+                  type: object
+                  properties:
+                    public_id:
+                    version:
+                    url:
+                region:
+                  type: nested
+                  properties:
+                    uuid:
+                    name:
+                    slug:
+                    shorthand:
+                    logo:
+                      type: object
+                      properties:
+                        public_id:
+                        version:
+                        url:
+
+          persistence:
+            driver: orm
+            model: App\Entity\Core\Team\Member
+            model_to_elastica_transformer:
+              service: App\Transformer\MemberTransformer
+            listener:
+              defer: true
+              logger: true

@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-final class RankingsManager extends DefaultManager
+final class RankingManager extends DefaultManager
 {
     /**
      * @var RiotLeagueManager

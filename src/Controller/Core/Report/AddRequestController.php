@@ -5,7 +5,7 @@ namespace App\Controller\Core\Report;
 use App\Controller\APIController;
 use App\Entity\Core\Report\AddRequest;
 use App\Form\Core\Report\AddRequestForm;
-use App\Manager\Core\Report\AddRequestsManager;
+use App\Manager\Core\Report\AddRequestManager;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -63,7 +63,7 @@ class AddRequestController extends APIController
             return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
         }
 
-        $request = $this->get(AddRequestsManager::class)->create($request);
+        $request = $this->get(AddRequestManager::class)->create($request);
 
         return $this->serialize($request, 'get_add_request', 201);
     }
@@ -89,7 +89,7 @@ class AddRequestController extends APIController
             return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
         }
 
-        $request = $this->get(AddRequestsManager::class)->update($request);
+        $request = $this->get(AddRequestManager::class)->update($request);
 
         return $this->serialize($request, 'get_add_request');
     }
@@ -102,7 +102,7 @@ class AddRequestController extends APIController
     {
         $request = $this->find(AddRequest::class, $uuid);
 
-        $this->get(AddRequestsManager::class)->delete($request);
+        $this->get(AddRequestManager::class)->delete($request);
 
         return new JsonResponse(null, 204);
     }

@@ -1,0 +1,116 @@
+fos_elastica:
+  indexes:
+    fol_players:
+      index_name: "%env(ELASTICA_PREFIX)%_players"
+      settings:
+        number_of_replicas: 0
+        number_of_shards: 1
+        analysis:
+          normalizer:
+            lower:
+              type: custom
+              filter: [ "lowercase" ]
+      types:
+        player:
+          dynamic: strict
+          properties:
+            uuid:
+            name:
+              type: keyword
+              normalizer: lower
+            slug:
+              type: keyword
+            country:
+            position:
+            regions:
+              type: nested
+              properties:
+                uuid:
+                name:
+                slug:
+                shorthand:
+                  type: keyword
+                logo:
+                  type: object
+                  properties:
+                    public_id:
+                    version:
+                    url:
+            score:
+              type: integer
+            accounts:
+              type: nested
+              properties:
+                uuid:
+                profile_icon_id:
+                riot_id:
+                smurf:
+                summoner_name:
+                  type: keyword
+                  normalizer: lower
+                summoner_names:
+                    type: nested
+                    properties:
+                      name:
+                      created_at:
+                rank:
+                  type: nested
+                  properties:
+                    tier:
+                    rank:
+                    league_points:
+                    wins:
+                    losses:
+                    score:
+                    created_at:
+                peak:
+                  type: nested
+                  properties:
+                    tier:
+                    rank:
+                    league_points:
+                    wins:
+                    losses:
+                    score:
+                    created_at:
+            social_media:
+              type: object
+              properties:
+                twitter:
+                facebook:
+                discord:
+                twitch:
+                leaguepedia:
+            team:
+              type: object
+              properties:
+                uuid:
+                name:
+                slug:
+                tag:
+                logo:
+                  type: object
+                  properties:
+                    public_id:
+                    version:
+                    url:
+            rankings:
+              type: object
+              properties:
+                global:
+                  type: integer
+                country:
+                  type: integer
+                position:
+                  type: integer
+                country_position:
+                  type: integer
+
+          persistence:
+            driver: orm
+            model: App\Entity\Core\Player\Player
+            model_to_elastica_transformer:
+              service: App\Transformer\PlayerTransformer
+            listener:
+              defer: true
+              logger: true

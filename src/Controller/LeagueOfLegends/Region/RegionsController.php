@@ -5,7 +5,7 @@ namespace App\Controller\LeagueOfLegends\Region;
 use App\Controller\APIController;
 use App\Entity\LeagueOfLegends\Region\Region;
 use App\Form\LeagueOfLegends\Region\RegionForm;
-use App\Manager\LeagueOfLegends\Region\RegionsManager;
+use App\Manager\LeagueOfLegends\Region\RegionManager;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -63,7 +63,7 @@ class RegionsController extends APIController
             return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
         }
 
-        $region = $this->get(RegionsManager::class)->create($region);
+        $region = $this->get(RegionManager::class)->create($region);
 
         return $this->serialize($region, 'league.get_region', 201);
     }
@@ -92,7 +92,7 @@ class RegionsController extends APIController
         /* @var Region $region*/
         $region->setCountries($postedData['countries']);
 
-        $region = $this->get(RegionsManager::class)->update($region);
+        $region = $this->get(RegionManager::class)->update($region);
 
         return $this->serialize($region, 'league.get_region');
     }
@@ -105,7 +105,7 @@ class RegionsController extends APIController
     {
         $region = $this->find(Region::class, $uuid);
 
-        $this->get(RegionsManager::class)->delete($region);
+        $this->get(RegionManager::class)->delete($region);
 
         return new JsonResponse(null, 204);
     }

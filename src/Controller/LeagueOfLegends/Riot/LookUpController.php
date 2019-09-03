@@ -5,7 +5,7 @@ namespace App\Controller\LeagueOfLegends\Riot;
 use App\Controller\APIController;
 use App\Factory\LeagueOfLegends\LoLProsFactory;
 use App\Factory\LeagueOfLegends\RankingsFactory;
-use App\Manager\LeagueOfLegends\Player\PlayersManager;
+use App\Manager\LeagueOfLegends\Player\PlayerManager;
 use App\Manager\LeagueOfLegends\Riot\RiotLeagueManager;
 use App\Manager\LeagueOfLegends\Riot\RiotSpectatorManager;
 use App\Manager\LeagueOfLegends\Riot\RiotSummonerManager;
@@ -70,7 +70,7 @@ class LookUpController extends APIController
             $soloQ = $this->get(RiotLeagueManager::class)->getForId($participant->summonerId);
             $participant->ranking = $soloQ ? RankingsFactory::createArrayFromLeague($soloQ) : RankingsFactory::createEmptyArray();
 
-            $lolpros = $this->get(PlayersManager::class)->findWithAccount($participant->summonerId);
+            $lolpros = $this->get(PlayerManager::class)->findWithAccount($participant->summonerId);
             $participant->lolpros = $lolpros ? LoLProsFactory::createArrayFromRiotAccount($lolpros) : null;
         }
 

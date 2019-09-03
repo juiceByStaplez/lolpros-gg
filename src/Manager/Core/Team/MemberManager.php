@@ -9,7 +9,7 @@ use App\Exception\Core\EntityNotDeletedException;
 use App\Exception\Core\EntityNotUpdatedException;
 use App\Manager\DefaultManager;
 
-class MembersManager extends DefaultManager
+class MemberManager extends DefaultManager
 {
     public function create(Member $member): Member
     {

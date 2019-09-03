@@ -4,7 +4,7 @@ namespace App\Controller\LeagueOfLegends\Player;
 
 use App\Controller\APIController;
 use App\Entity\LeagueOfLegends\Player\RiotAccount;
-use App\Manager\LeagueOfLegends\Player\RankingsManager;
+use App\Manager\LeagueOfLegends\Player\RankingManager;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -25,7 +25,7 @@ class RiotAccountsRankingsController extends APIController
     {
         /* @var RiotAccount $riotAccount */
         $riotAccount = $this->find(RiotAccount::class, $uuid);
-        $rankings = $this->get(RankingsManager::class)->getRankingsForRiotAccount($riotAccount, $request->get('months', 1));
+        $rankings = $this->get(RankingManager::class)->getRankingsForRiotAccount($riotAccount, $request->get('months', 1));
 
         return $this->serialize($rankings, 'league.get_riot_account_rankings');
     }

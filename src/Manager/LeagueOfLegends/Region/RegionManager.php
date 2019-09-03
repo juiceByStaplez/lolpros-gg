@@ -9,7 +9,7 @@ use App\Exception\Core\EntityNotDeletedException;
 use App\Exception\Core\EntityNotUpdatedException;
 use App\Manager\DefaultManager;
 
-class RegionsManager extends DefaultManager
+class RegionManager extends DefaultManager
 {
     public function create(Region $region): Region
     {

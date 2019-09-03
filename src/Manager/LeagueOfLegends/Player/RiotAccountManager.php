@@ -20,10 +20,10 @@ use RiotAPI\LeagueAPI\Exceptions\ServerLimitException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-final class RiotAccountsManager extends DefaultManager
+final class RiotAccountManager extends DefaultManager
 {
     /**
-     * @var RankingsManager
+     * @var RankingManager
      */
     private $rankingsManager;
 
@@ -33,7 +33,7 @@ final class RiotAccountsManager extends DefaultManager
     private $riotSummonerManager;
 
     /**
-     * @var SummonerNamesManager
+     * @var SummonerNameManager
      */
     private $summonerNamesManager;
 
@@ -43,17 +43,17 @@ final class RiotAccountsManager extends DefaultManager
      * @param EntityManagerInterface   $entityManager
      * @param LoggerInterface          $logger
      * @param EventDispatcherInterface $eventDispatcher
-     * @param RankingsManager          $rankingsManager
+     * @param RankingManager           $rankingsManager
      * @param RiotSummonerManager      $riotSummonerManager
-     * @param SummonerNamesManager     $summonerNamesManager
+     * @param SummonerNameManager      $summonerNamesManager
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         LoggerInterface $logger,
         EventDispatcherInterface $eventDispatcher,
-        RankingsManager $rankingsManager,
+        RankingManager $rankingsManager,
         RiotSummonerManager $riotSummonerManager,
-        SummonerNamesManager $summonerNamesManager
+        SummonerNameManager $summonerNamesManager
     ) {
         parent::__construct($entityManager, $logger, $eventDispatcher);
         $this->rankingsManager = $rankingsManager;
@@ -167,7 +167,7 @@ final class RiotAccountsManager extends DefaultManager
             $riotAccount->setPlayer($player);
             $this->entityManager->persist($riotAccount);
 
-            $summonerName = SummonerNamesManager::createFromSummoner($summoner);
+            $summonerName = SummonerNameManager::createFromSummoner($summoner);
             $summonerName->setCurrent(true);
             $summonerName->setOwner($riotAccount);
             $riotAccount->addSummonerName($summonerName);

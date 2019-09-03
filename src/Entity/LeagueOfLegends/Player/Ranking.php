@@ -2,7 +2,7 @@
 
 namespace App\Entity\LeagueOfLegends\Player;
 
-use App\Manager\LeagueOfLegends\Player\RankingsManager;
+use App\Manager\LeagueOfLegends\Player\RankingManager;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as Serializer;
@@ -261,7 +261,7 @@ class Ranking
 
     public function getTierFromDatabase(): string
     {
-        return ucfirst(strtolower(RankingsManager::tierToRiot($this->tier)));
+        return ucfirst(strtolower(RankingManager::tierToRiot($this->tier)));
     }
 
     public function getFormattedRanking(): string

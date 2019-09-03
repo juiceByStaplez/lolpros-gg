@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 use RiotAPI\LeagueAPI\Objects\SummonerDto;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-final class SummonerNamesManager extends DefaultManager
+final class SummonerNameManager extends DefaultManager
 {
     /**
      * @var RiotSummonerManager

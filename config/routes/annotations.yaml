@@ -6,3 +6,8 @@ league_controllers:
     resource: ../../src/Controller/LeagueOfLegends/
     type: annotation
     prefix: '/lol'
+
+elasticsearch_controllers:
+    resource: ../../src/Controller/ElasticSearch/
+    type: annotation
+    prefix: '/es'

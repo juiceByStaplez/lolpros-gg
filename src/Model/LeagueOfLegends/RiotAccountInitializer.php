@@ -13,25 +13,25 @@ class RiotAccountInitializer
 {
     /**
      * @var RiotAccount
-     * @Serializer\Type("LeagueOfLegendsBundle\Entity\Player\RiotAccount")
+     * @Serializer\Type("App\Entity\LeagueOfLegends\Player\RiotAccount")
      */
     public $riotAccount;
 
     /**
      * @var SummonerName
-     * @Serializer\Type("LeagueOfLegendsBundle\Entity\Player\SummonerName")
+     * @Serializer\Type("App\Entity\LeagueOfLegends\Player\SummonerName")
      */
     public $summonerName;
 
     /**
      * @var Player
-     * @Serializer\Type("LeagueOfLegendsBundle\Entity\Player\Player")
+     * @Serializer\Type("App\Entity\LeagueOfLegends\Player\Player")
      */
     public $player;
 
     /**
      * @var ArrayCollection|Ranking[]
-     * @Serializer\Type("array<LeagueOfLegendsBundle\Entity\Player\Ranking>")
+     * @Serializer\Type("array<App\Entity\LeagueOfLegends\Player\Ranking>")
      */
     public $rankings;
 }

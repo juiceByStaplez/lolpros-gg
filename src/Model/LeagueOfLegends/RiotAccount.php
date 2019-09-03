@@ -52,7 +52,7 @@ class RiotAccount
 
     /**
      * @var Player
-     * @Serializer\Type("LeagueOfLegendsBundle\Entity\Player\Player")
+     * @Serializer\Type("App\Entity\LeagueOfLegends\Player\Player")
      */
     public $player;
 

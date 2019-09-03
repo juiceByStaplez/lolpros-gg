@@ -3,7 +3,7 @@
 namespace App\Factory\LeagueOfLegends;
 
 use App\Entity\LeagueOfLegends\Player\Ranking;
-use App\Manager\LeagueOfLegends\Player\RankingsManager;
+use App\Manager\LeagueOfLegends\Player\RankingManager;
 use RiotAPI\LeagueAPI\Objects\LeagueEntryDto;
 
 class RankingsFactory
@@ -13,12 +13,12 @@ class RankingsFactory
         $ranking = new Ranking();
 
         $ranking->setQueueType($league->queueType)
-            ->setTier(RankingsManager::tierToDatabase($league->tier))
-            ->setRank(RankingsManager::rankToDatabase($league->rank))
+            ->setTier(RankingManager::tierToDatabase($league->tier))
+            ->setRank(RankingManager::rankToDatabase($league->rank))
             ->setWins($league->wins)
             ->setLosses($league->losses)
             ->setLeaguePoints($league->leaguePoints)
-            ->setScore(RankingsManager::calculateScore($ranking))
+            ->setScore(RankingManager::calculateScore($ranking))
             ->setSeason(Ranking::SEASON_9_V2);
 
         return $ranking;
@@ -43,8 +43,8 @@ class RankingsFactory
     {
         return [
             'queueType' => $league->queueType,
-            'tier' => RankingsManager::tierToDatabase($league->tier),
-            'rank' => RankingsManager::rankToDatabase($league->rank),
+            'tier' => RankingManager::tierToDatabase($league->tier),
+            'rank' => RankingManager::rankToDatabase($league->rank),
             'wins' => $league->wins,
             'losses' => $league->losses,
             'leaguePoints' => $league->leaguePoints,

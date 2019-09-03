@@ -1,0 +1,104 @@
+<?php
+
+namespace App\Transformer;
+
+use App\Entity\LeagueOfLegends\Player\Player;
+use App\Entity\LeagueOfLegends\Player\RiotAccount;
+use App\Indexer\Indexer;
+use Doctrine\Common\Collections\Collection;
+use Elastica\Document;
+
+class LadderTransformer extends APlayerTransformer
+{
+    public function fetchAndTransform($document, array $fields): ?Document
+    {
+        $player = $this->entityManager->getRepository(Player::class)->findOneBy(['uuid' => $document['uuid']]);
+
+        if (!$player instanceof Player) {
+            return null;
+        }
+
+        $document = $this->transform($player, $fields);
+        $this->entityManager->clear();
+
+        return $document;
+    }
+
+    public function transform($player, array $fields)
+    {
+        if (!$player instanceof Player) {
+            return null;
+        }
+
+        $accounts = $player->getAccounts();
+
+        $document = [
+            'uuid' => $player->getUuidAsString(),
+            'name' => $player->getName(),
+            'slug' => $player->getSlug(),
+            'country' => $player->getCountry(),
+            'regions' => $this->buildRegions($player),
+            'position' => $player->getPosition(),
+            'score' => $player->getScore(),
+            'account' => $accounts->count() ? $this->buildAccount($player->getBestAccount()) : null,
+            'peak' => $this->buildPeak($player),
+            'total_games' => $this->getTotalGames($accounts),
+            'team' => $this->buildTeam($player),
+        ];
+
+        return new Document($player->getUuidAsString(), $document, Indexer::INDEX_TYPE_PLAYER, Indexer::INDEX_PLAYERS);
+    }
+
+    protected function buildAccount(RiotAccount $account)
+    {
+        $rank = $account->getCurrentRanking();
+        $totalGames = $rank->getWins() + $rank->getLosses();
+
+        return [
+            'uuid' => $account->getUuidAsString(),
+            'riot_id' => $account->getRiotId(),
+            'account_id' => $account->getAccountId(),
+            'profile_icon_id' => $account->getProfileIconId(),
+            'summoner_name' => $account->getCurrentSummonerName()->getName(),
+            'rank' => $rank->getRank(),
+            'tier' => $rank->getTier(),
+            'league_points' => $rank->getLeaguePoints(),
+            'games' => $totalGames,
+            'winrate' => $totalGames ? round($rank->getWins() / $totalGames * 100, 1) : 0,
+        ];
+    }
+
+    private function buildPeak(Player $player)
+    {
+        if (!count($accounts = $player->getAccounts())) {
+            return null;
+        }
+
+        $peak = 0;
+
+        foreach ($accounts as $account) {
+            /** @var RiotAccount $account */
+            $peak = $peak && $peak->getScore() >= $account->getBestRanking()->getScore() ? $peak : $account->getBestRanking();
+        }
+
+        return [
+            'rank' => $peak->getRank(),
+            'tier' => $peak->getTier(),
+            'league_points' => $peak->getLeaguePoints(),
+            'score' => $peak->getScore(),
+            'date' => $peak->getCreatedAt()->format(\DateTime::ISO8601),
+        ];
+    }
+
+    private function getTotalGames(Collection $accounts)
+    {
+        $games = 0;
+
+        foreach ($accounts as $account) {
+            /* @var RiotAccount $account */
+            $games += $account->getCurrentRanking()->getWins() + $account->getCurrentRanking()->getLosses();
+        }
+
+        return $games;
+    }
+}

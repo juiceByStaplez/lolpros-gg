@@ -5,7 +5,7 @@ namespace App\Controller\Core\Team;
 use App\Controller\APIController;
 use App\Entity\Core\Team\Member;
 use App\Form\Core\Team\MemberForm;
-use App\Manager\Core\Team\MembersManager;
+use App\Manager\Core\Team\MemberManager;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -49,7 +49,7 @@ class MembersController extends APIController
             return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
         }
 
-        $member = $this->get(MembersManager::class)->create($member);
+        $member = $this->get(MemberManager::class)->create($member);
 
         return $this->serialize($member, 'get_member', 201);
     }
@@ -71,7 +71,7 @@ class MembersController extends APIController
             return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
         }
 
-        $member = $this->get(MembersManager::class)->update($member);
+        $member = $this->get(MemberManager::class)->update($member);
 
         return $this->serialize($member, 'get_member');
     }
@@ -84,7 +84,7 @@ class MembersController extends APIController
     {
         $member = $this->find(Member::class, $uuid);
 
-        $this->get(MembersManager::class)->delete($member);
+        $this->get(MemberManager::class)->delete($member);
 
         return new JsonResponse(null, 204);
     }

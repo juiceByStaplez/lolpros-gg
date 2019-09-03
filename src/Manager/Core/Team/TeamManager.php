@@ -10,7 +10,7 @@ use App\Exception\Core\EntityNotDeletedException;
 use App\Exception\Core\EntityNotUpdatedException;
 use App\Manager\DefaultManager;
 
-final class TeamsManager extends DefaultManager
+final class TeamManager extends DefaultManager
 {
     public function create(Team $team): Team
     {

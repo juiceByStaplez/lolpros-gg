@@ -1,0 +1,102 @@
+fos_elastica:
+  indexes:
+    fol_teams:
+      index_name: "%env(ELASTICA_PREFIX)%_teams"
+      settings:
+        number_of_replicas: 0
+        number_of_shards: 1
+        analysis:
+          normalizer:
+            lower:
+              type: custom
+              filter: [ "lowercase" ]
+      types:
+        team:
+          dynamic: strict
+          properties:
+            uuid:
+            name:
+              type: keyword
+              normalizer: lower
+            slug:
+              type: keyword
+            active:
+            tag:
+              type: keyword
+              normalizer: lower
+            region:
+              type: nested
+              properties:
+                uuid:
+                name:
+                slug:
+                shorthand:
+                  type: keyword
+                logo:
+                  type: object
+                  properties:
+                    public_id:
+                    version:
+                    url:
+            logo:
+              type: object
+              properties:
+                public_id:
+                version:
+                url:
+            creation_date:
+            disband_date:
+            social_media:
+              type: object
+              properties:
+                twitter:
+                facebook:
+                website:
+                leaguepedia:
+            current_members:
+              type: nested
+              properties:
+                uuid:
+                name:
+                slug:
+                country:
+                current:
+                position:
+                join_date:
+                join_timestamp:
+                leave_date:
+                leave_timestamp:
+                summoner_name:
+                profile_icon_id:
+                tier:
+                rank:
+                league_points:
+                score:
+            previous_members:
+              type: nested
+              properties:
+                uuid:
+                name:
+                slug:
+                country:
+                current:
+                position:
+                join_date:
+                join_timestamp:
+                leave_date:
+                leave_timestamp:
+                summoner_name:
+                profile_icon_id:
+                tier:
+                rank:
+                league_points:
+                score:
+
+          persistence:
+            driver: orm
+            model: App\Entity\Core\Team\Team
+            model_to_elastica_transformer:
+              service: App\Transformer\TeamTransformer
+            listener:
+              defer: true
+              logger: true

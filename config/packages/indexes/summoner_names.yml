@@ -1,0 +1,39 @@
+fos_elastica:
+  indexes:
+    fol_summoner_names:
+      index_name: "%env(ELASTICA_PREFIX)%_summoner_names"
+      settings:
+        number_of_replicas: 0
+        number_of_shards: 1
+      types:
+        summoner_name:
+          dynamic: strict
+          properties:
+            name:
+            created_at:
+              type: date
+            current:
+            account_uuid:
+            previous:
+            player:
+              type: nested
+              properties:
+                uuid:
+                name:
+                slug:
+                country:
+                regions:
+                  type: nested
+                  properties:
+                    uuid:
+                    shorthand:
+                      type: keyword
+
+          persistence:
+            driver: orm
+            model: App\Entity\LeagueOfLegends\Player\SummonerName
+            model_to_elastica_transformer:
+              service: App\Transformer\SummonerNameTransformer
+            listener:
+              defer: true
+              logger: true

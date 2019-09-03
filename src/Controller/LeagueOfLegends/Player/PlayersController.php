@@ -7,8 +7,8 @@ use App\Entity\LeagueOfLegends\Player\Player;
 use App\Entity\LeagueOfLegends\Region\Region;
 use App\Exception\LeagueOfLegends\AccountRecentlyUpdatedException;
 use App\Form\LeagueOfLegends\Player\PlayerForm;
-use App\Manager\LeagueOfLegends\Player\PlayersManager;
-use App\Manager\LeagueOfLegends\Player\RiotAccountsManager;
+use App\Manager\LeagueOfLegends\Player\PlayerManager;
+use App\Manager\LeagueOfLegends\Player\RiotAccountManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
@@ -34,7 +34,7 @@ class PlayersController extends APIController
      */
     public function getPlayersAction(ParamFetcherInterface $paramFetcher): Response
     {
-        $players = $this->get(PlayersManager::class)->getList($paramFetcher);
+        $players = $this->get(PlayerManager::class)->getList($paramFetcher);
 
         return $this->serialize($players, 'league.get_players');
     }
@@ -74,7 +74,7 @@ class PlayersController extends APIController
             return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
         }
 
-        $player = $this->get(PlayersManager::class)->create($player);
+        $player = $this->get(PlayerManager::class)->create($player);
 
         return $this->serialize($player, 'league.get_player', 201);
     }
@@ -101,7 +101,7 @@ class PlayersController extends APIController
             return new JsonResponse($this->get('service.generic.error_formatter')->reduce($violationList), 422);
         }
 
-        $player = $this->get(PlayersManager::class)->update($player, $playerData);
+        $player = $this->get(PlayerManager::class)->update($player, $playerData);
 
         return $this->serialize($player, 'league.get_player');
     }
@@ -114,7 +114,7 @@ class PlayersController extends APIController
     {
         $player = $this->find(Player::class, $uuid);
 
-        $this->get(PlayersManager::class)->delete($player);
+        $this->get(PlayerManager::class)->delete($player);
 
         return new JsonResponse(null, 204);
     }
@@ -132,7 +132,7 @@ class PlayersController extends APIController
 
         foreach ($accounts as $account) {
             try {
-                $this->get(RiotAccountsManager::class)->refreshRiotAccount($account);
+                $this->get(RiotAccountManager::class)->refreshRiotAccount($account);
             } catch (AccountRecentlyUpdatedException $e) {
                 ++$errorCount;
             }

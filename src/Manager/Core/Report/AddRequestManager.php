@@ -2,12 +2,13 @@
 
 namespace App\Manager\Core\Report;
 
+use App\Entity\Core\Report\AddRequest;
 use App\Exception\Core\EntityNotCreatedException;
 use App\Exception\Core\EntityNotDeletedException;
 use App\Exception\Core\EntityNotUpdatedException;
 use App\Manager\DefaultManager;
 
-class AddRequestsManager extends DefaultManager
+class AddRequestManager extends DefaultManager
 {
     public function create(AddRequest $addRequest): AddRequest
     {
