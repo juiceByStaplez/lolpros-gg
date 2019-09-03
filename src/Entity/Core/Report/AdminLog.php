@@ -23,6 +23,7 @@ class AdminLog
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Serializer\Exclude
      */
     protected $id;
 
@@ -30,6 +31,9 @@ class AdminLog
      * @var UuidInterface
      * @ORM\Column(type="uuid", nullable=false)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "get_admin_logs",
+     * })
      */
     protected $uuid;
 
@@ -38,6 +42,9 @@ class AdminLog
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
      * @Serializer\Type("DateTime")
+     * @Serializer\Groups({
+     *     "get_admin_logs",
+     * })
      */
     protected $createdAt;
 
@@ -45,6 +52,9 @@ class AdminLog
      * @var UserInterface
      * @ORM\ManyToOne(targetEntity="App\Entity\Core\User\User", inversedBy="edits")
      * @Serializer\Type("App\Entity\Core\User\User")
+     * @Serializer\Groups({
+     *     "get_admin_logs",
+     * })
      */
     protected $user;
 
@@ -52,6 +62,9 @@ class AdminLog
      * @var string
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "get_admin_logs",
+     * })
      */
     protected $type;
 
@@ -66,6 +79,9 @@ class AdminLog
      * @var string
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "get_admin_logs",
+     * })
      */
     protected $entityName;
 
@@ -80,6 +96,9 @@ class AdminLog
      * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "get_admin_logs",
+     * })
      */
     protected $linkedName;
 

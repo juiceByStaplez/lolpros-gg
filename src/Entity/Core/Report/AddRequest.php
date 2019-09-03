@@ -24,6 +24,7 @@ class AddRequest
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Serializer\Exclude
      */
     protected $id;
 
@@ -31,8 +32,10 @@ class AddRequest
      * @var UuidInterface
      * @ORM\Column(type="uuid", nullable=false)
      * @Serializer\Type("string")
-     * @Assert\NotNull
-     * @Assert\NotBlank
+     * @Serializer\Groups({
+     *     "get_add_requests",
+     *     "get_add_request",
+     * })
      */
     protected $uuid;
 
@@ -40,6 +43,10 @@ class AddRequest
      * @var DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
+     * @Serializer\Groups({
+     *     "get_add_requests",
+     *     "get_add_request",
+     * })
      */
     protected $createdAt;
 
@@ -47,7 +54,10 @@ class AddRequest
      * @var string
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
-     * @Assert\NotNull(groups={"post_add_request"})
+     * @Serializer\Groups({
+     *     "get_add_requests",
+     *     "get_add_request",
+     * })
      */
     protected $name;
 
@@ -55,7 +65,9 @@ class AddRequest
      * @var string
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
-     * @Assert\NotNull(groups={"post_add_request"})
+     * @Serializer\Groups({
+     *     "get_add_request",
+     * })
      */
     protected $country;
 
@@ -63,7 +75,9 @@ class AddRequest
      * @var string
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
-     * @Assert\NotNull(groups={"post_add_request"})
+     * @Serializer\Groups({
+     *     "get_add_request",
+     * })
      * @Assert\Choice(callback="getAvailablePositions", strict=true)
      */
     protected $position;
@@ -72,6 +86,9 @@ class AddRequest
      * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "get_add_request",
+     * })
      */
     protected $twitter;
 
@@ -79,6 +96,9 @@ class AddRequest
      * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "get_add_request",
+     * })
      */
     protected $twitch;
 
@@ -86,6 +106,9 @@ class AddRequest
      * @var string
      * @ORM\Column(type="text", nullable=true)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "get_add_request",
+     * })
      */
     protected $comment;
 
@@ -93,7 +116,9 @@ class AddRequest
      * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type("string")
-     * @Assert\NotNull(groups={"post_add_request"})
+     * @Serializer\Groups({
+     *     "get_add_request",
+     * })
      */
     protected $summonerName;
 
@@ -101,7 +126,9 @@ class AddRequest
      * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type("string")
-     * @Assert\NotNull(groups={"post_add_request"})
+     * @Serializer\Groups({
+     *     "get_add_request",
+     * })
      */
     protected $summonerId;
 

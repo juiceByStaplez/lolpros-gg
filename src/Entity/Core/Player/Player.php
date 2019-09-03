@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\DiscriminatorMap({
  *     "league_player" = "App\Entity\LeagueOfLegends\Player\Player"
  * })
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Core\PlayerRepository")
  */
 abstract class Player
 {
@@ -41,6 +41,12 @@ abstract class Player
      * @var UuidInterface
      * @ORM\Column(name="uuid", type="uuid", nullable=false)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "league.get_players",
+     *     "league.get_player",
+     *     "league.get_riot_account",
+     *     "get_team_members",
+     * })
      */
     protected $uuid;
 
@@ -48,6 +54,12 @@ abstract class Player
      * @var string
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "league.get_players",
+     *     "league.get_player",
+     *     "league.get_riot_account",
+     *     "get_team_members",
+     * })
      * @Assert\NotNull(groups={"league.post_player"})
      */
     protected $name;
@@ -64,7 +76,11 @@ abstract class Player
      * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type("string")
-     * @Assert\NotNull(groups={"league.post_player"})
+     * @Serializer\Groups({
+     *     "league.get_players",
+     *     "league.get_player",
+     *     "get_team_members",
+     * })
      */
     protected $country;
 
@@ -73,6 +89,10 @@ abstract class Player
      * @ORM\OneToMany(targetEntity="App\Entity\Core\Team\Member", mappedBy="player")
      * @ORM\OrderBy({"joinDate"="DESC"})
      * @Serializer\Type("App\Entity\Core\Team\Member")
+     * @Serializer\Groups({
+     *     "league.get_players",
+     *     "league.get_player",
+     * })
      */
     protected $memberships;
 

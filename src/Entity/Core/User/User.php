@@ -7,6 +7,7 @@ use App\Entity\StringUuidTrait;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -33,13 +34,17 @@ class User implements UserInterface
 
     /**
      * @var UuidInterface
-     * @ORM\Column(type="uuid", nullable=false)
+     * @ORM\Column(type="uuid", nullable=false, unique=true)
      */
     protected $uuid;
 
     /**
      * @var string
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", nullable=false, unique=true)
+     * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "get_admin_logs",
+     * })
      */
     protected $username;
 
@@ -117,6 +122,11 @@ class User implements UserInterface
         $this->uuid = Uuid::uuid4();
     }
 
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
     public function __toString(): string
     {
         return (string) $this->getUsername();
@@ -157,11 +167,6 @@ class User implements UserInterface
         $this->username = $username;
 
         return $this;
-    }
-
-    public function getUsername(): string
-    {
-        return $this->username;
     }
 
     public function setPassword(string $password): self

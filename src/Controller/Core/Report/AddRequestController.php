@@ -75,6 +75,7 @@ class AddRequestController extends APIController
      */
     public function putAddRequestAction(string $uuid, AddRequestManager $addRequestManager): Response
     {
+        /** @var AddRequest $request */
         $request = $this->find(AddRequest::class, $uuid);
         $postedData = $this->getPostedData();
 
@@ -101,6 +102,7 @@ class AddRequestController extends APIController
      */
     public function deleteAddRequestsAction(string $uuid, AddRequestManager $addRequestManager): Response
     {
+        /** @var AddRequest $request */
         $request = $this->find(AddRequest::class, $uuid);
 
         $addRequestManager->delete($request);

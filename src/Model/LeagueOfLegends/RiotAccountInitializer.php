@@ -31,7 +31,7 @@ class RiotAccountInitializer
 
     /**
      * @var ArrayCollection|Ranking[]
-     * @Serializer\Type("array<App\Entity\LeagueOfLegends\Player\Ranking>")
+     * @Serializer\Type("ArrayCollection<App\Entity\LeagueOfLegends\Player\Ranking>")
      */
     public $rankings;
 }

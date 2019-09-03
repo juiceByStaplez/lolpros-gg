@@ -29,6 +29,7 @@ class Team
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Serializer\Exclude
      */
     protected $id;
 
@@ -36,8 +37,11 @@ class Team
      * @var UuidInterface
      * @ORM\Column(type="uuid", nullable=false)
      * @Serializer\Type("string")
-     * @Assert\NotNull
-     * @Assert\NotBlank
+     * @Serializer\Groups({
+     *     "get_player_members",
+     *     "get_teams",
+     *     "get_team",
+     * })
      */
     protected $uuid;
 
@@ -45,8 +49,11 @@ class Team
      * @var string
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
-     * @Assert\NotNull
-     * @Assert\NotBlank
+     * @Serializer\Groups({
+     *     "get_player_members",
+     *     "get_teams",
+     *     "get_team",
+     * })
      */
     protected $name;
 
@@ -55,8 +62,6 @@ class Team
      * @Gedmo\Slug(fields={"name"})
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
-     * @Assert\NotNull
-     * @Assert\NotBlank
      */
     protected $slug;
 
@@ -64,6 +69,11 @@ class Team
      * @var TeamLogo
      * @ORM\OneToOne(targetEntity="\App\Entity\Core\Document\TeamLogo", mappedBy="team", cascade={"remove"})
      * @Serializer\Type("App\Entity\Core\Document\TeamLogo")
+     * @Serializer\Groups({
+     *     "get_player_members",
+     *     "get_teams",
+     *     "get_team",
+     * })
      */
     protected $logo;
 
@@ -71,8 +81,10 @@ class Team
      * @var string
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
-     * @Assert\NotNull
-     * @Assert\NotBlank
+     * @Serializer\Groups({
+     *     "get_team",
+     *     "get_teams",
+     * })
      */
     protected $tag;
 
@@ -80,6 +92,9 @@ class Team
      * @var DateTime
      * @ORM\Column(name="creation_date", type="datetime", nullable=true)
      * @Serializer\Type("DateTime<'Y-m-d'>")
+     * @Serializer\Groups({
+     *     "get_team",
+     * })
      */
     protected $creationDate;
 
@@ -87,6 +102,9 @@ class Team
      * @var DateTime
      * @ORM\Column(name="disband_date", type="datetime", nullable=true)
      * @Serializer\Type("DateTime<'Y-m-d'>")
+     * @Serializer\Groups({
+     *     "get_team",
+     * })
      */
     protected $disbandDate;
 
@@ -101,16 +119,22 @@ class Team
      * @var Region
      * @ORM\ManyToOne(targetEntity="App\Entity\LeagueOfLegends\Region\Region", inversedBy="teams")
      * @Serializer\Type("App\Entity\LeagueOfLegends\Region\Region")
-     * @Assert\NotNull(groups={"post_team"})
-     * @Assert\NotBlank(groups={"post_team"})
+     * @Serializer\Groups({
+     *     "get_teams",
+     *     "get_team",
+     * })
      */
     protected $region;
 
     /**
      * @var ArrayCollection|Member[]
      * @ORM\OneToMany(targetEntity="App\Entity\Core\Team\Member", mappedBy="team")
-     * @Serializer\Type("array<App\Entity\Core\Team\Member>")
      * @ORM\OrderBy({"leaveDate"="ASC", "joinDate"="DESC"})
+     * @Serializer\Type("ArrayCollection<App\Entity\Core\Team\Member>")
+     * @Serializer\Groups({
+     *     "get_teams",
+     *     "get_team",
+     * })
      */
     protected $members;
 

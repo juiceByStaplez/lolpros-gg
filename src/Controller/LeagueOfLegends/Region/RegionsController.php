@@ -38,6 +38,7 @@ class RegionsController extends APIController
      */
     public function getRegionAction(string $uuid): Response
     {
+        /** @var Region $region */
         $region = $this->find(Region::class, $uuid);
 
         return $this->serialize($region, 'league.get_region');
@@ -75,6 +76,7 @@ class RegionsController extends APIController
      */
     public function putRegionAction(string $uuid, RegionManager $regionManager): Response
     {
+        /** @var Region $region */
         $region = $this->find(Region::class, $uuid);
         $postedData = $this->getPostedData();
 
@@ -104,6 +106,7 @@ class RegionsController extends APIController
      */
     public function deleteRegionsAction(string $uuid, RegionManager $regionManager): Response
     {
+        /** @var Region $region */
         $region = $this->find(Region::class, $uuid);
 
         $regionManager->delete($region);

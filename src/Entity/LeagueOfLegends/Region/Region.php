@@ -28,6 +28,7 @@ class Region
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Serializer\Exclude
      */
     protected $id;
 
@@ -38,6 +39,10 @@ class Region
      * @Serializer\Groups({
      *     "league.get_regions",
      *     "league.get_region",
+     *     "league.get_players",
+     *     "league.get_player",
+     *     "get_teams",
+     *     "get_team",
      * })
      */
     protected $uuid;
@@ -50,6 +55,10 @@ class Region
      * @Serializer\Groups({
      *     "league.get_regions",
      *     "league.get_region",
+     *     "league.get_players",
+     *     "league.get_player",
+     *     "get_teams",
+     *     "get_team",
      * })
      */
     protected $name;
@@ -58,12 +67,7 @@ class Region
      * @var string
      * @Gedmo\Slug(fields={"name"})
      * @ORM\Column(type="string", nullable=false)
-     *
      * @Serializer\Type("string")
-     * @Serializer\Groups({
-     *     "league.get_regions",
-     *     "league.get_region",
-     * })
      */
     protected $slug;
 
@@ -74,6 +78,10 @@ class Region
      * @Serializer\Groups({
      *     "league.get_regions",
      *     "league.get_region",
+     *     "league.get_players",
+     *     "league.get_player",
+     *     "get_teams",
+     *     "get_team",
      * })
      */
     protected $shorthand;
@@ -92,14 +100,14 @@ class Region
     /**
      * @var ArrayCollection|Player[]
      * @ORM\ManyToMany(targetEntity="App\Entity\LeagueOfLegends\Player\Player", mappedBy="regions")
-     * @Serializer\Type("array<App\Entity\LeagueOfLegends\Player\Player>")
+     * @Serializer\Type("ArrayCollection<App\Entity\LeagueOfLegends\Player\Player>")
      */
     protected $players;
 
     /**
      * @var ArrayCollection|Team[]
      * @ORM\OneToMany(targetEntity="App\Entity\Core\Team\Team", mappedBy="region")
-     * @Serializer\Type("array<App\Entity\Core\Team\Team>")
+     * @Serializer\Type("ArrayCollection<App\Entity\Core\Team\Team>")
      */
     protected $teams;
 
@@ -110,6 +118,10 @@ class Region
      * @Serializer\Groups({
      *     "league.get_regions",
      *     "league.get_region",
+     *     "league.get_players",
+     *     "league.get_player",
+     *     "get_teams",
+     *     "get_team",
      * })
      */
     protected $logo;

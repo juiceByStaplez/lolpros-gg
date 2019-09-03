@@ -9,7 +9,6 @@ use App\Exception\Core\EntityNotDeletedException;
 use App\Exception\LeagueOfLegends\AccountRecentlyUpdatedException;
 use App\Form\LeagueOfLegends\Player\RiotAccountForm;
 use App\Manager\LeagueOfLegends\Player\RiotAccountManager;
-use App\Repository\LeagueOfLegends\RiotAccountRepository;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -29,9 +28,9 @@ class RiotAccountsController extends APIController
      * @Get(path="")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function getRiotAccountsAction(RiotAccountRepository $riotAccountRepository): Response
+    public function getRiotAccountsAction(): Response
     {
-        $accounts = $riotAccountRepository->findAll();
+        $accounts = $this->getDoctrine()->getRepository(RiotAccount::class)->findAll();
 
         return $this->serialize($accounts, 'league.get_riot_accounts');
     }
@@ -55,6 +54,7 @@ class RiotAccountsController extends APIController
     {
         $content = json_decode($request->getContent());
         $datas = $this->deserialize(RiotAccount::class, 'league.post_riot_account');
+        /** @var Player $player */
         $player = $this->find(Player::class, $content->player);
 
         $riotAccount = $riotAccountManager->createRiotAccount($datas, $player);
@@ -68,6 +68,7 @@ class RiotAccountsController extends APIController
      */
     public function putRiotAccountAction(string $uuid, RiotAccountManager $riotAccountManager): Response
     {
+        /** @var RiotAccount $riotAccount */
         $riotAccount = $this->find(RiotAccount::class, $uuid);
         $postedData = $this->getPostedData();
 
@@ -90,6 +91,7 @@ class RiotAccountsController extends APIController
      */
     public function putRiotAccountRefreshAction(string $uuid, RiotAccountManager $riotAccountManager): Response
     {
+        /** @var RiotAccount $riotAccount */
         $riotAccount = $this->find(RiotAccount::class, $uuid);
         try {
             $riotAccount = $riotAccountManager->refreshRiotAccount($riotAccount);
@@ -105,6 +107,7 @@ class RiotAccountsController extends APIController
      */
     public function deleteRiotAccountAction(string $uuid, RiotAccountManager $riotAccountManager): Response
     {
+        /** @var RiotAccount $riotAccount */
         $riotAccount = $this->find(RiotAccount::class, $uuid);
         try {
             $riotAccountManager->delete($riotAccount);

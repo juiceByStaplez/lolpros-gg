@@ -30,7 +30,7 @@ class PlayersController extends APIController
 {
     /**
      * @Get(path="")
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      * @QueryParam(name="position", default=null, nullable=true)
      */
     public function getPlayersAction(ParamFetcherInterface $paramFetcher, PlayerManager $playerManager): Response
@@ -46,6 +46,7 @@ class PlayersController extends APIController
      */
     public function getPlayerAction(string $uuid): Response
     {
+        /** @var Player $player */
         $player = $this->find(Player::class, $uuid);
 
         return $this->serialize($player, 'league.get_player');
@@ -113,6 +114,7 @@ class PlayersController extends APIController
      */
     public function deletePlayersAction(string $uuid, PlayerManager $playerManager): Response
     {
+        /** @var Player $player */
         $player = $this->find(Player::class, $uuid);
 
         $playerManager->delete($player);

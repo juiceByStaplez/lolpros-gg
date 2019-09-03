@@ -2,7 +2,7 @@ security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
 
     encoders:
-        App\Entity\Core\User:
+        App\Entity\Core\User\User:
             algorithm: auto
 
     role_hierarchy:
@@ -10,8 +10,11 @@ security:
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
-        oauth:
-            id: knpu.oauth2.user_provider
+        app_user_provider:
+            entity:
+                class: App\Entity\Core\User\User
+                property: username
+
     firewalls:
         login:
             pattern:  ^/auth/login
@@ -26,29 +29,22 @@ security:
             stateless: true
             anonymous: true
 
-        connect:
-            pattern: ^/connect
-            stateless: true
-            anonymous: true
-            guard:
-                authenticators:
-                    - App\Security\DiscordAuthenticator
-
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
         main:
+            pattern: ^/
+            stateless: true
             anonymous: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
-
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/auth/*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/doc, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/add-requests, methods: [POST], role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, methods: [GET], roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, methods: [POST, PUT, DELETE], roles: ROLE_USER }

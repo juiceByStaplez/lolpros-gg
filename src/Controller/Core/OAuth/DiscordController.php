@@ -6,7 +6,6 @@ use App\Controller\APIController;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Component\HttpFoundation\Request;
 
 class DiscordController extends APIController
@@ -17,7 +16,7 @@ class DiscordController extends APIController
      * @QueryParam(name="opener", nullable=false)
      * @Get("/connect/discord")
      */
-    public function connectDiscordAction(ParamFetcher $paramFetcher, ClientRegistry $registry)
+    public function connectDiscordAction(ParamFetcher $paramFetcher)
     {
         return $registry->getClient('discord')
             ->redirect(['identify', 'email'], [

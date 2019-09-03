@@ -6,15 +6,9 @@ use JMS\Serializer\SerializationContext;
 
 trait SelfReferencedEntityTrait
 {
-    /**
-     * @param SerializationContext $context
-     *
-     * @return bool
-     */
-    public function isChild(SerializationContext $context)
+    public function isChild(SerializationContext $context): bool
     {
-        $groups = $context->attributes->get('groups')->get();
-
+        $groups = $context->getAttribute('groups');
         $childDepth = in_array('pagination', $groups) ? 2 : 1;
 
         return $context->getDepth() > $childDepth;

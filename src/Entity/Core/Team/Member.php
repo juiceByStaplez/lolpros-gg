@@ -3,6 +3,7 @@
 namespace App\Entity\Core\Team;
 
 use App\Entity\Core\Player\Player;
+use App\Entity\SelfReferencedEntityTrait;
 use App\Entity\StringUuidTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +11,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as Serializer;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="team__members")
@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Member
 {
+    use SelfReferencedEntityTrait;
     use StringUuidTrait;
     const MEMBER_STAFF = 'staff';
     const MEMBER_PLAYER = 'player';
@@ -27,6 +28,7 @@ class Member
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Serializer\Exclude
      */
     protected $id;
 
@@ -34,8 +36,13 @@ class Member
      * @var UuidInterface
      * @ORM\Column(type="uuid", nullable=false)
      * @Serializer\Type("string")
-     * @Assert\NotNull
-     * @Assert\NotBlank
+     * @Serializer\Groups({
+     *     "league.get_players",
+     *     "get_player_members",
+     *     "get_teams",
+     *     "get_team",
+     *     "get_team_members",
+     * })
      */
     protected $uuid;
 
@@ -43,6 +50,9 @@ class Member
      * @var Player
      * @ORM\ManyToOne(targetEntity="App\Entity\Core\Player\Player", inversedBy="memberships")
      * @Serializer\Type("App\Entity\Core\Player\Player")
+     * @Serializer\Groups({
+     *     "get_team_members",
+     * })
      */
     protected $player;
 
@@ -50,6 +60,9 @@ class Member
      * @var Team
      * @ORM\ManyToOne(targetEntity="App\Entity\Core\Team\Team", inversedBy="members")
      * @Serializer\Type("App\Entity\Core\Team\Team")
+     * @Serializer\Groups({
+     *     "get_player_members",
+     * })
      */
     protected $team;
 
@@ -57,6 +70,10 @@ class Member
      * @var DateTime
      * @ORM\Column(name="join_date", type="datetime", nullable=true)
      * @Serializer\Type("DateTime<'Y-m-d'>")
+     * @Serializer\Groups({
+     *     "get_player_members",
+     *     "get_team_members",
+     * })
      */
     protected $joinDate;
 
@@ -64,6 +81,11 @@ class Member
      * @var DateTime
      * @ORM\Column(name="leave_date", type="datetime", nullable=true)
      * @Serializer\Type("DateTime<'Y-m-d'>")
+     * @Serializer\Groups({
+     *     "league.get_players",
+     *     "get_player_members",
+     *     "get_team_members",
+     * })
      */
     protected $leaveDate;
 
@@ -71,8 +93,6 @@ class Member
      * @var string
      * @ORM\Column(name="role", type="string")
      * @Serializer\Type("string")
-     * @Assert\NotNull(groups={"post_team_member"})
-     * @Assert\Choice(callback="getAvailableRoles", strict=true)
      */
     protected $role;
 

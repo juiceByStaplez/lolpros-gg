@@ -24,6 +24,7 @@ class UploadController extends APIController
     public function uploadTeamLogoAction(string $teamUuid, Request $request, FileUploader $fileUploader): Response
     {
         $file = $request->files->get('file');
+        /** @var Team $team */
         $team = $this->find(Team::class, $teamUuid);
 
         $document = $fileUploader->uploadTeamLogo($file, $team);
@@ -38,6 +39,7 @@ class UploadController extends APIController
     public function uploadRegionLogoAction(string $regionUuid, Request $request, FileUploader $fileUploader): Response
     {
         $file = $request->files->get('file');
+        /** @var Region $region */
         $region = $this->find(Region::class, $regionUuid);
 
         $document = $fileUploader->uploadRegionLogo($file, $region);

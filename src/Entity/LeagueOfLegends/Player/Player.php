@@ -27,6 +27,9 @@ class Player extends BasePlayer
      * @ORM\OneToMany(targetEntity="App\Entity\LeagueOfLegends\Player\RiotAccount", mappedBy="player")
      * @ORM\OrderBy({"smurf" = "ASC", "score" = "DESC"})
      * @Serializer\Type("App\Entity\LeagueOfLegends\Player\RiotAccount")
+     * @Serializer\Groups({
+     *     "league.get_players",
+     * })
      */
     protected $accounts;
 
@@ -36,6 +39,10 @@ class Player extends BasePlayer
      * @Serializer\Type("string")
      * @Assert\NotNull(groups={"league.post_player"})
      * @Assert\Choice(callback="getAvailablePositions", strict=true)
+     * @Serializer\Groups({
+     *     "league.get_players",
+     *     "league.get_player",
+     * })
      */
     protected $position;
 
@@ -50,6 +57,10 @@ class Player extends BasePlayer
      * @var ArrayCollection|Region[]
      * @ORM\ManyToMany(targetEntity="App\Entity\LeagueOfLegends\Region\Region", inversedBy="players")
      * @Serializer\Type("App\Entity\LeagueOfLegends\Region\Region")
+     * @Serializer\Groups({
+     *     "league.get_players",
+     *     "league.get_player",
+     * })
      */
     private $regions;
 

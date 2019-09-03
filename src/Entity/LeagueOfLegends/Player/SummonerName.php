@@ -3,6 +3,7 @@
 namespace App\Entity\LeagueOfLegends\Player;
 
 use App\Entity\SelfReferencedEntityTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as Serializer;
@@ -21,6 +22,7 @@ class SummonerName
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Serializer\Exclude
      */
     protected $id;
 
@@ -28,6 +30,9 @@ class SummonerName
      * @var string
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "league.get_riot_account_summoner_names"
+     * })
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -48,18 +53,24 @@ class SummonerName
     protected $current;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
      * @Serializer\Type("DateTime")
+     * @Serializer\Groups({
+     *     "league.get_riot_account_summoner_names"
+     * })
      */
     protected $createdAt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="changed_at", type="datetime")
      * @Serializer\Type("DateTime")
+     * @Serializer\Groups({
+     *     "league.get_riot_account_summoner_names"
+     * })
      */
     protected $changedAt;
 
@@ -67,7 +78,7 @@ class SummonerName
      * @var SummonerName
      * @ORM\OneToOne(targetEntity="App\Entity\LeagueOfLegends\Player\SummonerName", inversedBy="next")
      * @Serializer\Type("App\Entity\LeagueOfLegends\Player\SummonerName")
-     * @Serializer\Exclude(if="object.isChild(context)")
+     * @Serializer\Exclude
      */
     protected $previous;
 
@@ -75,11 +86,11 @@ class SummonerName
      * @var SummonerName
      * @ORM\OneToOne(targetEntity="App\Entity\LeagueOfLegends\Player\SummonerName", mappedBy="previous")
      * @Serializer\Type("App\Entity\LeagueOfLegends\Player\SummonerName")
-     * @Serializer\Exclude(if="object.isChild(context)")
+     * @Serializer\Exclude
      */
     protected $next;
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }

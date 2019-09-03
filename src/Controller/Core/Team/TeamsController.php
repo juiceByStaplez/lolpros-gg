@@ -29,9 +29,9 @@ class TeamsController extends APIController
     /**
      * @Get(path="")
      * @QueryParam(name="active", nullable=true)
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
-    public function getTeamsAction(ParamFetcher $paramFetcher, TeamRepository $teamRepository): Response
+    public function getTeamsAction(ParamFetcher $paramFetcher): Response
     {
         $options = [];
 
@@ -39,7 +39,7 @@ class TeamsController extends APIController
             $options['active'] = $active;
         }
 
-        $teams = $teamRepository->findBy($options, ['name' => 'asc']);
+        $teams = $this->getDoctrine()->getRepository(Team::class)->findBy($options, ['name' => 'asc']);
 
         return $this->serialize($teams, 'get_teams');
     }
@@ -88,6 +88,7 @@ class TeamsController extends APIController
     public function putTeamsAction(string $uuid, Request $request, TeamManager $teamManager, ValidatorInterface $validator): Response
     {
         $content = json_decode($request->getContent());
+        /** @var Team $team */
         $team = $this->find(Team::class, $uuid);
         $teamData = $this->deserialize(Team::class, 'put_team');
         $region = $this->find(Region::class, $content->region->uuid);
@@ -109,6 +110,7 @@ class TeamsController extends APIController
      */
     public function deleteTeamsAction(string $uuid, TeamManager $teamManager): Response
     {
+        /** @var Team $team */
         $team = $this->find(Team::class, $uuid);
 
         $teamManager->delete($team);

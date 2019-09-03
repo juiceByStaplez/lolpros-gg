@@ -3,6 +3,7 @@
 namespace App\Entity\LeagueOfLegends\Player;
 
 use App\Manager\LeagueOfLegends\Player\RankingManager;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as Serializer;
@@ -38,6 +39,7 @@ class Ranking
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Serializer\Exclude
      */
     protected $id;
 
@@ -45,6 +47,9 @@ class Ranking
      * @var bool
      * @ORM\Column(type="boolean", nullable=false)
      * @Serializer\Type("boolean")
+     * @Serializer\Groups({
+     *     "league.get_riot_account_rankings",
+     * })
      */
     protected $best = false;
 
@@ -56,10 +61,13 @@ class Ranking
     protected $owner;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
      * @Serializer\Type("DateTime")
+     * @Serializer\Groups({
+     *     "league.get_riot_account_rankings",
+     * })
      */
     protected $createdAt;
 
@@ -74,6 +82,9 @@ class Ranking
      * @var string
      * @ORM\Column(type="string")
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "league.get_riot_account_rankings",
+     * })
      */
     protected $tier;
 
@@ -81,6 +92,9 @@ class Ranking
      * @var string
      * @ORM\Column(type="integer", options={"default"=0})
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "league.get_riot_account_rankings",
+     * })
      */
     protected $rank = 0;
 
@@ -88,6 +102,9 @@ class Ranking
      * @var int
      * @ORM\Column(type="integer", options={"default"=0})
      * @Serializer\Type("integer")
+     * @Serializer\Groups({
+     *     "league.get_riot_account_rankings",
+     * })
      */
     protected $leaguePoints = 0;
 
@@ -95,6 +112,9 @@ class Ranking
      * @var int
      * @ORM\Column(type="integer", options={"default"=0})
      * @Serializer\Type("integer")
+     * @Serializer\Groups({
+     *     "league.get_riot_account_rankings",
+     * })
      */
     protected $wins = 0;
 
@@ -102,6 +122,9 @@ class Ranking
      * @var int
      * @ORM\Column(type="integer", options={"default"=0})
      * @Serializer\Type("integer")
+     * @Serializer\Groups({
+     *     "league.get_riot_account_rankings",
+     * })
      */
     protected $losses = 0;
 
@@ -116,6 +139,9 @@ class Ranking
      * @var string
      * @ORM\Column(type="string")
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "league.get_riot_account_rankings",
+     * })
      */
     private $season;
 
@@ -239,7 +265,7 @@ class Ranking
         return $this;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }

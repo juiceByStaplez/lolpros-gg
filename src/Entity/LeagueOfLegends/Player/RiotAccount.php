@@ -3,6 +3,7 @@
 namespace App\Entity\LeagueOfLegends\Player;
 
 use App\Entity\StringUuidTrait;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,6 +26,7 @@ class RiotAccount
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Serializer\Exclude
      */
     protected $id;
 
@@ -32,6 +34,12 @@ class RiotAccount
      * @var UuidInterface
      * @ORM\Column(type="uuid", nullable=false)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "league.get_players",
+     *     "league.get_player_riot_accounts",
+     *     "league.get_riot_account",
+     *     "league.get_riot_accounts",
+     * })
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -41,6 +49,9 @@ class RiotAccount
      * @var string
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "league.get_player_riot_accounts",
+     * })
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -69,6 +80,11 @@ class RiotAccount
      * @var string
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "league.get_player_riot_accounts",
+     *     "league.get_riot_account",
+     *     "league.get_riot_accounts",
+     * })
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -78,6 +94,9 @@ class RiotAccount
      * @var string
      * @ORM\Column(type="string", nullable=false)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "league.get_riot_account",
+     * })
      * @Assert\NotNull
      * @Assert\NotBlank
      */
@@ -87,6 +106,9 @@ class RiotAccount
      * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Serializer\Type("string")
+     * @Serializer\Groups({
+     *     "league.get_riot_account",
+     * })
      */
     protected $profileIconId;
 
@@ -94,6 +116,9 @@ class RiotAccount
      * @var Player
      * @ORM\ManyToOne(targetEntity="App\Entity\LeagueOfLegends\Player\Player", inversedBy="accounts")
      * @Serializer\Type("App\Entity\LeagueOfLegends\Player\Player")
+     * @Serializer\Groups({
+     *     "league.get_riot_account",
+     * })
      */
     protected $player;
 
@@ -101,6 +126,11 @@ class RiotAccount
      * @var bool
      * @ORM\Column(type="boolean", nullable=false)
      * @Serializer\Type("boolean")
+     * @Serializer\Groups({
+     *     "league.get_player_riot_accounts",
+     *     "league.get_riot_account",
+     *     "league.get_riot_accounts",
+     * })
      */
     protected $smurf;
 
@@ -119,17 +149,20 @@ class RiotAccount
     protected $rankings;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
      * @Serializer\Type("DateTime")
+     * @Serializer\Groups({
+     *     "league.get_player_riot_accounts",
+     * })
      */
     protected $updatedAt;
 
@@ -301,14 +334,14 @@ class RiotAccount
         return $this->summonerNames;
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): self
+    public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
@@ -338,9 +371,13 @@ class RiotAccount
     }
 
     /**
-     * @Serializer\VirtualProperty()
-     *
      * @return string
+     * @Serializer\VirtualProperty()
+     * @Serializer\Groups({
+     *     "league.get_player_riot_accounts",
+     *     "league.get_riot_account",
+     *     "league.get_riot_accounts",
+     * })
      */
     public function getSummonerName(): string
     {
