@@ -41,19 +41,4 @@ SQL;
 
         return $results[array_search($playerUuid, array_column($results, 'uuid'))]['rank'];
     }
-
-    public function getCountries()
-    {
-        $query = $this->getEntityManager()->getConnection()->prepare('select country from player__player GROUP BY country');
-        $query->execute();
-
-        $array = $query->fetchAll();
-
-        $flatten = [];
-        array_walk_recursive($array, function ($value) use (&$flatten) {
-            $flatten[] = $value;
-        });
-
-        return $flatten;
-    }
 }
