@@ -18,14 +18,13 @@ class SearchController extends APIController
     /**
      * @Get(path="")
      */
-    public function getSearchAction(Request $request): Response
+    public function getSearchAction(Request $request, SearchManager $searchManager): Response
     {
         $query = $request->get('q', null);
 
         $results = new SearchResult();
-
-        $results->players = $this->get(SearchManager::class)->getSearchPlayers($query);
-        $results->accounts = $this->get(SearchManager::class)->getSearchRiotAccounts($query);
+        $results->players = $searchManager->getSearchPlayers($query);
+        $results->accounts = $searchManager->getSearchRiotAccounts($query);
 
         return $this->serialize($results, 'league.get_search');
     }
@@ -33,9 +32,9 @@ class SearchController extends APIController
     /**
      * @Get(path="/players/{name}")
      */
-    public function getSearchPlayersAction($name)
+    public function getSearchPlayersAction(string $name, SearchManager $searchManager): Response
     {
-        $players = $this->get(SearchManager::class)->getSearchPlayers($name);
+        $players = $searchManager->getSearchPlayers($name);
 
         return $this->serialize($players, 'league.get_player');
     }
@@ -43,9 +42,9 @@ class SearchController extends APIController
     /**
      * @Get(path="/teams/{name}")
      */
-    public function getSearchTeamsAction($name)
+    public function getSearchTeamsAction(string $name, SearchManager $searchManager): Response
     {
-        $players = $this->get(SearchManager::class)->getSearchTeams($name);
+        $players = $searchManager->getSearchTeams($name);
 
         return $this->serialize($players, 'get_teams');
     }

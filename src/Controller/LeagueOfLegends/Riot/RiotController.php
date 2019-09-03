@@ -22,16 +22,20 @@ class RiotController extends APIController
      * @Get("/summoner/{name}")
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
-    public function getRiotPlayerSearchAction(string $name): Response
-    {
+    public function getRiotPlayerSearchAction(
+        string $name,
+        RiotSummonerManager $riotSummonerManager,
+        RiotAccountManager $riotAccountManager,
+        RiotLeagueManager $riotLeagueManager
+    ): Response {
         try {
-            $summoner = $this->get(RiotSummonerManager::class)->findPlayer($name);
+            $summoner = $riotSummonerManager->findPlayer($name);
 
-            if ($this->get(RiotAccountManager::class)->accountExists($summoner->id)) {
+            if ($riotAccountManager->accountExists($summoner->id)) {
                 throw new AccountAlreadyExistsException();
             }
 
-            $summoner->leagues = $this->get(RiotLeagueManager::class)->getForId($summoner->id);
+            $summoner->leagues = $riotLeagueManager->getForId($summoner->id);
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), $e->getCode());
         }

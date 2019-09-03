@@ -2,8 +2,10 @@
 
 namespace App\Entity\Core\User;
 
+use App\Entity\Core\Report\AdminLog;
 use App\Entity\StringUuidTrait;
 use DateTime;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
@@ -64,6 +66,12 @@ class User implements UserInterface
      * @ORM\Column(type="array")
      */
     protected $roles;
+
+    /**
+     * @var Collection|AdminLog
+     * @ORM\OneToMany(targetEntity="App\Entity\Core\Report\AdminLog", mappedBy="user")
+     */
+    protected $edits;
 
     /**
      * @var string

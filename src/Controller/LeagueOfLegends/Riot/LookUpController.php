@@ -13,6 +13,7 @@ use FOS\RestBundle\Controller\Annotations\Get;
 use RiotAPI\LeagueAPI\Exceptions\RequestException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -23,10 +24,10 @@ class LookUpController extends APIController
     /**
      * @Get(path="/summoner/{name}")
      */
-    public function getIdFromSummonerNameAction(string $name)
+    public function getIdFromSummonerNameAction(string $name, RiotSummonerManager $riotSummonerManager): Response
     {
         try {
-            $summoner = $this->get(RiotSummonerManager::class)->findPlayer($name);
+            $summoner = $riotSummonerManager->findPlayer($name);
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), $e->getCode());
         }
@@ -37,10 +38,10 @@ class LookUpController extends APIController
     /**
      * @Get(path="/id/{id}")
      */
-    public function getSummonerNameFromIdAction(string $id)
+    public function getSummonerNameFromIdAction(string $id, RiotSummonerManager $riotSummonerManager): Response
     {
         try {
-            $summoner = $this->get(RiotSummonerManager::class)->getForId($id);
+            $summoner = $riotSummonerManager->getForId($id);
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), $e->getCode());
         }
@@ -52,25 +53,30 @@ class LookUpController extends APIController
      * @Get(path="/game/{name}")
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
-    public function getGameForSummonerNameAction(string $name)
-    {
+    public function getGameForSummonerNameAction(
+        string $name,
+        RiotSummonerManager $riotSummonerManager,
+        RiotSpectatorManager $riotSpectatorManager,
+        RiotLeagueManager $riotLeagueManager,
+        PlayerManager $playerManager
+    ): Response {
         try {
-            $summoner = $this->get(RiotSummonerManager::class)->findPlayer($name);
+            $summoner = $riotSummonerManager->findPlayer($name);
         } catch (RequestException $e) {
             return new JsonResponse($e->getMessage(), $e->getCode());
         }
 
         try {
-            $game = $this->get(RiotSpectatorManager::class)->findGame($summoner->id);
+            $game = $riotSpectatorManager->findGame($summoner->id);
         } catch (RequestException $e) {
             return new JsonResponse($e->getMessage(), 406);
         }
 
         foreach ($game->participants as $participant) {
-            $soloQ = $this->get(RiotLeagueManager::class)->getForId($participant->summonerId);
+            $soloQ = $riotLeagueManager->getForId($participant->summonerId);
             $participant->ranking = $soloQ ? RankingsFactory::createArrayFromLeague($soloQ) : RankingsFactory::createEmptyArray();
 
-            $lolpros = $this->get(PlayerManager::class)->findWithAccount($participant->summonerId);
+            $lolpros = $playerManager->findWithAccount($participant->summonerId);
             $participant->lolpros = $lolpros ? LoLProsFactory::createArrayFromRiotAccount($lolpros) : null;
         }
 

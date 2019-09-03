@@ -13,6 +13,7 @@ use FOS\RestBundle\Controller\Annotations\Put;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -24,7 +25,7 @@ class AddRequestController extends APIController
      * @Get(path="")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function getAddRequestsAction()
+    public function getAddRequestsAction(): Response
     {
         $requests = $this->getDoctrine()->getRepository(AddRequest::class)->findAll();
 
@@ -35,7 +36,7 @@ class AddRequestController extends APIController
      * @Get(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function getAddRequestAction($uuid)
+    public function getAddRequestAction(string $uuid): Response
     {
         $request = $this->find(AddRequest::class, $uuid);
 
@@ -46,7 +47,7 @@ class AddRequestController extends APIController
      * @Post(path="")
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
-    public function postAddRequestsAction()
+    public function postAddRequestsAction(AddRequestManager $addRequestManager): Response
     {
         $request = new AddRequest();
         $postedData = $this->getPostedData();
@@ -60,10 +61,10 @@ class AddRequestController extends APIController
             ->submit($postedData, false);
 
         if (!$form->isValid()) {
-            return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
+            return new JsonResponse($this->errorFormatter->reduceForm($form), 422);
         }
 
-        $request = $this->get(AddRequestManager::class)->create($request);
+        $request = $addRequestManager->create($request);
 
         return $this->serialize($request, 'get_add_request', 201);
     }
@@ -72,7 +73,7 @@ class AddRequestController extends APIController
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function putAddRequestAction($uuid)
+    public function putAddRequestAction(string $uuid, AddRequestManager $addRequestManager): Response
     {
         $request = $this->find(AddRequest::class, $uuid);
         $postedData = $this->getPostedData();
@@ -86,10 +87,10 @@ class AddRequestController extends APIController
             ->submit($postedData, false);
 
         if (!$form->isValid()) {
-            return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
+            return new JsonResponse($this->errorFormatter->reduceForm($form), 422);
         }
 
-        $request = $this->get(AddRequestManager::class)->update($request);
+        $request = $addRequestManager->update($request);
 
         return $this->serialize($request, 'get_add_request');
     }
@@ -98,11 +99,11 @@ class AddRequestController extends APIController
      * @Delete(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function deleteAddRequestsAction($uuid)
+    public function deleteAddRequestsAction(string $uuid, AddRequestManager $addRequestManager): Response
     {
         $request = $this->find(AddRequest::class, $uuid);
 
-        $this->get(AddRequestManager::class)->delete($request);
+        $addRequestManager->delete($request);
 
         return new JsonResponse(null, 204);
     }

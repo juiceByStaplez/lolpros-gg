@@ -23,7 +23,7 @@ class SummonerNamesController extends APIController
      * @QueryParam(name="per_page", default=50, nullable=true)
      * @QueryParam(name="previous", nullable=true)
      */
-    public function getSummonerNamesAction(ParamFetcher $paramFetcher, SummonerNameFetcher $summonerNamesFetcher)
+    public function getSummonerNamesAction(ParamFetcher $paramFetcher, SummonerNameFetcher $summonerNamesFetcher): JsonResponse
     {
         $options = [
             'previous' => $this->getNullOrBoolean($paramFetcher->get('previous')),

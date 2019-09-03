@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/players")
@@ -32,9 +33,9 @@ class PlayersController extends APIController
      * @IsGranted("ROLE_ADMIN")
      * @QueryParam(name="position", default=null, nullable=true)
      */
-    public function getPlayersAction(ParamFetcherInterface $paramFetcher): Response
+    public function getPlayersAction(ParamFetcherInterface $paramFetcher, PlayerManager $playerManager): Response
     {
-        $players = $this->get(PlayerManager::class)->getList($paramFetcher);
+        $players = $playerManager->getList($paramFetcher);
 
         return $this->serialize($players, 'league.get_players');
     }
@@ -43,7 +44,7 @@ class PlayersController extends APIController
      * @Get(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function getPlayerAction($uuid): Response
+    public function getPlayerAction(string $uuid): Response
     {
         $player = $this->find(Player::class, $uuid);
 
@@ -54,7 +55,7 @@ class PlayersController extends APIController
      * @Post(path="")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function postPlayersAction()
+    public function postPlayersAction(PlayerManager $playerManager): Response
     {
         $player = new Player();
         $postedData = $this->getPostedData();
@@ -71,10 +72,10 @@ class PlayersController extends APIController
             ->submit($postedData, false);
 
         if (!$form->isValid()) {
-            return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
+            return new JsonResponse($this->errorFormatter->reduceForm($form), 422);
         }
 
-        $player = $this->get(PlayerManager::class)->create($player);
+        $player = $playerManager->create($player);
 
         return $this->serialize($player, 'league.get_player', 201);
     }
@@ -83,7 +84,7 @@ class PlayersController extends APIController
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function putPlayersAction($uuid)
+    public function putPlayersAction(string $uuid, PlayerManager $playerManager, ValidatorInterface $validator): Response
     {
         /** @var Player $player */
         $player = $this->find(Player::class, $uuid);
@@ -96,12 +97,12 @@ class PlayersController extends APIController
         }
         $playerData->setRegions($regions);
 
-        $violationList = $this->get('validator')->validate($playerData, null, ['put_team']);
+        $violationList = $validator->validate($playerData, null, ['put_team']);
         if ($violationList->count() > 0) {
-            return new JsonResponse($this->get('service.generic.error_formatter')->reduce($violationList), 422);
+            return new JsonResponse($this->errorFormatter->reduce($violationList), 422);
         }
 
-        $player = $this->get(PlayerManager::class)->update($player, $playerData);
+        $player = $playerManager->update($player, $playerData);
 
         return $this->serialize($player, 'league.get_player');
     }
@@ -110,11 +111,11 @@ class PlayersController extends APIController
      * @Delete(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function deletePlayersAction($uuid)
+    public function deletePlayersAction(string $uuid, PlayerManager $playerManager): Response
     {
         $player = $this->find(Player::class, $uuid);
 
-        $this->get(PlayerManager::class)->delete($player);
+        $playerManager->delete($player);
 
         return new JsonResponse(null, 204);
     }
@@ -123,7 +124,7 @@ class PlayersController extends APIController
      * @Get(path="/{uuid}/update")
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
-    public function getPlayerUpdateAction($uuid)
+    public function getPlayerUpdateAction(string $uuid, RiotAccountManager $riotAccountManager): Response
     {
         /** @var Player $player */
         $player = $this->find(Player::class, $uuid);
@@ -132,7 +133,7 @@ class PlayersController extends APIController
 
         foreach ($accounts as $account) {
             try {
-                $this->get(RiotAccountManager::class)->refreshRiotAccount($account);
+                $riotAccountManager->refreshRiotAccount($account);
             } catch (AccountRecentlyUpdatedException $e) {
                 ++$errorCount;
             }

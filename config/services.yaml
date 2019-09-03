@@ -49,3 +49,13 @@ services:
     App\Fetcher\SearchFetcher:
         arguments:
             $type: '@fos_elastica.index.fol_players'
+
+    App\Manager\LeagueOfLegends\Riot\RiotSummonerManager:
+        arguments:
+            $apiKey: '%env(RIOT_API_KEY)%'
+    App\Manager\LeagueOfLegends\Riot\RiotLeagueManager:
+        arguments:
+            $apiKey: '%env(RIOT_API_KEY)%'
+    App\Manager\LeagueOfLegends\Riot\RiotSpectatorManager:
+        arguments:
+            $apiKey: '%env(RIOT_API_KEY)%'

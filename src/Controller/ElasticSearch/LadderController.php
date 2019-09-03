@@ -28,7 +28,7 @@ class LadderController extends APIController
      * @QueryParam(name="sort", nullable=true)
      * @QueryParam(name="order", nullable=true)
      */
-    public function getLadderAction(ParamFetcher $paramFetcher, LadderFetcher $ladderFetcher)
+    public function getLadderAction(ParamFetcher $paramFetcher, LadderFetcher $ladderFetcher): JsonResponse
     {
         $options = [
             'position' => $paramFetcher->get('position'),

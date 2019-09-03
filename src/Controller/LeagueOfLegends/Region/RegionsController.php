@@ -13,6 +13,7 @@ use FOS\RestBundle\Controller\Annotations\Put;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -24,7 +25,7 @@ class RegionsController extends APIController
      * @Get(path="")
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
-    public function getRegionsAction()
+    public function getRegionsAction(): Response
     {
         $regions = $this->getDoctrine()->getRepository(Region::class)->findBy([], ['name' => 'asc']);
 
@@ -35,7 +36,7 @@ class RegionsController extends APIController
      * @Get(path="/{uuid}")
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
-    public function getRegionAction($uuid)
+    public function getRegionAction(string $uuid): Response
     {
         $region = $this->find(Region::class, $uuid);
 
@@ -46,7 +47,7 @@ class RegionsController extends APIController
      * @Post(path="")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function postRegionsAction()
+    public function postRegionsAction(RegionManager $regionManager): Response
     {
         $region = new Region();
         $postedData = $this->getPostedData();
@@ -60,10 +61,10 @@ class RegionsController extends APIController
             ->submit($postedData, false);
 
         if (!$form->isValid()) {
-            return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
+            return new JsonResponse($this->errorFormatter->reduceForm($form), 422);
         }
 
-        $region = $this->get(RegionManager::class)->create($region);
+        $region = $regionManager->create($region);
 
         return $this->serialize($region, 'league.get_region', 201);
     }
@@ -72,7 +73,7 @@ class RegionsController extends APIController
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function putRegionAction($uuid)
+    public function putRegionAction(string $uuid, RegionManager $regionManager): Response
     {
         $region = $this->find(Region::class, $uuid);
         $postedData = $this->getPostedData();
@@ -86,13 +87,13 @@ class RegionsController extends APIController
             ->submit($postedData, false);
 
         if (!$form->isValid()) {
-            return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
+            return new JsonResponse($this->errorFormatter->reduceForm($form), 422);
         }
 
         /* @var Region $region*/
         $region->setCountries($postedData['countries']);
 
-        $region = $this->get(RegionManager::class)->update($region);
+        $region = $regionManager->update($region);
 
         return $this->serialize($region, 'league.get_region');
     }
@@ -101,11 +102,11 @@ class RegionsController extends APIController
      * @Delete(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function deleteRegionsAction($uuid)
+    public function deleteRegionsAction(string $uuid, RegionManager $regionManager): Response
     {
         $region = $this->find(Region::class, $uuid);
 
-        $this->get(RegionManager::class)->delete($region);
+        $regionManager->delete($region);
 
         return new JsonResponse(null, 204);
     }

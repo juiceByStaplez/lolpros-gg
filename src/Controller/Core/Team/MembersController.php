@@ -36,7 +36,7 @@ class MembersController extends APIController
      * @Post(path="")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function postMembersAction(): Response
+    public function postMembersAction(MemberManager $memberManager): Response
     {
         $member = new Member();
         $postedData = $this->getPostedData();
@@ -46,10 +46,10 @@ class MembersController extends APIController
             ->submit($postedData, false);
 
         if (!$form->isValid()) {
-            return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
+            return new JsonResponse($this->errorFormatter->reduceForm($form), 422);
         }
 
-        $member = $this->get(MemberManager::class)->create($member);
+        $member = $memberManager->create($member);
 
         return $this->serialize($member, 'get_member', 201);
     }
@@ -58,7 +58,7 @@ class MembersController extends APIController
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function putMembersAction(string $uuid): Response
+    public function putMembersAction(string $uuid, MemberManager $memberManager): Response
     {
         $member = $this->find(Member::class, $uuid);
         $postedData = $this->getPostedData();
@@ -68,10 +68,10 @@ class MembersController extends APIController
             ->submit($postedData, false);
 
         if (!$form->isValid()) {
-            return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
+            return new JsonResponse($this->errorFormatter->reduceForm($form), 422);
         }
 
-        $member = $this->get(MemberManager::class)->update($member);
+        $member = $memberManager->update($member);
 
         return $this->serialize($member, 'get_member');
     }
@@ -80,11 +80,11 @@ class MembersController extends APIController
      * @Delete(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function deleteMembersAction(string $uuid): Response
+    public function deleteMembersAction(string $uuid, MemberManager $memberManager): Response
     {
         $member = $this->find(Member::class, $uuid);
 
-        $this->get(MemberManager::class)->delete($member);
+        $memberManager->delete($member);
 
         return new JsonResponse(null, 204);
     }

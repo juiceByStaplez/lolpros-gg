@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\ErrorFormatter;
 use Doctrine\Common\Inflector\Inflector;
 use FOS\RestBundle\Context\Context;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -16,11 +17,17 @@ class APIController extends AbstractFOSRestController
     /**
      * @var SerializerInterface
      */
-    private $serializer;
+    protected $serializer;
 
-    public function __construct(SerializerInterface $serializer)
+    /**
+     * @var ErrorFormatter
+     */
+    protected $errorFormatter;
+
+    public function __construct(SerializerInterface $serializer, ErrorFormatter $errorFormatter)
     {
         $this->serializer = $serializer;
+        $this->errorFormatter = $errorFormatter;
     }
 
     protected function serialize($data, $groups = null, $code = 200): Response

@@ -9,6 +9,7 @@ use App\Exception\Core\EntityNotDeletedException;
 use App\Exception\LeagueOfLegends\AccountRecentlyUpdatedException;
 use App\Form\LeagueOfLegends\Player\RiotAccountForm;
 use App\Manager\LeagueOfLegends\Player\RiotAccountManager;
+use App\Repository\LeagueOfLegends\RiotAccountRepository;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -16,6 +17,7 @@ use FOS\RestBundle\Controller\Annotations\Put;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -27,9 +29,9 @@ class RiotAccountsController extends APIController
      * @Get(path="")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function getRiotAccountsAction()
+    public function getRiotAccountsAction(RiotAccountRepository $riotAccountRepository): Response
     {
-        $accounts = $this->getDoctrine()->getRepository(RiotAccount::class)->findAll();
+        $accounts = $riotAccountRepository->findAll();
 
         return $this->serialize($accounts, 'league.get_riot_accounts');
     }
@@ -38,7 +40,7 @@ class RiotAccountsController extends APIController
      * @Get(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function getRiotAccountAction($uuid)
+    public function getRiotAccountAction($uuid): Response
     {
         $account = $this->find(RiotAccount::class, $uuid);
 
@@ -49,13 +51,13 @@ class RiotAccountsController extends APIController
      * @Post(path="")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function postRiotAccountsAction(Request $request)
+    public function postRiotAccountsAction(Request $request, RiotAccountManager $riotAccountManager): Response
     {
         $content = json_decode($request->getContent());
         $datas = $this->deserialize(RiotAccount::class, 'league.post_riot_account');
         $player = $this->find(Player::class, $content->player);
 
-        $riotAccount = $this->get(RiotAccountManager::class)->createRiotAccount($datas, $player);
+        $riotAccount = $riotAccountManager->createRiotAccount($datas, $player);
 
         return $this->serialize($riotAccount, 'league.get_riot_account', 201);
     }
@@ -64,7 +66,7 @@ class RiotAccountsController extends APIController
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function putRiotAccountAction($uuid)
+    public function putRiotAccountAction(string $uuid, RiotAccountManager $riotAccountManager): Response
     {
         $riotAccount = $this->find(RiotAccount::class, $uuid);
         $postedData = $this->getPostedData();
@@ -74,10 +76,10 @@ class RiotAccountsController extends APIController
             ->submit($postedData, false);
 
         if (!$form->isValid()) {
-            return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
+            return new JsonResponse($this->errorFormatter->reduceForm($form), 422);
         }
 
-        $riotAccount = $this->get(RiotAccountManager::class)->update($riotAccount);
+        $riotAccount = $riotAccountManager->update($riotAccount);
 
         return $this->serialize($riotAccount, 'league.get_riot_account');
     }
@@ -86,11 +88,11 @@ class RiotAccountsController extends APIController
      * @Put(path="/{uuid}/update")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function putRiotAccountRefreshAction($uuid)
+    public function putRiotAccountRefreshAction(string $uuid, RiotAccountManager $riotAccountManager): Response
     {
         $riotAccount = $this->find(RiotAccount::class, $uuid);
         try {
-            $riotAccount = $this->get(RiotAccountManager::class)->refreshRiotAccount($riotAccount);
+            $riotAccount = $riotAccountManager->refreshRiotAccount($riotAccount);
         } catch (AccountRecentlyUpdatedException $e) {
             return new JsonResponse($e->getMessage(), 409);
         }
@@ -101,11 +103,11 @@ class RiotAccountsController extends APIController
     /**
      * @Delete(path="/{uuid}")
      */
-    public function deleteRiotAccountAction($uuid)
+    public function deleteRiotAccountAction(string $uuid, RiotAccountManager $riotAccountManager): Response
     {
         $riotAccount = $this->find(RiotAccount::class, $uuid);
         try {
-            $this->get(RiotAccountManager::class)->delete($riotAccount);
+            $riotAccountManager->delete($riotAccount);
         } catch (EntityNotDeletedException $e) {
             return new JsonResponse($e->getMessage(), 409);
         }

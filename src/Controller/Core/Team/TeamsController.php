@@ -7,6 +7,7 @@ use App\Entity\Core\Team\Team;
 use App\Entity\LeagueOfLegends\Region\Region;
 use App\Form\Core\Team\TeamForm;
 use App\Manager\Core\Team\TeamManager;
+use App\Repository\Core\TeamRepository;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -18,6 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/teams")
@@ -29,7 +31,7 @@ class TeamsController extends APIController
      * @QueryParam(name="active", nullable=true)
      * @IsGranted("ROLE_ADMIN")
      */
-    public function getTeamsAction(ParamFetcher $paramFetcher): Response
+    public function getTeamsAction(ParamFetcher $paramFetcher, TeamRepository $teamRepository): Response
     {
         $options = [];
 
@@ -37,7 +39,7 @@ class TeamsController extends APIController
             $options['active'] = $active;
         }
 
-        $teams = $this->getDoctrine()->getRepository(Team::class)->findBy($options, ['name' => 'asc']);
+        $teams = $teamRepository->findBy($options, ['name' => 'asc']);
 
         return $this->serialize($teams, 'get_teams');
     }
@@ -57,7 +59,7 @@ class TeamsController extends APIController
      * @Post(path="")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function postTeamsAction(): Response
+    public function postTeamsAction(TeamManager $teamManager): Response
     {
         $team = new Team();
         $postedData = $this->getPostedData();
@@ -71,10 +73,10 @@ class TeamsController extends APIController
             ->submit($postedData, false);
 
         if (!$form->isValid()) {
-            return new JsonResponse($this->get('service.generic.error_formatter')->reduceForm($form), 422);
+            return new JsonResponse($this->errorFormatter->reduceForm($form), 422);
         }
 
-        $team = $this->get(TeamManager::class)->create($team);
+        $team = $teamManager->create($team);
 
         return $this->serialize($team, 'get_team', 201);
     }
@@ -83,7 +85,7 @@ class TeamsController extends APIController
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function putTeamsAction(string $uuid, Request $request): Response
+    public function putTeamsAction(string $uuid, Request $request, TeamManager $teamManager, ValidatorInterface $validator): Response
     {
         $content = json_decode($request->getContent());
         $team = $this->find(Team::class, $uuid);
@@ -91,25 +93,25 @@ class TeamsController extends APIController
         $region = $this->find(Region::class, $content->region->uuid);
         $teamData->setRegion($region);
 
-        $violationList = $this->get('validator')->validate($teamData, null, ['put_team']);
+        $violationList = $validator->validate($teamData, null, ['put_team']);
         if ($violationList->count() > 0) {
-            return new JsonResponse($this->get('service.generic.error_formatter')->reduce($violationList), 422);
+            return new JsonResponse($this->errorFormatter->reduce($violationList), 422);
         }
 
-        $team = $this->get(TeamManager::class)->update($team, $teamData);
+        $team = $teamManager->update($team, $teamData);
 
         return $this->serialize($team, 'get_team');
     }
 
     /**
      * @Delete(path="/{uuid}")
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
-    public function deleteTeamsAction(string $uuid): Response
+    public function deleteTeamsAction(string $uuid, TeamManager $teamManager): Response
     {
         $team = $this->find(Team::class, $uuid);
 
-        $this->get(TeamManager::class)->delete($team);
+        $teamManager->delete($team);
 
         return new JsonResponse(null, 204);
     }
