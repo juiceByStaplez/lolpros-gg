@@ -33,6 +33,22 @@ final class RankingManager extends DefaultManager
         $this->riotLeagueManager = $riotLeagueManager;
     }
 
+    private function updateBestWithNewRanking(Ranking $ranking)
+    {
+        $best = $this->entityManager->getRepository(Ranking::class)->getBestForAccount($ranking->getOwner(), $ranking->getSeason());
+
+        if (!$best) {
+            $ranking->setBest(true);
+        }
+
+        if ($best && $ranking->getScore() > $best->getScore()) {
+            $ranking->setBest(true);
+            $best->setBest(false);
+        }
+
+        $ranking->getOwner()->setScore($ranking->getScore());
+    }
+
     public function updateRanking(RiotAccount $riotAccount)
     {
         $soloQ = $this->riotLeagueManager->getForId($riotAccount->getEncryptedRiotId());
@@ -42,6 +58,7 @@ final class RankingManager extends DefaultManager
         $riotAccount->addRanking($ranking);
 
         $this->entityManager->persist($ranking);
+        $this->updateBestWithNewRanking($ranking);
         $this->entityManager->flush();
 
         $this->eventDispatcher->dispatch(new RankingEvent($ranking), RankingEvent::CREATED);

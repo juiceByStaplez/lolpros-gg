@@ -3,7 +3,6 @@
 namespace App\Manager\Core\Report;
 
 use App\Entity\Core\Report\AdminLog;
-use App\Exception\Core\EntityNotCreatedException;
 use App\Manager\DefaultManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -36,7 +35,7 @@ class AdminLogManager extends DefaultManager
             $log->setLinkedName($linkedName);
 
             $this->entityManager->persist($log);
-            $this->entityManager->flush($log);
+            $this->entityManager->flush();
 
             return $log;
         } catch (Exception $e) {
@@ -44,7 +43,7 @@ class AdminLogManager extends DefaultManager
                 'reason' => $e->getMessage(),
             ]);
 
-            throw new EntityNotCreatedException(AdminLog::class, $e->getMessage());
+            return null;
         }
     }
 }

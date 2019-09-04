@@ -3,6 +3,12 @@
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+
+imports:
+    - { resource: elastica/fetchers.yaml }
+    - { resource: elastica/indexers.yaml }
+    - { resource: elastica/transformers.yaml }
+
 parameters:
 
 services:
@@ -15,7 +21,7 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Fetcher,Indexer,Transformer,Listener,Kernel.php}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
@@ -26,30 +32,7 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Fetcher\PlayerFetcher:
-        arguments:
-            $type: '@fos_elastica.index.fol_players'
-
-    App\Fetcher\LadderFetcher:
-        arguments:
-            $type: '@fos_elastica.index.fol_ladder'
-
-    App\Fetcher\SummonerNameFetcher:
-        arguments:
-            $type: '@fos_elastica.index.fol_summoner_names'
-
-    App\Fetcher\TeamFetcher:
-        arguments:
-            $type: '@fos_elastica.index.fol_teams'
-
-    App\Fetcher\MemberFetcher:
-        arguments:
-            $type: '@fos_elastica.index.fol_members'
-
-    App\Fetcher\SearchFetcher:
-        arguments:
-            $type: '@fos_elastica.index.fol_players'
-
+    # Managers
     App\Manager\LeagueOfLegends\Riot\RiotSummonerManager:
         arguments:
             $apiKey: '%env(RIOT_API_KEY)%'

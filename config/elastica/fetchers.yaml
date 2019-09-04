@@ -1,0 +1,28 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Fetcher\PlayerFetcher:
+        arguments:
+            $type: '@fos_elastica.index.fol_players'
+
+    App\Fetcher\LadderFetcher:
+        arguments:
+            $type: '@fos_elastica.index.fol_ladder'
+
+    App\Fetcher\SummonerNameFetcher:
+        arguments:
+            $type: '@fos_elastica.index.fol_summoner_names'
+
+    App\Fetcher\TeamFetcher:
+        arguments:
+            $type: '@fos_elastica.index.fol_teams'
+
+    App\Fetcher\MemberFetcher:
+        arguments:
+            $type: '@fos_elastica.index.fol_members'
+
+    App\Fetcher\SearchFetcher:
+        arguments:
+            $type: '@fos_elastica.index.fol_players'

@@ -7,6 +7,7 @@ use App\Exception\Core\EntityNotCreatedException;
 use App\Exception\Core\EntityNotDeletedException;
 use App\Exception\Core\EntityNotUpdatedException;
 use App\Manager\DefaultManager;
+use Exception;
 
 class AddRequestManager extends DefaultManager
 {
@@ -14,10 +15,10 @@ class AddRequestManager extends DefaultManager
     {
         try {
             $this->entityManager->persist($addRequest);
-            $this->entityManager->flush($addRequest);
+            $this->entityManager->flush();
 
             return $addRequest;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('[AddRequestsManager] Could not create addRequest because of {reason}', [
                 'reason' => $e->getMessage(),
             ]);
@@ -29,10 +30,10 @@ class AddRequestManager extends DefaultManager
     public function update(AddRequest $addRequest): AddRequest
     {
         try {
-            $this->entityManager->flush($addRequest);
+            $this->entityManager->flush();
 
             return $addRequest;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('[AddRequestsManager] Could not update addRequest {uuid} because of {reason}', [
                 'uuid' => $addRequest->getUuid()->toString(),
                 'reason' => $e->getMessage(),
@@ -46,8 +47,8 @@ class AddRequestManager extends DefaultManager
     {
         try {
             $this->entityManager->remove($addRequest);
-            $this->entityManager->flush($addRequest);
-        } catch (\Exception $e) {
+            $this->entityManager->flush();
+        } catch (Exception $e) {
             $this->logger->error('[AddRequestsManager] Could not delete addRequest {uuid} because of {reason}', [
                 'uuid' => $addRequest->getUuid()->toString(),
                 'reason' => $e->getMessage(),

@@ -29,6 +29,8 @@ final class SocialMediaManager extends DefaultManager
                 $this->eventDispatcher->dispatch(new PlayerEvent($player), PlayerEvent::UPDATED);
             }
 
+            $this->eventDispatcher->dispatch(new PlayerEvent($player), PlayerEvent::UPDATED);
+
             return $media;
         } catch (Exception $e) {
             $this->logger->error('[SocialMediaManager] Could not update social medias for player {uuid} because of {reason}', ['uuid' => $player->getUuidAsString(), 'reason' => $e->getMessage()]);

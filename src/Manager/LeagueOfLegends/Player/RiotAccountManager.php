@@ -9,12 +9,11 @@ use App\Event\LeagueOfLegends\Player\RiotAccountEvent;
 use App\Exception\Core\EntityNotDeletedException;
 use App\Exception\Core\EntityNotUpdatedException;
 use App\Exception\LeagueOfLegends\AccountRecentlyUpdatedException;
-use App\Factory\LeagueOfLegends\RankingsFactory;
 use App\Manager\DefaultManager;
 use App\Manager\LeagueOfLegends\Riot\RiotSummonerManager;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Psr\Log\LoggerInterface;
 use RiotAPI\LeagueAPI\Exceptions\ServerLimitException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -71,41 +70,14 @@ final class RiotAccountManager extends DefaultManager
         ]);
     }
 
-    public function resetRiotAccount(RiotAccount $riotAccount): RiotAccount
-    {
-        try {
-            foreach ($riotAccount->getRankings() as $ranking) {
-                $this->entityManager->remove($ranking);
-                $riotAccount->setRankings(new ArrayCollection());
-            }
-
-            $empty = RankingsFactory::createEmptyRanking();
-            $empty->setBest(true);
-            $empty->setOwner($riotAccount);
-            $riotAccount->setScore(0);
-            $this->entityManager->persist($empty);
-            $this->entityManager->flush();
-
-            return $riotAccount;
-        } catch (\Exception $e) {
-            $this->logger->error('[RiotAccountsManager] Unable to reset riotAccount {uuid} because of {reason}', [
-                'uuid' => $riotAccount->getUuidAsString(),
-                'reason' => $e->getMessage(),
-            ]);
-
-            throw new BadRequestHttpException($e->getMessage());
-        }
-    }
-
     public function update(RiotAccount $riotAccount): RiotAccount
     {
         try {
             $this->entityManager->flush($riotAccount);
-
             $this->eventDispatcher->dispatch(new RiotAccountEvent($riotAccount), RiotAccountEvent::UPDATED);
 
             return $riotAccount;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('[RiotAccountsManager] Could not update riotAccount {uuid} because of {reason}', [
                 'uuid' => $riotAccount->getUuidAsString(),
                 'reason' => $e->getMessage(),
@@ -140,7 +112,7 @@ final class RiotAccountManager extends DefaultManager
             $this->logger->notice(sprintf('[RiotAccountsManager::refreshRiotAccount] Could not update account %s (%s) because the API rate limit was reached.', $riotAccount->getUuidAsString(), $riotAccount->getSummonerName()));
 
             throw $e;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error(sprintf('[RiotAccountsManager::refreshRiotAccount] Could not update account %s (%s) because of {reason}.', $riotAccount->getUuidAsString(), $riotAccount->getSummonerName()), [
                 'uuid' => $riotAccount->getUuidAsString(),
                 'reason' => $e->getMessage(),
@@ -180,16 +152,14 @@ final class RiotAccountManager extends DefaultManager
             $riotAccount->setScore($ranking->getScore());
             $this->entityManager->persist($ranking);
 
-            $player->setScore($riotAccount->getScore() < $player->getScore() ? $riotAccount->getScore() : $player->getScore());
             $player->addAccount($riotAccount);
-
-            $this->entityManager->flush($riotAccount);
-            $this->entityManager->flush($player);
+            $this->updateBestAccountForPlayer($player);
+            $this->entityManager->flush();
 
             $this->eventDispatcher->dispatch(new RiotAccountEvent($riotAccount), RiotAccountEvent::CREATED);
 
             return $riotAccount;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('[RiotAccountsManager] Could not create RiotAccount for player {uuid} because of {reason}', [
                 'uuid' => $player->getUuidAsString() ?? null,
                 'reason' => $e->getMessage(),
@@ -199,24 +169,31 @@ final class RiotAccountManager extends DefaultManager
         }
     }
 
+    private function updateBestAccountForPlayer(Player $player)
+    {
+        $best = $this->entityManager->getRepository(RiotAccount::class)->getCurrentBestForPlayer($player);
+        $player->setScore($best ? $best->getScore() : 0);
+    }
+
     public function delete(RiotAccount $riotAccount)
     {
         $this->logger->debug('[RiotAccountsManager::delete] Deleting RiotAccount {uuid}', ['uuid' => $riotAccount->getUuidAsString()]);
         try {
-            $this->eventDispatcher->dispatch(new RiotAccountEvent($riotAccount), RiotAccountEvent::DELETED);
-
             foreach ($riotAccount->getRankings() as $ranking) {
                 $this->entityManager->remove($ranking);
             }
             foreach ($riotAccount->getSummonerNames() as $summonerName) {
                 $this->entityManager->remove($summonerName);
             }
-
             $this->eventDispatcher->dispatch(new RiotAccountEvent($riotAccount), RiotAccountEvent::DELETED);
+
+            $player = $riotAccount->getPlayer();
+            $player->removeAccount($riotAccount);
+            $this->updateBestAccountForPlayer($player);
 
             $this->entityManager->remove($riotAccount);
             $this->entityManager->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('[RiotAccountsManager::delete] Could not delete RiotAccount {uuid} because of {reason}', [
                 'uuid' => $riotAccount->getUuidAsString(),
                 'reason' => $e->getMessage(),
