@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Entity\LeagueOfLegends\Region;
+namespace App\Entity\Core\Region;
 
+use App\Entity\Core\Document\RegionLogo;
+use App\Entity\Core\Player\Player;
 use App\Entity\Core\Team\Team;
-use App\Entity\LeagueOfLegends\Document\RegionLogo;
-use App\Entity\LeagueOfLegends\Player\Player;
 use App\Entity\StringUuidTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -99,8 +99,8 @@ class Region
 
     /**
      * @var ArrayCollection|Player[]
-     * @ORM\ManyToMany(targetEntity="App\Entity\LeagueOfLegends\Player\Player", mappedBy="regions")
-     * @Serializer\Type("ArrayCollection<App\Entity\LeagueOfLegends\Player\Player>")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Core\Player\Player", mappedBy="regions")
+     * @Serializer\Type("ArrayCollection<App\Entity\Core\Player\Player>")
      */
     protected $players;
 
@@ -113,8 +113,8 @@ class Region
 
     /**
      * @var RegionLogo
-     * @ORM\OneToOne(targetEntity="App\Entity\LeagueOfLegends\Document\RegionLogo", mappedBy="region", cascade={"remove"})
-     * @Serializer\Type("App\Entity\LeagueOfLegends\Document\RegionLogo")
+     * @ORM\OneToOne(targetEntity="App\Entity\Core\Document\RegionLogo", mappedBy="region", cascade={"remove"})
+     * @Serializer\Type("App\Entity\Core\Document\RegionLogo")
      * @Serializer\Groups({
      *     "league.get_regions",
      *     "league.get_region",

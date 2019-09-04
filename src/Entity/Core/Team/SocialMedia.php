@@ -50,6 +50,7 @@ class SocialMedia
      * @Serializer\Type("string")
      * @Serializer\Groups({
      *     "get_team_social_medias",
+     *     "put_team_social_medias",
      * })
      */
     protected $twitter;
@@ -60,6 +61,7 @@ class SocialMedia
      * @Serializer\Type("string")
      * @Serializer\Groups({
      *     "get_team_social_medias",
+     *     "put_team_social_medias",
      * })
      */
     protected $facebook;
@@ -70,6 +72,7 @@ class SocialMedia
      * @Serializer\Type("string")
      * @Serializer\Groups({
      *     "get_team_social_medias",
+     *     "put_team_social_medias",
      * })
      */
     protected $website;
@@ -80,6 +83,7 @@ class SocialMedia
      * @Serializer\Type("string")
      * @Serializer\Groups({
      *     "get_team_social_medias",
+     *     "put_team_social_medias",
      * })
      */
     protected $leaguepedia;

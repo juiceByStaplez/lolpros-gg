@@ -5,8 +5,9 @@ namespace App\Manager\Core\Team;
 use App\Entity\Core\Team\SocialMedia;
 use App\Entity\Core\Team\Team;
 use App\Event\Core\Team\TeamEvent;
+use App\Exception\Core\EntityNotUpdatedException;
 use App\Manager\DefaultManager;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Exception;
 
 final class SocialMediaManager extends DefaultManager
 {
@@ -26,9 +27,9 @@ final class SocialMediaManager extends DefaultManager
             $this->eventDispatcher->dispatch(new TeamEvent($team), TeamEvent::UPDATED);
 
             return $media;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('[SocialMediaManager] Could not update social medias for team {uuid} because of {reason}', ['uuid' => $team->getUuidAsString(), 'reason' => $e->getMessage()]);
-            throw new BadRequestHttpException($e->getMessage());
+            throw new EntityNotUpdatedException($socialMedia->getOwner()->getUuidAsString(), $e->getMessage());
         }
     }
 }

@@ -3,15 +3,14 @@
 namespace App\Controller\LeagueOfLegends\Player;
 
 use App\Controller\APIController;
-use App\Entity\LeagueOfLegends\Player\Player;
 use App\Entity\LeagueOfLegends\Player\RiotAccount;
 use App\Exception\Core\EntityNotDeletedException;
+use App\Exception\Core\EntityNotUpdatedException;
 use App\Exception\LeagueOfLegends\AccountRecentlyUpdatedException;
 use App\Form\LeagueOfLegends\Player\RiotAccountForm;
 use App\Manager\LeagueOfLegends\Player\RiotAccountManager;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Put;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -41,30 +40,14 @@ class RiotAccountsController extends APIController
      */
     public function getRiotAccountAction($uuid): Response
     {
-        $account = $this->find(RiotAccount::class, $uuid);
-
-        return $this->serialize($account, 'league.get_riot_account');
-    }
-
-    /**
-     * @Post(path="")
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function postRiotAccountsAction(Request $request, RiotAccountManager $riotAccountManager): Response
-    {
-        $content = json_decode($request->getContent());
-        $datas = $this->deserialize(RiotAccount::class, 'league.post_riot_account');
-        /** @var Player $player */
-        $player = $this->find(Player::class, $content->player);
-
-        $riotAccount = $riotAccountManager->createRiotAccount($datas, $player);
-
-        return $this->serialize($riotAccount, 'league.get_riot_account', 201);
+        return $this->serialize($this->find(RiotAccount::class, $uuid), 'league.get_riot_account');
     }
 
     /**
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
+     *
+     * @throws EntityNotUpdatedException
      */
     public function putRiotAccountAction(string $uuid, RiotAccountManager $riotAccountManager): Response
     {

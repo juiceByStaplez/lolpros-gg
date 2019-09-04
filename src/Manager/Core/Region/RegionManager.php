@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Manager\LeagueOfLegends\Region;
+namespace App\Manager\Core\Region;
 
-use App\Entity\LeagueOfLegends\Region\Region;
-use App\Event\LeagueOfLegends\Region\RegionEvent;
+use App\Entity\Core\Region\Region;
+use App\Event\Core\Region\RegionEvent;
 use App\Exception\Core\EntityNotCreatedException;
 use App\Exception\Core\EntityNotDeletedException;
 use App\Exception\Core\EntityNotUpdatedException;

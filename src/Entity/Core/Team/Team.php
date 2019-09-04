@@ -3,8 +3,8 @@
 namespace App\Entity\Core\Team;
 
 use App\Entity\Core\Document\TeamLogo;
+use App\Entity\Core\Region\Region;
 use App\Entity\LeagueOfLegends\Player\Player;
-use App\Entity\LeagueOfLegends\Region\Region;
 use App\Entity\StringUuidTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,7 +14,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as Serializer;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="team__team")
@@ -41,6 +40,7 @@ class Team
      *     "get_player_members",
      *     "get_teams",
      *     "get_team",
+     *     "put_team",
      * })
      */
     protected $uuid;
@@ -53,6 +53,7 @@ class Team
      *     "get_player_members",
      *     "get_teams",
      *     "get_team",
+     *     "put_team",
      * })
      */
     protected $name;
@@ -84,6 +85,7 @@ class Team
      * @Serializer\Groups({
      *     "get_team",
      *     "get_teams",
+     *     "put_team",
      * })
      */
     protected $tag;
@@ -94,6 +96,7 @@ class Team
      * @Serializer\Type("DateTime<'Y-m-d'>")
      * @Serializer\Groups({
      *     "get_team",
+     *     "put_team",
      * })
      */
     protected $creationDate;
@@ -104,6 +107,7 @@ class Team
      * @Serializer\Type("DateTime<'Y-m-d'>")
      * @Serializer\Groups({
      *     "get_team",
+     *     "put_team",
      * })
      */
     protected $disbandDate;
@@ -117,11 +121,12 @@ class Team
 
     /**
      * @var Region
-     * @ORM\ManyToOne(targetEntity="App\Entity\LeagueOfLegends\Region\Region", inversedBy="teams")
-     * @Serializer\Type("App\Entity\LeagueOfLegends\Region\Region")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Core\Region\Region", inversedBy="teams")
+     * @Serializer\Type("App\Entity\Core\Region\Region")
      * @Serializer\Groups({
      *     "get_teams",
      *     "get_team",
+     *     "put_team",
      * })
      */
     protected $region;
@@ -333,7 +338,8 @@ class Team
                 return false;
             }
 
-            if ($membership->getPlayer() instanceof Player && $membership->getPlayer()->getPosition() === $position) {
+            $player = $membership->getPlayer();
+            if ($player instanceof Player && $player->getPosition() === $position) {
                 if ($membership->getJoinDate() == $end || $membership->getLeaveDate() == $begin) {
                     return false;
                 }

@@ -8,6 +8,7 @@ use FOS\RestBundle\Context\Context;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -23,14 +24,19 @@ class APIController extends AbstractFOSRestController
      * @var ErrorFormatter
      */
     protected $errorFormatter;
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
 
-    public function __construct(SerializerInterface $serializer, ErrorFormatter $errorFormatter)
+    public function __construct(SerializerInterface $serializer, ErrorFormatter $errorFormatter, RequestStack $requestStack)
     {
         $this->serializer = $serializer;
         $this->errorFormatter = $errorFormatter;
+        $this->requestStack = $requestStack;
     }
 
-    protected function serialize($data, $groups = null, $code = 200): Response
+    protected function serialize($data, $groups = null, int $code = 200): Response
     {
         $context = (new Context())->setGroups($groups ? (array) $groups : null)->setSerializeNull(true);
 
@@ -39,7 +45,7 @@ class APIController extends AbstractFOSRestController
 
     protected function deserialize(string $class, string $group = null)
     {
-        if (!($content = $this->get('request_stack')->getCurrentRequest()->getContent())) {
+        if (!($content = $this->requestStack->getCurrentRequest()->getContent())) {
             return $content;
         }
 
@@ -58,7 +64,7 @@ class APIController extends AbstractFOSRestController
         $rawData = (array) $data;
 
         if (!$data) {
-            $content = $this->get('request_stack')->getCurrentRequest()->getContent();
+            $content = $this->requestStack->getCurrentRequest()->getContent();
 
             $rawData = json_decode($content, true);
 
@@ -117,7 +123,7 @@ class APIController extends AbstractFOSRestController
         return $entity;
     }
 
-    protected function getNullOrBoolean($param): ?bool
+    protected function getNullOrBoolean(string $param): ?bool
     {
         if (null !== $param) {
             return filter_var($param, FILTER_VALIDATE_BOOLEAN);

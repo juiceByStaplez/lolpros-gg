@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Entity\LeagueOfLegends\Document;
+namespace App\Entity\Core\Document;
 
-use App\Entity\Core\Document\Document;
-use App\Entity\LeagueOfLegends\Region\Region;
+use App\Entity\Core\Region\Region;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,7 +12,7 @@ class RegionLogo extends Document
 {
     /**
      * @var Region
-     * @ORM\OneToOne(targetEntity="App\Entity\LeagueOfLegends\Region\Region", inversedBy="logo")
+     * @ORM\OneToOne(targetEntity="App\Entity\Core\Region\Region", inversedBy="logo")
      */
     protected $region;
 

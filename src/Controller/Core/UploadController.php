@@ -3,8 +3,8 @@
 namespace App\Controller\Core;
 
 use App\Controller\APIController;
+use App\Entity\Core\Region\Region;
 use App\Entity\Core\Team\Team;
-use App\Entity\LeagueOfLegends\Region\Region;
 use App\Service\FileUploader;
 use FOS\RestBundle\Controller\Annotations\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;

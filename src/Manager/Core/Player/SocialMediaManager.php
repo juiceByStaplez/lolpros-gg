@@ -5,8 +5,9 @@ namespace App\Manager\Core\Player;
 use App\Entity\Core\Player\Player;
 use App\Entity\Core\Player\SocialMedia;
 use App\Event\LeagueOfLegends\Player\PlayerEvent;
+use App\Exception\Core\EntityNotUpdatedException;
 use App\Manager\DefaultManager;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Exception;
 
 final class SocialMediaManager extends DefaultManager
 {
@@ -29,9 +30,9 @@ final class SocialMediaManager extends DefaultManager
             }
 
             return $media;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('[SocialMediaManager] Could not update social medias for player {uuid} because of {reason}', ['uuid' => $player->getUuidAsString(), 'reason' => $e->getMessage()]);
-            throw new BadRequestHttpException($e->getMessage());
+            throw new EntityNotUpdatedException($socialMedia->getOwner()->getUuidAsString(), $e->getMessage());
         }
     }
 }

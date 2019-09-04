@@ -3,7 +3,7 @@
 namespace App\Entity\LeagueOfLegends\Player;
 
 use App\Entity\Core\Player\Player as BasePlayer;
-use App\Entity\LeagueOfLegends\Region\Region;
+use App\Entity\Core\Region\Region;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -42,6 +42,7 @@ class Player extends BasePlayer
      * @Serializer\Groups({
      *     "league.get_players",
      *     "league.get_player",
+     *     "league.put_player",
      * })
      */
     protected $position;
@@ -55,11 +56,12 @@ class Player extends BasePlayer
 
     /**
      * @var ArrayCollection|Region[]
-     * @ORM\ManyToMany(targetEntity="App\Entity\LeagueOfLegends\Region\Region", inversedBy="players")
-     * @Serializer\Type("App\Entity\LeagueOfLegends\Region\Region")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Core\Region\Region", inversedBy="players")
+     * @Serializer\Type("App\Entity\Core\Region\Region")
      * @Serializer\Groups({
      *     "league.get_players",
      *     "league.get_player",
+     *     "league.put_player",
      * })
      */
     private $regions;

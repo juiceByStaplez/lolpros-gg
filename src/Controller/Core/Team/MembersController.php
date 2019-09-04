@@ -4,6 +4,9 @@ namespace App\Controller\Core\Team;
 
 use App\Controller\APIController;
 use App\Entity\Core\Team\Member;
+use App\Exception\Core\EntityNotCreatedException;
+use App\Exception\Core\EntityNotDeletedException;
+use App\Exception\Core\EntityNotUpdatedException;
 use App\Form\Core\Team\MemberForm;
 use App\Manager\Core\Team\MemberManager;
 use FOS\RestBundle\Controller\Annotations\Delete;
@@ -27,14 +30,14 @@ class MembersController extends APIController
      */
     public function getMemberAction(string $uuid): Response
     {
-        $member = $this->find(Member::class, $uuid);
-
-        return $this->serialize($member, 'get_member');
+        return $this->serialize($this->find(Member::class, $uuid), 'get_member');
     }
 
     /**
      * @Post(path="")
      * @IsGranted("ROLE_ADMIN")
+     *
+     * @throws EntityNotCreatedException
      */
     public function postMembersAction(MemberManager $memberManager): Response
     {
@@ -57,9 +60,12 @@ class MembersController extends APIController
     /**
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
+     *
+     * @throws EntityNotUpdatedException
      */
     public function putMembersAction(string $uuid, MemberManager $memberManager): Response
     {
+        /** @var Member $member */
         $member = $this->find(Member::class, $uuid);
         $postedData = $this->getPostedData();
 
@@ -79,9 +85,12 @@ class MembersController extends APIController
     /**
      * @Delete(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
+     *
+     * @throws EntityNotDeletedException
      */
     public function deleteMembersAction(string $uuid, MemberManager $memberManager): Response
     {
+        /** @var Member $member */
         $member = $this->find(Member::class, $uuid);
 
         $memberManager->delete($member);

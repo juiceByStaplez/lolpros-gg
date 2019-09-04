@@ -51,6 +51,7 @@ class RiotAccount
      * @Serializer\Type("string")
      * @Serializer\Groups({
      *     "league.get_player_riot_accounts",
+     *     "league.post_riot_account",
      * })
      * @Assert\NotNull
      * @Assert\NotBlank
@@ -130,6 +131,7 @@ class RiotAccount
      *     "league.get_player_riot_accounts",
      *     "league.get_riot_account",
      *     "league.get_riot_accounts",
+     *     "league.post_riot_account",
      * })
      */
     protected $smurf;

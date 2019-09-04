@@ -3,12 +3,12 @@
 namespace App\Service;
 
 use App\Entity\Core\Document\Document;
+use App\Entity\Core\Document\RegionLogo;
 use App\Entity\Core\Document\TeamLogo;
+use App\Entity\Core\Region\Region;
 use App\Entity\Core\Team\Team;
-use App\Entity\LeagueOfLegends\Document\RegionLogo;
-use App\Entity\LeagueOfLegends\Region\Region;
+use App\Event\Core\Region\RegionEvent;
 use App\Event\Core\Team\TeamEvent;
-use App\Event\LeagueOfLegends\Region\RegionEvent;
 use App\Manager\DefaultManager;
 use Cloudinary\Uploader;
 use Doctrine\ORM\EntityManagerInterface;

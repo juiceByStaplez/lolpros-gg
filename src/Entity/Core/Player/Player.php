@@ -59,6 +59,7 @@ abstract class Player
      *     "league.get_player",
      *     "league.get_riot_account",
      *     "get_team_members",
+     *     "league.put_player",
      * })
      * @Assert\NotNull(groups={"league.post_player"})
      */
@@ -80,6 +81,7 @@ abstract class Player
      *     "league.get_players",
      *     "league.get_player",
      *     "get_team_members",
+     *     "league.put_player",
      * })
      */
     protected $country;

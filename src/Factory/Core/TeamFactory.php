@@ -4,7 +4,7 @@ namespace App\Factory\Core;
 
 use App\Entity\Core\Team\Member;
 use App\Entity\LeagueOfLegends\Player\Player;
-use App\Model\Core\Team\PlayerTeam;
+use App\Model\Core\PlayerTeam;
 
 class TeamFactory
 {

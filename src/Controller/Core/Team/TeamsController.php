@@ -3,17 +3,17 @@
 namespace App\Controller\Core\Team;
 
 use App\Controller\APIController;
+use App\Entity\Core\Region\Region;
 use App\Entity\Core\Team\Team;
-use App\Entity\LeagueOfLegends\Region\Region;
+use App\Exception\Core\EntityNotCreatedException;
+use App\Exception\Core\EntityNotDeletedException;
+use App\Exception\Core\EntityNotUpdatedException;
 use App\Form\Core\Team\TeamForm;
 use App\Manager\Core\Team\TeamManager;
-use App\Repository\Core\TeamRepository;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Put;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Request\ParamFetcher;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,20 +28,11 @@ class TeamsController extends APIController
 {
     /**
      * @Get(path="")
-     * @QueryParam(name="active", nullable=true)
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
-    public function getTeamsAction(ParamFetcher $paramFetcher): Response
+    public function getTeamsAction(): Response
     {
-        $options = [];
-
-        if (($active = $this->getNullOrBoolean($paramFetcher->get('active')))) {
-            $options['active'] = $active;
-        }
-
-        $teams = $this->getDoctrine()->getRepository(Team::class)->findBy($options, ['name' => 'asc']);
-
-        return $this->serialize($teams, 'get_teams');
+        return $this->serialize($this->getDoctrine()->getRepository(Team::class)->findBy([], ['name' => 'asc']), 'get_teams');
     }
 
     /**
@@ -50,14 +41,14 @@ class TeamsController extends APIController
      */
     public function getTeamAction(string $uuid): Response
     {
-        $team = $this->find(Team::class, $uuid);
-
-        return $this->serialize($team, 'get_team');
+        return $this->serialize($this->find(Team::class, $uuid), 'get_team');
     }
 
     /**
      * @Post(path="")
      * @IsGranted("ROLE_ADMIN")
+     *
+     * @throws EntityNotCreatedException
      */
     public function postTeamsAction(TeamManager $teamManager): Response
     {
@@ -84,6 +75,8 @@ class TeamsController extends APIController
     /**
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
+     *
+     * @throws EntityNotUpdatedException
      */
     public function putTeamsAction(string $uuid, Request $request, TeamManager $teamManager, ValidatorInterface $validator): Response
     {
@@ -106,7 +99,9 @@ class TeamsController extends APIController
 
     /**
      * @Delete(path="/{uuid}")
-     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
+     * @IsGranted("ROLE_ADMIN")
+     *
+     * @throws EntityNotDeletedException
      */
     public function deleteTeamsAction(string $uuid, TeamManager $teamManager): Response
     {

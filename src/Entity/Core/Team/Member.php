@@ -42,6 +42,7 @@ class Member
      *     "get_teams",
      *     "get_team",
      *     "get_team_members",
+     *     "league.get_player",
      * })
      */
     protected $uuid;

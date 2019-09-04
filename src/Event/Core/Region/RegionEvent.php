@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Event\LeagueOfLegends\Region;
+namespace App\Event\Core\Region;
 
-use App\Entity\LeagueOfLegends\Region\Region;
+use App\Entity\Core\Region\Region;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class RegionEvent extends Event

@@ -9,6 +9,7 @@ use App\Exception\Core\EntityNotCreatedException;
 use App\Exception\Core\EntityNotDeletedException;
 use App\Exception\Core\EntityNotUpdatedException;
 use App\Manager\DefaultManager;
+use Exception;
 
 final class TeamManager extends DefaultManager
 {
@@ -21,7 +22,7 @@ final class TeamManager extends DefaultManager
             $this->eventDispatcher->dispatch(new TeamEvent($team), TeamEvent::CREATED);
 
             return $team;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('[TeamsManager] Could not create team because of {reason}', ['reason' => $e->getMessage()]);
             throw new EntityNotCreatedException(Team::class, $e->getMessage());
         }
@@ -41,7 +42,7 @@ final class TeamManager extends DefaultManager
             $this->eventDispatcher->dispatch(new TeamEvent($team), TeamEvent::UPDATED);
 
             return $team;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('[TeamsManager] Could not update team {uuid} because of {reason}', ['uuid' => $team->getUuidAsString(), 'reason' => $e->getMessage()]);
             throw new EntityNotUpdatedException(Team::class, $team->getUuidAsString(), $e->getMessage());
         }
@@ -54,7 +55,7 @@ final class TeamManager extends DefaultManager
             $this->entityManager->flush($team);
 
             $this->eventDispatcher->dispatch(new TeamEvent($team), TeamEvent::DELETED);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('[TeamsManager] Could not delete team {uuid} because of {reason}', ['uuid' => $team->getUuidAsString(), 'reason' => $e->getMessage()]);
             throw new EntityNotDeletedException(Team::class, $team->getUuidAsString(), $e->getMessage());
         }

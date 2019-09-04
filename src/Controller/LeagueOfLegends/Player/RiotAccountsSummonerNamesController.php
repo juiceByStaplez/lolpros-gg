@@ -22,8 +22,7 @@ class RiotAccountsSummonerNamesController extends APIController
     {
         /* @var RiotAccount $riotAccount */
         $riotAccount = $this->find(RiotAccount::class, $uuid);
-        $summonerNames = $riotAccount->getSummonerNames();
 
-        return $this->serialize($summonerNames, 'league.get_riot_account_summoner_names');
+        return $this->serialize($riotAccount->getSummonerNames(), 'league.get_riot_account_summoner_names');
     }
 }

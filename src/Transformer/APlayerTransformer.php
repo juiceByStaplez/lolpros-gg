@@ -3,8 +3,8 @@
 namespace App\Transformer;
 
 use App\Entity\Core\Document\Document as Logo;
+use App\Entity\Core\Region\Region;
 use App\Entity\LeagueOfLegends\Player\Player;
-use App\Entity\LeagueOfLegends\Region\Region;
 
 abstract class APlayerTransformer extends DefaultTransformer
 {

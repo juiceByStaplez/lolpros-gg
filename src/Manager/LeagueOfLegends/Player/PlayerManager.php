@@ -9,28 +9,9 @@ use App\Exception\Core\EntityNotCreatedException;
 use App\Exception\Core\EntityNotDeletedException;
 use App\Exception\Core\EntityNotUpdatedException;
 use App\Manager\DefaultManager;
-use FOS\RestBundle\Request\ParamFetcherInterface;
 
 final class PlayerManager extends DefaultManager
 {
-    public function getList(ParamFetcherInterface $fetcher): array
-    {
-        $filters = array_filter($fetcher->all(true));
-        $position = $filters['position'] ?? false;
-
-        $queryBuilder = $this->entityManager->getRepository(Player::class)
-            ->createQueryBuilder('player')
-            ->orderBy('player.name', 'asc');
-
-        if ($position) {
-            $queryBuilder
-                ->andWhere('player.position = :position')
-                ->setParameter('position', $position);
-        }
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
     public function create(Player $player): Player
     {
         $this->logger->debug('[PlayersManager::create] Creating player {uuid}', ['uuid' => $player->getUuidAsString()]);

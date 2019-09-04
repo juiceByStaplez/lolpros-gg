@@ -35,18 +35,18 @@ class PlayersSocialMediaController extends APIController
      * @Put(path="/{uuid}/social-medias")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function putPlayerSocialMediasAction(string $uuid, ValidatorInterface $validator): Response
+    public function putPlayerSocialMediasAction(string $uuid, ValidatorInterface $validator, SocialMediaManager $socialMediaManager): Response
     {
         /** @var Player $player */
         $player = $this->find(Player::class, $uuid);
-        $socialMedia = $this->deserialize(SocialMedia::class, 'post_player_social_medias');
+        $socialMedia = $this->deserialize(SocialMedia::class, 'put_player_social_medias');
 
-        $violationList = $validator->validate($socialMedia, null, ['post_player_social_medias']);
+        $violationList = $validator->validate($socialMedia, null, ['put_player_social_medias']);
         if ($violationList->count() > 0) {
             return new JsonResponse($this->errorFormatter->reduce($violationList), 422);
         }
 
-        $socialMedia = $this->get(SocialMediaManager::class)->updateSocialMedia($player, $socialMedia);
+        $socialMedia = $socialMediaManager->updateSocialMedia($player, $socialMedia);
 
         return $this->serialize($socialMedia, 'get_player_social_medias');
     }

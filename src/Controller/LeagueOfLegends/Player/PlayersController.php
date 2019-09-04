@@ -3,8 +3,11 @@
 namespace App\Controller\LeagueOfLegends\Player;
 
 use App\Controller\APIController;
+use App\Entity\Core\Region\Region;
 use App\Entity\LeagueOfLegends\Player\Player;
-use App\Entity\LeagueOfLegends\Region\Region;
+use App\Exception\Core\EntityNotCreatedException;
+use App\Exception\Core\EntityNotDeletedException;
+use App\Exception\Core\EntityNotUpdatedException;
 use App\Exception\LeagueOfLegends\AccountRecentlyUpdatedException;
 use App\Form\LeagueOfLegends\Player\PlayerForm;
 use App\Manager\LeagueOfLegends\Player\PlayerManager;
@@ -14,8 +17,6 @@ use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Put;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Request\ParamFetcherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,30 +32,26 @@ class PlayersController extends APIController
     /**
      * @Get(path="")
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
-     * @QueryParam(name="position", default=null, nullable=true)
      */
-    public function getPlayersAction(ParamFetcherInterface $paramFetcher, PlayerManager $playerManager): Response
+    public function getPlayersAction(): Response
     {
-        $players = $playerManager->getList($paramFetcher);
-
-        return $this->serialize($players, 'league.get_players');
+        return $this->serialize($this->getDoctrine()->getRepository(Player::class)->findBy([], ['name' => 'asc']), 'league.get_players');
     }
 
     /**
      * @Get(path="/{uuid}")
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
     public function getPlayerAction(string $uuid): Response
     {
-        /** @var Player $player */
-        $player = $this->find(Player::class, $uuid);
-
-        return $this->serialize($player, 'league.get_player');
+        return $this->serialize($this->find(Player::class, $uuid), 'league.get_player');
     }
 
     /**
      * @Post(path="")
      * @IsGranted("ROLE_ADMIN")
+     *
+     * @throws EntityNotCreatedException
      */
     public function postPlayersAction(PlayerManager $playerManager): Response
     {
@@ -84,6 +81,8 @@ class PlayersController extends APIController
     /**
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
+     *
+     * @throws EntityNotUpdatedException
      */
     public function putPlayersAction(string $uuid, PlayerManager $playerManager, ValidatorInterface $validator): Response
     {
@@ -111,6 +110,8 @@ class PlayersController extends APIController
     /**
      * @Delete(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
+     *
+     * @throws EntityNotDeletedException
      */
     public function deletePlayersAction(string $uuid, PlayerManager $playerManager): Response
     {

@@ -2,8 +2,8 @@
 
 namespace App\Form\Core\Team;
 
+use App\Entity\Core\Region\Region;
 use App\Entity\Core\Team\Team;
-use App\Entity\LeagueOfLegends\Region\Region;
 use App\Form\EntityTransformer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;

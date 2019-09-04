@@ -2,7 +2,6 @@
 
 namespace App\Entity\LeagueOfLegends\Player;
 
-use App\Manager\LeagueOfLegends\Player\RankingManager;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -283,19 +282,5 @@ class Ranking
             self::TIER_BRONZE,
             self::TIER_UNRANKED,
         ];
-    }
-
-    public function getTierFromDatabase(): string
-    {
-        return ucfirst(strtolower(RankingManager::tierToRiot($this->tier)));
-    }
-
-    public function getFormattedRanking(): string
-    {
-        if (in_array($this->tier, [self::TIER_CHALLENGER, self::TIER_GRANDMASTER, self::TIER_MASTER, self::TIER_UNRANKED])) {
-            return $this->getTierFromDatabase();
-        }
-
-        return $this->getTierFromDatabase().' '.$this->rank;
     }
 }

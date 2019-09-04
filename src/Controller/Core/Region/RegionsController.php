@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Controller\LeagueOfLegends\Region;
+namespace App\Controller\Core\Region;
 
 use App\Controller\APIController;
-use App\Entity\LeagueOfLegends\Region\Region;
-use App\Form\LeagueOfLegends\Region\RegionForm;
-use App\Manager\LeagueOfLegends\Region\RegionManager;
+use App\Entity\Core\Region\Region;
+use App\Exception\Core\EntityNotCreatedException;
+use App\Exception\Core\EntityNotDeletedException;
+use App\Exception\Core\EntityNotUpdatedException;
+use App\Form\Core\Region\RegionForm;
+use App\Manager\Core\Region\RegionManager;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -27,9 +30,7 @@ class RegionsController extends APIController
      */
     public function getRegionsAction(): Response
     {
-        $regions = $this->getDoctrine()->getRepository(Region::class)->findBy([], ['name' => 'asc']);
-
-        return $this->serialize($regions, 'league.get_regions');
+        return $this->serialize($this->getDoctrine()->getRepository(Region::class)->findBy([], ['name' => 'asc']), 'league.get_regions');
     }
 
     /**
@@ -38,15 +39,14 @@ class RegionsController extends APIController
      */
     public function getRegionAction(string $uuid): Response
     {
-        /** @var Region $region */
-        $region = $this->find(Region::class, $uuid);
-
-        return $this->serialize($region, 'league.get_region');
+        return $this->serialize($this->find(Region::class, $uuid), 'league.get_region');
     }
 
     /**
      * @Post(path="")
      * @IsGranted("ROLE_ADMIN")
+     *
+     * @throws EntityNotCreatedException
      */
     public function postRegionsAction(RegionManager $regionManager): Response
     {
@@ -73,6 +73,8 @@ class RegionsController extends APIController
     /**
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
+     *
+     * @throws EntityNotUpdatedException
      */
     public function putRegionAction(string $uuid, RegionManager $regionManager): Response
     {
@@ -103,6 +105,8 @@ class RegionsController extends APIController
     /**
      * @Delete(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
+     *
+     * @throws EntityNotDeletedException
      */
     public function deleteRegionsAction(string $uuid, RegionManager $regionManager): Response
     {
