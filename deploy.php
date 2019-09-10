@@ -9,6 +9,7 @@ set('repository', 'git@github.com:SpireGG/lolpros-gg.git');
 set('git_tty', false);
 set('allow_anonymous_stats', false);
 set('default_timeout', 600);
+set('writable_dirs', ['var/cache', 'var/logs', 'var/sessions']);
 
 // Hosts
 host('lolpros.xyz')
