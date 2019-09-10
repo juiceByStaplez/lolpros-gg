@@ -33,6 +33,7 @@
         "symfony/yaml": "^4.3"
     },
     "require-dev": {
+        "deployer/deployer": "^6.5",
         "friendsofphp/php-cs-fixer": "^2.15",
         "symfony/console": "^4.3",
         "symfony/debug-pack": "^1.0",

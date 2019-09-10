@@ -2,6 +2,7 @@
 
 namespace App\Entity\Core\Player;
 
+use App\Entity\Core\Region\Region;
 use App\Entity\Core\Team\Member;
 use App\Entity\Core\Team\Team;
 use App\Entity\StringUuidTrait;
@@ -106,6 +107,18 @@ abstract class Player
     protected $socialMedia;
 
     /**
+     * @var ArrayCollection|Region[]
+     * @ORM\ManyToMany(targetEntity="App\Entity\Core\Region\Region", inversedBy="players")
+     * @Serializer\Type("App\Entity\Core\Region\Region")
+     * @Serializer\Groups({
+     *     "league.get_players",
+     *     "league.get_player",
+     *     "league.put_player",
+     * })
+     */
+    private $regions;
+
+    /**
      * @var DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
@@ -125,6 +138,7 @@ abstract class Player
     {
         $this->uuid = Uuid::uuid4();
         $this->socialMedia = new SocialMedia($this);
+        $this->regions = new ArrayCollection();
         $this->memberships = new ArrayCollection();
     }
 
@@ -192,6 +206,34 @@ abstract class Player
     public function setSocialMedia(SocialMedia $socialMedia): self
     {
         $this->socialMedia = $socialMedia;
+
+        return $this;
+    }
+
+    public function getRegions(): ?Collection
+    {
+        return $this->regions;
+    }
+
+    public function setRegions($regions): self
+    {
+        $this->regions = $regions;
+
+        return $this;
+    }
+
+    public function addRegion(Region $region): self
+    {
+        $this->regions->add($region);
+        $region->addPlayer($this);
+
+        return $this;
+    }
+
+    public function removeRegion(Region $region): self
+    {
+        $this->regions->remove($region);
+        $region->removePlayer($this);
 
         return $this;
     }

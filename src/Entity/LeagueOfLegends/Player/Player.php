@@ -54,23 +54,10 @@ class Player extends BasePlayer
      */
     private $score = 0;
 
-    /**
-     * @var ArrayCollection|Region[]
-     * @ORM\ManyToMany(targetEntity="App\Entity\Core\Region\Region", inversedBy="players")
-     * @Serializer\Type("App\Entity\Core\Region\Region")
-     * @Serializer\Groups({
-     *     "league.get_players",
-     *     "league.get_player",
-     *     "league.put_player",
-     * })
-     */
-    private $regions;
-
     public function __construct()
     {
         parent::__construct();
         $this->accounts = new ArrayCollection();
-        $this->regions = new ArrayCollection();
     }
 
     public function getAccounts(): Collection
@@ -119,34 +106,6 @@ class Player extends BasePlayer
     public function setScore(int $score): self
     {
         $this->score = $score;
-
-        return $this;
-    }
-
-    public function getRegions(): ?Collection
-    {
-        return $this->regions;
-    }
-
-    public function setRegions($regions): self
-    {
-        $this->regions = $regions;
-
-        return $this;
-    }
-
-    public function addRegion(Region $region): self
-    {
-        $this->regions->add($region);
-        $region->addPlayer($this);
-
-        return $this;
-    }
-
-    public function removeRegion(Region $region): self
-    {
-        $this->regions->remove($region);
-        $region->removePlayer($this);
 
         return $this;
     }
