@@ -2,10 +2,41 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <meta name="description" content="Ranking and listing of high Elo players on League of Legends">
+        <meta name="keywords" content="lolpros.gg, lolpros, chypriote, league of legends"/>
+        <link rel="icon" href="favicon.png">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+        <title>LOLPros.GG</title>
+        <style>
+            @font-face {
+                font-family: 'Cocogoose';
+                src: url('Cocogoose.woff2') format('woff2'),
+                url('Cocogoose.woff') format('woff'),
+                url('Cocogoose.eot') format('eot'),
+                url('Cocogoose.ttf') format('ttf');
+                font-weight: normal;
+                font-style: normal;
+            }
+            body {
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                background-color: #ebebeb;
+            }
+            .logo { width: 50%; margin: 0 auto 3rem; }
+            .wordmark { font-family: Cocogoose, sans-serif; font-size: 8rem;}
+            .accent {color: #057e8c;}
+        </style>
     </head>
     <body>
+        <div class="wrapper">
+            <div class="logo"><img src="logo.svg" alt="LOLProsGG"></div>
+            <div class="wordmark">LOLPROS<span class="accent">.GG</span></div>
+        </div>
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
