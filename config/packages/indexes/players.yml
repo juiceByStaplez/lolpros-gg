@@ -38,6 +38,8 @@ fos_elastica:
                     url:
             score:
               type: integer
+            total_games:
+              type: integer
             accounts:
               type: nested
               properties:

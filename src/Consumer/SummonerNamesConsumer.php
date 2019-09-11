@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class SummonerNamesConsumer implements ConsumerInterface
 {
@@ -50,7 +50,7 @@ class SummonerNamesConsumer implements ConsumerInterface
         }
 
         try {
-            $this->eventDispatcher->dispatch(SummonerNameEvent::CREATED, new SummonerNameEvent($summoner));
+            $this->eventDispatcher->dispatch(new SummonerNameEvent($summoner), SummonerNameEvent::CREATED);
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
         }
