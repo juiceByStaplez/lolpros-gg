@@ -3,7 +3,6 @@
 namespace App\Entity\LeagueOfLegends\Player;
 
 use App\Entity\Core\Player\Player as BasePlayer;
-use App\Entity\Core\Region\Region;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

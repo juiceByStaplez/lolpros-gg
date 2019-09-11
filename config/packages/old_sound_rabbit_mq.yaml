@@ -1,0 +1,24 @@
+old_sound_rabbit_mq:
+    connections:
+        default:
+            url: '%env(RABBITMQ_URL)%'
+            lazy: false
+
+    consumers:
+        players:
+            connection: default
+            exchange_options:
+                name: 'players'
+                type: 'direct'
+            queue_options:
+                name: 'players'
+            callback: App\Consumer\PlayersConsumer
+
+        summoner_names:
+            connection: default
+            exchange_options:
+                name: 'summoner_names'
+                type: 'direct'
+            queue_options:
+                name: 'summoner_names'
+            callback: App\Consumer\SummonerNamesConsumer

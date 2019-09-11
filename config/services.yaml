@@ -42,3 +42,11 @@ services:
     App\Manager\LeagueOfLegends\Riot\RiotSpectatorManager:
         arguments:
             $apiKey: '%env(RIOT_API_KEY)%'
+
+    # Consumers
+    App\Consumer\PlayersConsumer:
+        arguments:
+            $playerIndexer: '@api.indexer.players'
+            $ladderIndexer: '@api.indexer.ladder'
+            $teamIndexer: '@api.indexer.teams'
+    App\Consumer\SummonerNamesConsumer: ~
