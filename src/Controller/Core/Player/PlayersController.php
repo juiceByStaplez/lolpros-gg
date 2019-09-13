@@ -18,7 +18,7 @@ class PlayersController extends APIController
 {
     /**
      * @Get(path="/countries")
-     * @IsGranted("ROLE_USER")
+     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
     public function getPlayersCountriesAction(): Response
     {
