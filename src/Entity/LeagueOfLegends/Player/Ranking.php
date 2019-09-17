@@ -131,6 +131,9 @@ class Ranking
      * @var int
      * @ORM\Column(type="integer", options={"default"=0})
      * @Serializer\Type("integer")
+     * @Serializer\Groups({
+     *     "league.get_riot_account_rankings",
+     * })
      */
     private $score = 0;
 
