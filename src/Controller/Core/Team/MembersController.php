@@ -36,7 +36,6 @@ class MembersController extends APIController
     /**
      * @Post(path="")
      * @IsGranted("ROLE_ADMIN")
-     *
      * @throws EntityNotCreatedException
      */
     public function postMembersAction(MemberManager $memberManager): Response
@@ -60,7 +59,6 @@ class MembersController extends APIController
     /**
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
-     *
      * @throws EntityNotUpdatedException
      */
     public function putMembersAction(string $uuid, MemberManager $memberManager): Response
@@ -85,7 +83,6 @@ class MembersController extends APIController
     /**
      * @Delete(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
-     *
      * @throws EntityNotDeletedException
      */
     public function deleteMembersAction(string $uuid, MemberManager $memberManager): Response

@@ -5,6 +5,7 @@ namespace App\Controller\Core\Player;
 use App\Controller\APIController;
 use App\Entity\Core\Player\Player;
 use App\Entity\Core\Player\SocialMedia;
+use App\Exception\Core\EntityNotUpdatedException;
 use App\Manager\Core\Player\SocialMediaManager;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Put;
@@ -34,6 +35,7 @@ class PlayersSocialMediaController extends APIController
     /**
      * @Put(path="/{uuid}/social-medias")
      * @IsGranted("ROLE_ADMIN")
+     * @throws EntityNotUpdatedException
      */
     public function putPlayerSocialMediasAction(string $uuid, ValidatorInterface $validator, SocialMediaManager $socialMediaManager): Response
     {

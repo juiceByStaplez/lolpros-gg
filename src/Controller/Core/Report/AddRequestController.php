@@ -4,6 +4,9 @@ namespace App\Controller\Core\Report;
 
 use App\Controller\APIController;
 use App\Entity\Core\Report\AddRequest;
+use App\Exception\Core\EntityNotCreatedException;
+use App\Exception\Core\EntityNotDeletedException;
+use App\Exception\Core\EntityNotUpdatedException;
 use App\Form\Core\Report\AddRequestForm;
 use App\Manager\Core\Report\AddRequestManager;
 use FOS\RestBundle\Controller\Annotations\Delete;
@@ -46,6 +49,7 @@ class AddRequestController extends APIController
     /**
      * @Post(path="")
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
+     * @throws EntityNotCreatedException
      */
     public function postAddRequestsAction(AddRequestManager $addRequestManager): Response
     {
@@ -72,6 +76,7 @@ class AddRequestController extends APIController
     /**
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
+     * @throws EntityNotUpdatedException
      */
     public function putAddRequestAction(string $uuid, AddRequestManager $addRequestManager): Response
     {
@@ -99,6 +104,7 @@ class AddRequestController extends APIController
     /**
      * @Delete(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
+     * @throws EntityNotDeletedException
      */
     public function deleteAddRequestsAction(string $uuid, AddRequestManager $addRequestManager): Response
     {

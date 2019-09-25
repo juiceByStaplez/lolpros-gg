@@ -17,6 +17,7 @@ use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Put;
+use RiotAPI\LeagueAPI\Exceptions\ServerLimitException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,7 +51,6 @@ class PlayersController extends APIController
     /**
      * @Post(path="")
      * @IsGranted("ROLE_ADMIN")
-     *
      * @throws EntityNotCreatedException
      */
     public function postPlayersAction(PlayerManager $playerManager): Response
@@ -81,7 +81,6 @@ class PlayersController extends APIController
     /**
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
-     *
      * @throws EntityNotUpdatedException
      */
     public function putPlayersAction(string $uuid, PlayerManager $playerManager, ValidatorInterface $validator): Response
@@ -110,7 +109,6 @@ class PlayersController extends APIController
     /**
      * @Delete(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
-     *
      * @throws EntityNotDeletedException
      */
     public function deletePlayersAction(string $uuid, PlayerManager $playerManager): Response
@@ -126,6 +124,7 @@ class PlayersController extends APIController
     /**
      * @Get(path="/{uuid}/update")
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
+     * @throws ServerLimitException
      */
     public function getPlayerUpdateAction(string $uuid, RiotAccountManager $riotAccountManager): Response
     {

@@ -5,6 +5,7 @@ namespace App\Controller\Core\Team;
 use App\Controller\APIController;
 use App\Entity\Core\Team\SocialMedia;
 use App\Entity\Core\Team\Team;
+use App\Exception\Core\EntityNotUpdatedException;
 use App\Manager\Core\Team\SocialMediaManager;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Put;
@@ -34,6 +35,7 @@ class TeamsSocialMediasController extends APIController
     /**
      * @Put(path="/{uuid}/social-medias")
      * @IsGranted("ROLE_ADMIN")
+     * @throws EntityNotUpdatedException
      */
     public function putTeamSocialMediasAction(string $uuid, SocialMediaManager $socialMediaManager, ValidatorInterface $validator): Response
     {
