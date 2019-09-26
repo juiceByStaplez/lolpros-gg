@@ -8,6 +8,7 @@ use App\Exception\Core\EntityNotCreatedException;
 use App\Exception\Core\EntityNotDeletedException;
 use App\Exception\Core\EntityNotUpdatedException;
 use App\Manager\DefaultManager;
+use Exception;
 
 class RegionManager extends DefaultManager
 {
@@ -17,8 +18,10 @@ class RegionManager extends DefaultManager
             $this->entityManager->persist($region);
             $this->entityManager->flush($region);
 
+            $this->eventDispatcher->dispatch(new RegionEvent($region), RegionEvent::CREATED);
+
             return $region;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('[RegionsManager] Could not create region because of {reason}', [
                 'reason' => $e->getMessage(),
             ]);
@@ -35,7 +38,7 @@ class RegionManager extends DefaultManager
             $this->eventDispatcher->dispatch(new RegionEvent($region), RegionEvent::UPDATED);
 
             return $region;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('[RegionsManager] Could not update region {uuid} because of {reason}', [
                 'uuid' => $region->getUuid()->toString(),
                 'reason' => $e->getMessage(),
@@ -50,7 +53,9 @@ class RegionManager extends DefaultManager
         try {
             $this->entityManager->remove($region);
             $this->entityManager->flush($region);
-        } catch (\Exception $e) {
+
+            $this->eventDispatcher->dispatch(new RegionEvent($region), RegionEvent::DELETED);
+        } catch (Exception $e) {
             $this->logger->error('[RegionsManager] Could not delete region {uuid} because of {reason}', [
                 'uuid' => $region->getUuid()->toString(),
                 'reason' => $e->getMessage(),

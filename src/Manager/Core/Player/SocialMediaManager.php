@@ -4,7 +4,9 @@ namespace App\Manager\Core\Player;
 
 use App\Entity\Core\Player\Player;
 use App\Entity\Core\Player\SocialMedia;
-use App\Event\LeagueOfLegends\Player\PlayerEvent;
+use App\Entity\LeagueOfLegends\Player\Player as LeaguePlayer;
+use App\Event\Core\Player\PlayerEvent;
+use App\Event\LeagueOfLegends\Player\PlayerEvent as LeaguePlayerEvent;
 use App\Exception\Core\EntityNotUpdatedException;
 use App\Manager\DefaultManager;
 use Exception;
@@ -25,11 +27,13 @@ final class SocialMediaManager extends DefaultManager
             $this->entityManager->flush($media);
             $this->entityManager->flush($player);
 
-            if ($player instanceof \App\Entity\LeagueOfLegends\Player\Player) {
-                $this->eventDispatcher->dispatch(new PlayerEvent($player), PlayerEvent::UPDATED);
+            switch (true) {
+                case $player instanceof LeaguePlayer:
+                    $this->eventDispatcher->dispatch(new LeaguePlayerEvent($player), LeaguePlayerEvent::UPDATED);
+                    break;
+                default:
+                    $this->eventDispatcher->dispatch(new PlayerEvent($player), PlayerEvent::UPDATED);
             }
-
-            $this->eventDispatcher->dispatch(new PlayerEvent($player), PlayerEvent::UPDATED);
 
             return $media;
         } catch (Exception $e) {

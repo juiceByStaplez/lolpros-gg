@@ -3,6 +3,14 @@ services:
         autowire: true
         autoconfigure: true
 
+    #Core listeners
+    App\Listener\Core\PlayerListener:
+        arguments:
+            $playerIndexer: '@api.indexer.players'
+            $teamIndexer: '@api.indexer.teams'
+        tags:
+            - { name: kernel.event_subscriber }
+
     App\Listener\Core\TeamListener:
         arguments:
             $teamIndexer: '@api.indexer.teams'
@@ -27,6 +35,7 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    #League listeners
     App\Listener\LeagueOfLegends\PlayerListener:
         arguments:
             $playerIndexer: '@api.indexer.players'

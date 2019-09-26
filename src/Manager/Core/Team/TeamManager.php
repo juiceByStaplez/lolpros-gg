@@ -17,7 +17,7 @@ final class TeamManager extends DefaultManager
     {
         try {
             $this->entityManager->persist($team);
-            $this->entityManager->flush();
+            $this->entityManager->flush($team);
 
             $this->eventDispatcher->dispatch(new TeamEvent($team), TeamEvent::CREATED);
 
@@ -51,23 +51,13 @@ final class TeamManager extends DefaultManager
     public function delete(Team $team)
     {
         try {
+            $this->eventDispatcher->dispatch(new TeamEvent($team), TeamEvent::DELETED);
+
             $this->entityManager->remove($team);
             $this->entityManager->flush($team);
-
-            $this->eventDispatcher->dispatch(new TeamEvent($team), TeamEvent::DELETED);
         } catch (Exception $e) {
             $this->logger->error('[TeamsManager] Could not delete team {uuid} because of {reason}', ['uuid' => $team->getUuidAsString(), 'reason' => $e->getMessage()]);
             throw new EntityNotDeletedException(Team::class, $team->getUuidAsString(), $e->getMessage());
-        }
-    }
-
-    public static function keepCurrentMembers(Team $team)
-    {
-        foreach ($team->getMembers() as $member) {
-            /** @var Member $member */
-            if (!$member->isCurrent()) {
-                $team->removeMember($member);
-            }
         }
     }
 }

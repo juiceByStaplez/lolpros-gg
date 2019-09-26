@@ -5,6 +5,7 @@ namespace App\Form\Core\Team;
 use App\Entity\Core\Region\Region;
 use App\Entity\Core\Team\Team;
 use App\Form\EntityTransformer;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
@@ -34,16 +35,8 @@ class TeamForm extends AbstractType
             ->add('region', TextType::class);
 
         $builder->get('region')->addModelTransformer(new EntityTransformer($this->entityManager->getRepository(Region::class)));
-        $builder->get('creationDate')->addModelTransformer(new CallbackTransformer(function ($string) {
-            return $string;
-        }, function ($datetime) {
-            return new \DateTime($datetime);
-        }));
-        $builder->get('disbandDate')->addModelTransformer(new CallbackTransformer(function ($string) {
-            return $string;
-        }, function ($datetime) {
-            return $datetime ? new \DateTime($datetime) : null;
-        }));
+        $builder->get('creationDate')->addModelTransformer(new CallbackTransformer(function ($string) { return $string; }, function ($datetime) { return new DateTime($datetime); }));
+        $builder->get('disbandDate')->addModelTransformer(new CallbackTransformer(function ($string) { return $string; }, function ($datetime) { return $datetime ? new DateTime($datetime) : null; }));
     }
 
     public function configureOptions(OptionsResolver $resolver)

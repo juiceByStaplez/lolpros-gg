@@ -6,6 +6,7 @@ use App\Entity\Core\Team\Member;
 use App\Entity\Core\Team\Team;
 use App\Entity\LeagueOfLegends\Player\Player;
 use App\Form\EntityTransformer;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
@@ -36,16 +37,8 @@ class MemberForm extends AbstractType
 
         $builder->get('player')->addModelTransformer(new EntityTransformer($this->entityManager->getRepository(Player::class)));
         $builder->get('team')->addModelTransformer(new EntityTransformer($this->entityManager->getRepository(Team::class)));
-        $builder->get('joinDate')->addModelTransformer(new CallbackTransformer(function ($string) {
-            return $string;
-        }, function ($datetime) {
-            return new \DateTime($datetime);
-        }));
-        $builder->get('leaveDate')->addModelTransformer(new CallbackTransformer(function ($string) {
-            return $string;
-        }, function ($datetime) {
-            return $datetime ? new \DateTime($datetime) : null;
-        }));
+        $builder->get('joinDate')->addModelTransformer(new CallbackTransformer(function ($string) { return $string; }, function ($datetime) { return new DateTime($datetime); }));
+        $builder->get('leaveDate')->addModelTransformer(new CallbackTransformer(function ($string) { return $string; }, function ($datetime) { return $datetime ? new DateTime($datetime) : null; }));
     }
 
     public function configureOptions(OptionsResolver $resolver)

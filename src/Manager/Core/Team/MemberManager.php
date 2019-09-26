@@ -8,6 +8,7 @@ use App\Exception\Core\EntityNotCreatedException;
 use App\Exception\Core\EntityNotDeletedException;
 use App\Exception\Core\EntityNotUpdatedException;
 use App\Manager\DefaultManager;
+use Exception;
 
 class MemberManager extends DefaultManager
 {
@@ -20,7 +21,7 @@ class MemberManager extends DefaultManager
             $this->eventDispatcher->dispatch(new MemberEvent($member), MemberEvent::CREATED);
 
             return $member;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('[MembersManager] Could not create Member because of {reason}', ['reason' => $e->getMessage()]);
             throw new EntityNotCreatedException(Member::class, $e->getMessage());
         }
@@ -34,7 +35,7 @@ class MemberManager extends DefaultManager
             $this->eventDispatcher->dispatch(new MemberEvent($member), MemberEvent::UPDATED);
 
             return $member;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('[MembersManager] Could not update Member {uuid} because of {reason}', ['uuid' => $member->getUuidAsString(), 'reason' => $e->getMessage()]);
             throw new EntityNotUpdatedException(Member::class, $member->getUuidAsString(), $e->getMessage());
         }
@@ -50,7 +51,7 @@ class MemberManager extends DefaultManager
 
             $this->entityManager->remove($member);
             $this->entityManager->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('[MembersManager] Could not delete member {uuid} because of {reason}', ['uuid' => $member->getUuidAsString(), 'reason' => $e->getMessage()]);
             throw new EntityNotDeletedException(Member::class, $member->getUuidAsString(), $e->getMessage());
         }
