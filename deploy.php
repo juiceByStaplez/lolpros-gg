@@ -12,7 +12,7 @@ set('default_timeout', 600);
 set('writable_dirs', ['var/cache', 'var/log', 'var/sessions']);
 
 // Hosts
-host('lolpros.xyz')
+host('146.185.137.177')
     ->user('chypriote')
     ->multiplexing(false)
     ->forwardAgent(true)

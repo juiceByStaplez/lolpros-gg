@@ -123,7 +123,7 @@ class APIController extends AbstractFOSRestController
         return $entity;
     }
 
-    protected function getNullOrBoolean(string $param): ?bool
+    protected function getNullOrBoolean(?string $param): ?bool
     {
         if (null !== $param) {
             return filter_var($param, FILTER_VALIDATE_BOOLEAN);
