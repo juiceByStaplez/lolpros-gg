@@ -27,16 +27,12 @@ class PlayerForm extends AbstractType
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name', TextType::class)
-            ->add('position', TextType::class)
             ->add('country', TextType::class)
+            ->add('position', TextType::class)
             ->add('regions', CollectionType::class, [
                 'entry_type' => TextType::class,
                 'allow_add' => true,
@@ -46,9 +42,6 @@ class PlayerForm extends AbstractType
         $builder->get('regions')->addModelTransformer(new EntityTransformer($this->entityManager->getRepository(Region::class)));
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
@@ -59,12 +52,6 @@ class PlayerForm extends AbstractType
         ]);
     }
 
-    /**
-     * @param string $method
-     * @param array  $data
-     *
-     * @return array
-     */
     public static function buildOptions(string $method, array $data)
     {
         $validationGroups = [
