@@ -99,7 +99,11 @@ class Player extends BasePlayer
 
     public function getScore(): ?int
     {
-        return $this->score;
+        if (!$this->getAccounts()->count()) {
+            return 0;
+        }
+
+        return $this->getBestAccount()->getScore();
     }
 
     public function setScore(int $score): self
@@ -114,19 +118,17 @@ class Player extends BasePlayer
      */
     public function getBestAccount(): ?RiotAccount
     {
-        $accounts = $this->getAccounts();
-        if ($accounts) {
-            $iterator = $accounts->getIterator();
-            $iterator->uasort(function (RiotAccount $a, RiotAccount $b) {
-                return ($a->getScore() > $b->getScore()) ? -1 : 1;
-            });
-            $accounts = new ArrayCollection(iterator_to_array($iterator));
-            $account = $accounts->first();
-
-            return $account ? $account : null;
+        if (!($accounts = $this->getAccounts())->count()) {
+            return null;
         }
 
-        return null;
+        $iterator = $accounts->getIterator();
+        $iterator->uasort(function (RiotAccount $a, RiotAccount $b) {
+            return ($a->getScore() > $b->getScore()) ? -1 : 1;
+        });
+        $accounts = new ArrayCollection(iterator_to_array($iterator));
+
+        return $accounts->first();
     }
 
     public function getMainAccount(): ?RiotAccount
