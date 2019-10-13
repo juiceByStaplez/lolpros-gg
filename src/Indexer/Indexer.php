@@ -77,7 +77,7 @@ class Indexer implements IndexerInterface
         return $this->name;
     }
 
-    public function addOne(string $typeName, $object): int
+    public function addOne(string $typeName, $object): bool
     {
         $this->logger->debug('[Indexer::addOne]', ['name' => $this->name, 'object' => $object]);
         $document = $this->transformer->transform($object, []);
@@ -85,7 +85,7 @@ class Indexer implements IndexerInterface
         if (!$document instanceof Document) {
             $this->logger->debug('[Indexer] Could not transform [data]', ['Indexer' => $this->name, 'data' => json_encode($object)]);
 
-            return 0;
+            return false;
         }
 
         $response = $this->index->getType($typeName)->addDocument($document);
@@ -95,13 +95,13 @@ class Indexer implements IndexerInterface
 
             $this->logger->debug('[Indexer] creating [document]', ['Indexer' => $this->name, 'document' => json_encode($document)]);
 
-            return 1;
+            return true;
         }
 
-        return 0;
+        return false;
     }
 
-    public function deleteOne(string $typeName, string $uuid): int
+    public function deleteOne(string $typeName, string $uuid): bool
     {
         $this->logger->debug('[Indexer::deleteOne]', ['name' => $this->name, 'uuid' => $uuid]);
         try {
@@ -114,7 +114,7 @@ class Indexer implements IndexerInterface
                     'Document' => $uuid,
                 ]);
 
-                return 1;
+                return true;
             }
 
             $response = $this->index->getType($typeName)->deleteDocument($document);
@@ -128,16 +128,16 @@ class Indexer implements IndexerInterface
                     'Document' => $uuid,
                 ]);
 
-                return 1;
+                return true;
             }
         } catch (NotFoundException $e) {
             $this->logger->error($e->getMessage());
         }
 
-        return 0;
+        return false;
     }
 
-    public function updateOne(string $typeName, $updatedObject): int
+    public function updateOne(string $typeName, $updatedObject): bool
     {
         $this->logger->debug('[Indexer::updateOne] {uuid}', ['name' => $this->name, 'uuid' => $updatedObject instanceof StringUuidTrait ? $updatedObject->getUuidAsString() : get_class($updatedObject)]);
 
@@ -146,26 +146,25 @@ class Indexer implements IndexerInterface
         if (!$document instanceof Document) {
             $this->logger->debug('[Indexer] Could not transform {data}', ['Indexer' => $this->name, 'data' => json_encode($updatedObject)]);
 
-            return 0;
+            return false;
         }
 
         $response = $this->index->getType($typeName)->updateDocument($document);
 
         if ($response->isOk()) {
             $this->index->refresh();
-
             $this->logger->debug('[Indexer] updating {document}', ['Indexer' => $this->name, 'document' => json_encode($document)]);
 
-            return 1;
+            return true;
         }
 
-        return 0;
+        return false;
     }
 
-    public function updateMultiple(string $typeName, array $ids): int
+    public function updateMultiple(string $typeName, array $ids): bool
     {
         if (false === $documents = $this->fetcher->fetchByIds($ids)) {
-            return 0;
+            return false;
         }
 
         $updatedDocuments = [];
@@ -180,10 +179,10 @@ class Indexer implements IndexerInterface
             $this->index->refresh();
             $this->logger->debug('[indexer] updating {document}', ['indexer' => $this->name, 'document' => json_encode($updatedDocuments)]);
 
-            return 1;
+            return true;
         }
 
-        return 0;
+        return false;
     }
 
     public function refresh()
@@ -191,7 +190,7 @@ class Indexer implements IndexerInterface
         $this->index->refresh();
     }
 
-    public function addOrUpdateOne(string $typeName, $object): int
+    public function addOrUpdateOne(string $typeName, $object): bool
     {
         $this->logger->debug('[Indexer::addOrUpdateOne]', ['name' => $this->name, 'object' => $object]);
         $document = $this->transformer->transform($object, []);
@@ -199,7 +198,7 @@ class Indexer implements IndexerInterface
         if (!$document instanceof Document) {
             $this->logger->debug('[Indexer] Could not transform [data]', ['Indexer' => $this->name, 'data' => json_encode($object)]);
 
-            return 0;
+            return false;
         }
 
         $response = (0 === $this->fetcher->fetchByIds($document->getId())) ? $this->index->getType($typeName)->addDocument($document) : $this->index->getType($typeName)->updateDocument($document);
@@ -209,9 +208,9 @@ class Indexer implements IndexerInterface
 
             $this->logger->debug('[Indexer] creating Or updating [document]', ['Indexer' => $this->name, 'document' => json_encode($document)]);
 
-            return 1;
+            return true;
         }
 
-        return 0;
+        return false;
     }
 }

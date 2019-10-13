@@ -41,7 +41,7 @@ abstract class APlayerTransformer extends DefaultTransformer
         return $regions;
     }
 
-    protected function buildSocialMedia(Player $player)
+    protected function buildSocialMedia(Player $player): array
     {
         $socialMedia = $player->getSocialMedia();
 

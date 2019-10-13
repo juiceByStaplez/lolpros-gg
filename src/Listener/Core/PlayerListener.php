@@ -2,8 +2,8 @@
 
 namespace App\Listener\Core;
 
-use App\Entity\Core\Team\Member;
 use App\Entity\Core\Player\Player;
+use App\Entity\Core\Team\Member;
 use App\Event\Core\Player\PlayerEvent;
 use App\Indexer\Indexer;
 use App\Manager\Core\Report\AdminLogManager;

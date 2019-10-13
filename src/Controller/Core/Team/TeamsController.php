@@ -47,6 +47,7 @@ class TeamsController extends APIController
     /**
      * @Post(path="")
      * @IsGranted("ROLE_ADMIN")
+     *
      * @throws EntityNotCreatedException
      */
     public function postTeamsAction(TeamManager $teamManager): Response
@@ -74,6 +75,7 @@ class TeamsController extends APIController
     /**
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
+     *
      * @throws EntityNotUpdatedException
      */
     public function putTeamsAction(string $uuid, Request $request, TeamManager $teamManager, ValidatorInterface $validator): Response
@@ -98,6 +100,7 @@ class TeamsController extends APIController
     /**
      * @Delete(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
+     *
      * @throws EntityNotDeletedException
      */
     public function deleteTeamsAction(string $uuid, TeamManager $teamManager): Response

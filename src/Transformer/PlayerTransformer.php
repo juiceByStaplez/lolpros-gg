@@ -25,7 +25,7 @@ class PlayerTransformer extends APlayerTransformer
         return $document;
     }
 
-    public function transform($player, array $fields)
+    public function transform($player, array $fields): ?Document
     {
         if (!$player instanceof Player) {
             return null;

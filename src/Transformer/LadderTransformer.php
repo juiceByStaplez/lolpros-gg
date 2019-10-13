@@ -24,7 +24,7 @@ class LadderTransformer extends APlayerTransformer
         return $document;
     }
 
-    public function transform($player, array $fields)
+    public function transform($player, array $fields): ?Document
     {
         if (!$player instanceof Player) {
             return null;
@@ -49,7 +49,7 @@ class LadderTransformer extends APlayerTransformer
         return new Document($player->getUuidAsString(), $document, Indexer::INDEX_TYPE_PLAYER, Indexer::INDEX_LADDER);
     }
 
-    protected function buildAccount(RiotAccount $account)
+    private function buildAccount(RiotAccount $account): array
     {
         $rank = $account->getCurrentRanking();
         $totalGames = $rank->getWins() + $rank->getLosses();
@@ -68,7 +68,7 @@ class LadderTransformer extends APlayerTransformer
         ];
     }
 
-    private function buildPeak(Player $player)
+    private function buildPeak(Player $player): array
     {
         if (!count($accounts = $player->getAccounts())) {
             return null;
@@ -78,7 +78,7 @@ class LadderTransformer extends APlayerTransformer
 
         foreach ($accounts as $account) {
             /** @var RiotAccount $account */
-            $peak = $peak && $peak->getScore() >= $account->getBestRanking()->getScore() ? $peak : $account->getBestRanking();
+            $peak = $peak instanceof RiotAccount && $peak->getScore() >= $account->getBestRanking()->getScore() ? $peak : $account->getBestRanking();
         }
 
         return [
@@ -90,7 +90,7 @@ class LadderTransformer extends APlayerTransformer
         ];
     }
 
-    private function getTotalGames(Collection $accounts)
+    private function getTotalGames(Collection $accounts): int
     {
         $games = 0;
 

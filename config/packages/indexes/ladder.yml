@@ -5,6 +5,11 @@ fos_elastica:
       settings:
         number_of_replicas: 0
         number_of_shards: 1
+        analysis:
+          normalizer:
+            lower:
+              type: custom
+              filter: [ "lowercase" ]
       types:
         ladder:
           dynamic: strict
@@ -12,7 +17,9 @@ fos_elastica:
             uuid:
             name:
               type: keyword
+              normalizer: lower
             slug:
+              type: keyword
             country:
             position:
             regions:

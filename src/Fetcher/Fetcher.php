@@ -101,12 +101,7 @@ abstract class Fetcher
         }
     }
 
-    /**
-     * @param $ids
-     *
-     * @return array|string
-     */
-    public function fetchByIds($ids)
+    public function fetchByIds($ids): array
     {
         try {
             $ids = (array) $ids;
@@ -114,22 +109,17 @@ abstract class Fetcher
             $query = new Ids();
             $query->setIds($ids);
 
-            $documents = array_map(
-                function (Document $document) {
-                    return $document->getData();
-                },
-                $this->type->search($query, ['limit' => count($ids)])->getDocuments()
-            );
+            $documents = $this->type->search($query, ['limit' => count($ids)])->getDocuments();
 
-            if (0 === count($documents)) {
-                return false;
+            if (!count($documents)) {
+                return [];
             }
 
-            return $documents;
+            return array_map(function (Document $doc) { return $doc->getData(); }, $documents);
         } catch (ResponseException $e) {
             $this->logger->error('[fetcher] try to fetch documents {ids}', ['ids' => $ids]);
 
-            return false;
+            return [];
         }
     }
 

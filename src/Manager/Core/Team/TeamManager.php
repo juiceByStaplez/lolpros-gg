@@ -2,7 +2,6 @@
 
 namespace App\Manager\Core\Team;
 
-use App\Entity\Core\Team\Member;
 use App\Entity\Core\Team\Team;
 use App\Event\Core\Team\TeamEvent;
 use App\Exception\Core\EntityNotCreatedException;

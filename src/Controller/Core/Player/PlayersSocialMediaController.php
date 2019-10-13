@@ -35,6 +35,7 @@ class PlayersSocialMediaController extends APIController
     /**
      * @Put(path="/{uuid}/social-medias")
      * @IsGranted("ROLE_ADMIN")
+     *
      * @throws EntityNotUpdatedException
      */
     public function putPlayerSocialMediasAction(string $uuid, ValidatorInterface $validator, SocialMediaManager $socialMediaManager): Response

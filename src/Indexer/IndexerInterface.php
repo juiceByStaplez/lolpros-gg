@@ -6,11 +6,11 @@ interface IndexerInterface
 {
     public function getName(): string;
 
-    public function addOne(string $typeName, $object): int;
+    public function addOne(string $typeName, $object): bool;
 
-    public function deleteOne(string $typeName, string $uuid): int;
+    public function deleteOne(string $typeName, string $uuid): bool;
 
-    public function updateOne(string $typeName, $object): int;
+    public function updateOne(string $typeName, $object): bool;
 
-    public function addOrUpdateOne(string $typeName, $object): int;
+    public function addOrUpdateOne(string $typeName, $object): bool;
 }

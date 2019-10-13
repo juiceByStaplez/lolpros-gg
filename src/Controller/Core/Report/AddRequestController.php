@@ -49,6 +49,7 @@ class AddRequestController extends APIController
     /**
      * @Post(path="")
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
+     *
      * @throws EntityNotCreatedException
      */
     public function postAddRequestsAction(AddRequestManager $addRequestManager): Response
@@ -76,6 +77,7 @@ class AddRequestController extends APIController
     /**
      * @Put(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
+     *
      * @throws EntityNotUpdatedException
      */
     public function putAddRequestAction(string $uuid, AddRequestManager $addRequestManager): Response
@@ -104,6 +106,7 @@ class AddRequestController extends APIController
     /**
      * @Delete(path="/{uuid}")
      * @IsGranted("ROLE_ADMIN")
+     *
      * @throws EntityNotDeletedException
      */
     public function deleteAddRequestsAction(string $uuid, AddRequestManager $addRequestManager): Response

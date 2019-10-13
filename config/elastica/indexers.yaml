@@ -17,7 +17,7 @@ services:
             - 'fol_players'
             - '@fos_elastica.index.fol_players'
             - '@App\Fetcher\PlayerFetcher'
-            - '@App\Transformer\LadderTransformer'
+            - '@App\Transformer\PlayerTransformer'
 
     api.indexer.summoner_names:
         class: App\Indexer\Indexer

@@ -35,6 +35,7 @@ class TeamsSocialMediasController extends APIController
     /**
      * @Put(path="/{uuid}/social-medias")
      * @IsGranted("ROLE_ADMIN")
+     *
      * @throws EntityNotUpdatedException
      */
     public function putTeamSocialMediasAction(string $uuid, SocialMediaManager $socialMediaManager, ValidatorInterface $validator): Response

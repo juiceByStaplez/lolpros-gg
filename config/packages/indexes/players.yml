@@ -26,6 +26,7 @@ fos_elastica:
               type: nested
               properties:
                 uuid:
+                  type: keyword
                 name:
                 slug:
                 shorthand:
@@ -38,8 +39,6 @@ fos_elastica:
                     url:
             score:
               type: integer
-            total_games:
-              type: integer
             accounts:
               type: nested
               properties:
@@ -51,10 +50,10 @@ fos_elastica:
                   type: keyword
                   normalizer: lower
                 summoner_names:
-                    type: nested
-                    properties:
-                      name:
-                      created_at:
+                  type: nested
+                  properties:
+                    name:
+                    created_at:
                 rank:
                   type: nested
                   properties:
