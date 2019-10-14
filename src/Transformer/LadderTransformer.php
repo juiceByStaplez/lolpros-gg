@@ -68,7 +68,7 @@ class LadderTransformer extends APlayerTransformer
         ];
     }
 
-    private function buildPeak(Player $player): array
+    private function buildPeak(Player $player): ?array
     {
         if (!count($accounts = $player->getAccounts())) {
             return null;
