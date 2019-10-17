@@ -2,7 +2,6 @@
 
 namespace App\Transformer;
 
-use App\Entity\Core\Document\Document as Logo;
 use App\Entity\Core\Player\Player;
 use App\Entity\Core\Team\Member;
 use App\Entity\Core\Team\Team;
@@ -85,18 +84,5 @@ class MemberTransformer extends DefaultTransformer
         ];
 
         return $team;
-    }
-
-    private function buildLogo(?Logo $logo): ?array
-    {
-        if (!$logo) {
-            return null;
-        }
-
-        return [
-            'public_id' => $logo->getPublicId(),
-            'version' => $logo->getVersion(),
-            'url' => $logo->getUrl(),
-        ];
     }
 }

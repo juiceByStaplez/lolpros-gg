@@ -82,8 +82,8 @@ fos_elastica:
                 discord:
                 twitch:
                 leaguepedia:
-            team:
-              type: object
+            teams:
+              type: nested
               properties:
                 uuid:
                 name:
@@ -95,6 +95,76 @@ fos_elastica:
                     public_id:
                     version:
                     url:
+                current_members:
+                  type: nested
+                  properties:
+                    uuid:
+                    name:
+                    slug:
+                    country:
+                    current:
+                    position:
+                    join_date:
+                    join_timestamp:
+                    leave_date:
+                    leave_timestamp:
+                    summoner_name:
+                    profile_icon_id:
+                    tier:
+                    rank:
+                    league_points:
+                    score:
+                previous_members:
+                  type: nested
+                  properties:
+                    uuid:
+                    name:
+                    slug:
+                    country:
+                    current:
+                    position:
+                    join_date:
+                    join_timestamp:
+                    leave_date:
+                    leave_timestamp:
+                    summoner_name:
+                    profile_icon_id:
+                    tier:
+                    rank:
+                    league_points:
+                    score:
+            previous_teams:
+              type: nested
+              properties:
+                uuid:
+                name:
+                slug:
+                tag:
+                logo:
+                  type: object
+                  properties:
+                    public_id:
+                    version:
+                    url:
+                members:
+                  type: nested
+                  properties:
+                    uuid:
+                    name:
+                    slug:
+                    country:
+                    current:
+                    position:
+                    join_date:
+                    join_timestamp:
+                    leave_date:
+                    leave_timestamp:
+                    summoner_name:
+                    profile_icon_id:
+                    tier:
+                    rank:
+                    league_points:
+                    score:
             rankings:
               type: object
               properties:

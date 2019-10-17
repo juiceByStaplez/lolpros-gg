@@ -172,13 +172,6 @@ class Region
         return $this->slug;
     }
 
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
     public function getShorthand(): ?string
     {
         return $this->shorthand;

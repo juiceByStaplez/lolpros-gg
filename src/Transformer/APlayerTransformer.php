@@ -2,7 +2,6 @@
 
 namespace App\Transformer;
 
-use App\Entity\Core\Document\Document as Logo;
 use App\Entity\Core\Region\Region;
 use App\Entity\LeagueOfLegends\Player\Player;
 
@@ -51,19 +50,6 @@ abstract class APlayerTransformer extends DefaultTransformer
             'discord' => $socialMedia->getDiscord(),
             'facebook' => $socialMedia->getFacebook(),
             'leaguepedia' => $socialMedia->getLeaguepedia(),
-        ];
-    }
-
-    private function buildLogo(?Logo $logo): ?array
-    {
-        if (!$logo) {
-            return null;
-        }
-
-        return [
-            'public_id' => $logo->getPublicId(),
-            'version' => $logo->getVersion(),
-            'url' => $logo->getUrl(),
         ];
     }
 }

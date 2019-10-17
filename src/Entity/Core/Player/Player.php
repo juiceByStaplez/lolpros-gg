@@ -164,13 +164,6 @@ abstract class Player
         return $this->slug;
     }
 
-    public function setSlug($slug): self
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
     public function getCountry(): ?string
     {
         return $this->country;
@@ -257,14 +250,18 @@ abstract class Player
         return $this;
     }
 
-    public function getCurrentMembership(): ?Member
+    public function getCurrentMemberships(): ArrayCollection
     {
-        /** @var Member $membership */
-        $membership = $this->memberships->filter(function (Member $membership) {
+        return $this->memberships->filter(function (Member $membership) {
             return $membership->isCurrent();
-        })->first();
+        });
+    }
 
-        return $membership;
+    public function getPreviousMemberships(): ArrayCollection
+    {
+        return $this->memberships->filter(function (Member $membership) {
+            return !$membership->isCurrent();
+        });
     }
 
     /**

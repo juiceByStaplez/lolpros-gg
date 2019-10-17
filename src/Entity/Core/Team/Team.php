@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use InvalidArgumentException;
 use JMS\Serializer\Annotation as Serializer;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -220,13 +221,6 @@ class Team
         return $this->slug;
     }
 
-    public function setSlug(?string $slug): self
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
     public function getLogo(): ?TeamLogo
     {
         return $this->logo;
@@ -308,6 +302,34 @@ class Team
         });
     }
 
+    /**
+     * Returns members that belonged to the team at the same time as the member.
+     */
+    public function getSharedMemberships(Member $current): ArrayCollection
+    {
+        if ($current->getTeam()->getUuidAsString() !== $this->getUuidAsString()) {
+            throw new InvalidArgumentException(sprintf("Member %s doesn't belong to the team %s", $current->getUuidAsString(), $this->getUuidAsString()));
+        }
+
+        return $this->members->filter(function (Member $member) use ($current) {
+            //Member is current
+            if (!$member->getLeaveDate()) {
+                return false;
+            }
+            //Member left before current joined
+            if ($this->isAfter($current->getJoinDate(), $member->getLeaveDate())) {
+                return false;
+            }
+            //Member left when current joined
+            if ($member->getLeaveDate() === $current->getJoinDate()) {
+                return false;
+            }
+
+            return true;
+        });
+    }
+
+    //Returns whether the second date is after the first
     private function isAfter(DateTime $first, DateTime $second)
     {
         if ($first->format('o') < $second->format('o')) {
@@ -327,9 +349,13 @@ class Team
         return true;
     }
 
-    public function getMembersBetweenDates(DateTime $begin, DateTime $end, $position): ?ArrayCollection
+    public function getMembersBetweenDates(DateTime $begin, DateTime $end = null): ?ArrayCollection
     {
-        return $this->members->filter(function (Member $membership) use ($begin, $end, $position) {
+        if (!$end) {
+            $end = new DateTime();
+        }
+
+        return $this->members->filter(function (Member $membership) use ($begin, $end) {
             if ($this->isAfter($membership->getJoinDate(), $end)) {
                 return false;
             }
@@ -338,11 +364,8 @@ class Team
                 return false;
             }
 
-            $player = $membership->getPlayer();
-            if ($player instanceof Player && $player->getPosition() === $position) {
-                if ($membership->getJoinDate() == $end || $membership->getLeaveDate() == $begin) {
-                    return false;
-                }
+            if ($membership->getJoinDate() == $end || $membership->getLeaveDate() == $begin) {
+                return false;
             }
 
             return true;

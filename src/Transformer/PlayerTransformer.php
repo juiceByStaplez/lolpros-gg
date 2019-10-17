@@ -2,6 +2,7 @@
 
 namespace App\Transformer;
 
+use App\Entity\Core\Team\Member;
 use App\Entity\LeagueOfLegends\Player\Player;
 use App\Entity\LeagueOfLegends\Player\Ranking;
 use App\Entity\LeagueOfLegends\Player\RiotAccount;
@@ -41,7 +42,8 @@ class PlayerTransformer extends APlayerTransformer
             'score' => $player->getScore(),
             'accounts' => $this->buildAccounts($player),
             'social_media' => $this->buildSocialMedia($player),
-            'team' => $this->buildTeam($player),
+            'teams' => $this->buildTeams($player),
+            'previous_teams' => $this->buildPreviousTeams($player),
             'rankings' => $this->buildPlayerRankings($player),
         ];
 
@@ -111,5 +113,46 @@ class PlayerTransformer extends APlayerTransformer
         }
 
         return $rankings;
+    }
+
+    private function buildTeams(Player $player): array
+    {
+        $teams = [];
+
+        foreach ($player->getCurrentMemberships() as $member) {
+            /** @var Member $member */
+            $team = $member->getTeam();
+            array_push($teams, [
+                'uuid' => $team->getUuidAsString(),
+                'tag' => $team->getTag(),
+                'name' => $team->getName(),
+                'slug' => $team->getSlug(),
+                'logo' => $this->buildLogo($team->getLogo()),
+                'current_members' => $this->buildMembers($team->getCurrentMemberships()),
+                'previous_members' => $this->buildMembers($team->getSharedMemberships($member)),
+            ]);
+        }
+
+        return $teams;
+    }
+
+    private function buildPreviousTeams(Player $player): array
+    {
+        $teams = [];
+
+        foreach ($player->getPreviousMemberships() as $member) {
+            /** @var Member $member */
+            $team = $member->getTeam();
+            array_push($teams, [
+                'uuid' => $team->getUuidAsString(),
+                'tag' => $team->getTag(),
+                'name' => $team->getName(),
+                'slug' => $team->getSlug(),
+                'logo' => $this->buildLogo($team->getLogo()),
+                'members' => $this->buildMembers($team->getMembersBetweenDates($member->getJoinDate(), $member->getLeaveDate())),
+            ]);
+        }
+
+        return $teams;
     }
 }
