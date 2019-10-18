@@ -42,12 +42,12 @@ class SummonerNamesConsumer implements ConsumerInterface
      */
     public function execute(AMQPMessage $msg)
     {
-        $summoner = $this->entityManager->getRepository(SummonerName::class)->find($msg->body);
+        $summoner = $this->entityManager->getRepository(SummonerName::class)->findOneBy(['id' => $msg->body]);
 
         if (!$summoner instanceof SummonerName) {
-            $this->logger->notice(sprintf('[SummonerNamesConsumer] Could\'t find a summoner name with the id %s', $msg->body));
+            $this->logger->error(sprintf('[SummonerNamesConsumer] Could\'t find a summoner name with the id %s', $msg->body));
 
-            return false;
+            return true;
         }
 
         try {
