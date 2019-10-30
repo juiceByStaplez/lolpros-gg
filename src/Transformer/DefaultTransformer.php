@@ -49,7 +49,7 @@ abstract class DefaultTransformer implements DefaultTransformerInterface
 
             //League player specifics
             if ($player instanceof Player) {
-                array_merge($member, [
+                $member = array_merge($member, [
                     'position' => $player->getPosition(),
                     'summoner_name' => $player->getMainAccount() ? $player->getMainAccount()->getCurrentSummonerName()->getName() : null,
                     'profile_icon_id' => $player->getMainAccount() ? $player->getMainAccount()->getProfileIconId() : null,
