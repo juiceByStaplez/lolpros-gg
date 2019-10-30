@@ -5,17 +5,11 @@ namespace App\Listener\LeagueOfLegends;
 use App\Entity\LeagueOfLegends\Player\SummonerName;
 use App\Event\LeagueOfLegends\Player\SummonerNameEvent;
 use App\Indexer\Indexer;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SummonerNameListener implements EventSubscriberInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
     /**
      * @var LoggerInterface
      */
@@ -38,9 +32,8 @@ class SummonerNameListener implements EventSubscriberInterface
         ];
     }
 
-    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger, Indexer $playerIndexer, Indexer $summonerNameIndexer)
+    public function __construct(LoggerInterface $logger, Indexer $playerIndexer, Indexer $summonerNameIndexer)
     {
-        $this->entityManager = $entityManager;
         $this->logger = $logger;
         $this->playerIndexer = $playerIndexer;
         $this->summonerNameIndexer = $summonerNameIndexer;

@@ -8,6 +8,7 @@ imports:
     - { resource: elastica/fetchers.yaml }
     - { resource: elastica/indexers.yaml }
     - { resource: elastica/transformers.yaml }
+    - { resource: listeners.yaml }
 
 parameters:
 
