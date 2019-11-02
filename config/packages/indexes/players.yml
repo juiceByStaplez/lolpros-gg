@@ -89,6 +89,8 @@ fos_elastica:
                 name:
                 slug:
                 tag:
+                join_date:
+                leave_date:
                 logo:
                   type: object
                   properties:
@@ -140,6 +142,8 @@ fos_elastica:
                 name:
                 slug:
                 tag:
+                join_date:
+                leave_date:
                 logo:
                   type: object
                   properties:

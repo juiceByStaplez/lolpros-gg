@@ -8,6 +8,7 @@ use App\Entity\LeagueOfLegends\Player\Ranking;
 use App\Entity\LeagueOfLegends\Player\RiotAccount;
 use App\Entity\LeagueOfLegends\Player\SummonerName;
 use App\Indexer\Indexer;
+use DateTime;
 use Elastica\Document;
 
 class PlayerTransformer extends APlayerTransformer
@@ -128,6 +129,8 @@ class PlayerTransformer extends APlayerTransformer
                 'name' => $team->getName(),
                 'slug' => $team->getSlug(),
                 'logo' => $this->buildLogo($team->getLogo()),
+                'join_date' => $member->getJoinDate()->format(DateTime::ISO8601),
+                'leave_date' => $member->getLeaveDate() ? $member->getLeaveDate()->format(DateTime::ISO8601) : null,
                 'current_members' => $this->buildMembers($team->getCurrentMemberships()),
                 'previous_members' => $this->buildMembers($team->getSharedMemberships($member)),
             ]);
@@ -149,6 +152,8 @@ class PlayerTransformer extends APlayerTransformer
                 'name' => $team->getName(),
                 'slug' => $team->getSlug(),
                 'logo' => $this->buildLogo($team->getLogo()),
+                'join_date' => $member->getJoinDate()->format(DateTime::ISO8601),
+                'leave_date' => $member->getLeaveDate() ? $member->getLeaveDate()->format(DateTime::ISO8601) : null,
                 'members' => $this->buildMembers($team->getMembersBetweenDates($member->getJoinDate(), $member->getLeaveDate())),
             ]);
         }
